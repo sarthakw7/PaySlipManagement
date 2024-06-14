@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaySlipManagement.Service", "PaySlipManagement\PaySlipManagement.Service.csproj", "{88570CA9-F70B-4AAC-98A7-CE6739224E4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySlipManagement.API", "PaySlipManagement\PaySlipManagement.API.csproj", "{88570CA9-F70B-4AAC-98A7-CE6739224E4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaySlipManagement.UI", "PaySlipManagement.UI\PaySlipManagement.UI.csproj", "{8AAB9111-14B4-4A93-8C89-1C6C83A7B913}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySlipManagement.UI", "PaySlipManagement.UI\PaySlipManagement.UI.csproj", "{8AAB9111-14B4-4A93-8C89-1C6C83A7B913}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaySlipManagement.DAL", "PaySlipManagement.DAL\PaySlipManagement.DAL.csproj", "{9DDE978C-B7F1-4448-8D44-5989BF9B9D00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySlipManagement.DAL", "PaySlipManagement.DAL\PaySlipManagement.DAL.csproj", "{9DDE978C-B7F1-4448-8D44-5989BF9B9D00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaySlipManagement.BAL", "PaySlipManagement.BAL\PaySlipManagement.BAL.csproj", "{2739F740-366D-4FB9-9857-DAE063F1868D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySlipManagement.BAL", "PaySlipManagement.BAL\PaySlipManagement.BAL.csproj", "{2739F740-366D-4FB9-9857-DAE063F1868D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayslipManagement.Common", "PayslipManagement.common\PayslipManagement.Common.csproj", "{097B26E5-066D-425A-AA18-33DBBAC1518F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{2739F740-366D-4FB9-9857-DAE063F1868D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2739F740-366D-4FB9-9857-DAE063F1868D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2739F740-366D-4FB9-9857-DAE063F1868D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{097B26E5-066D-425A-AA18-33DBBAC1518F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{097B26E5-066D-425A-AA18-33DBBAC1518F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{097B26E5-066D-425A-AA18-33DBBAC1518F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{097B26E5-066D-425A-AA18-33DBBAC1518F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
