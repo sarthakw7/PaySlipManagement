@@ -7,8 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
+    <PackageReference Include="Dapper.Extensions.NetCore" Version="4.2.5" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
+    <PackageReference Include="NPOI" Version="2.6.2" />
+    <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Implementations\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 
 </Project>
