@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PayslipManagement.Common.Models
+namespace PaySlipManagement.Common.Models
 {
     public class Department
     {
-        public int DepartmentId { get; set; }
+        public int? Id { get; set; }
         public string DepartmentName { get; set; }
     }
 }

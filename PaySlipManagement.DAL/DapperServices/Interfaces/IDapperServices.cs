@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PaySlipManagement.DAL.DapperServices.Interfaces
 {
-    public interface IDapperServices
+    public interface IDapperServices<T>
     {
         Task<IEnumerable<T>> ReadAllAsync(T entity);
         Task<T> ReadGetByIdAsync(T entity);

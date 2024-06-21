@@ -8,14 +8,15 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper.Extensions.NetCore" Version="4.2.5" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
     <PackageReference Include="NPOI" Version="2.6.2" />
     <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementations\" />
-    <Folder Include="Interfaces\" />
+    <ProjectReference Include="..\PayslipManagement.common\PaySlipManagement.Common.csproj" />
   </ItemGroup>
 
 </Project>
