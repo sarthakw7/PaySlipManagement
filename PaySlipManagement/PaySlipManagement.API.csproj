@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PaySlipManagement.BAL\PaySlipManagement.BAL.csproj" />
+    <ProjectReference Include="..\PaySlipManagement.DAL\PaySlipManagement.DAL.csproj" />
   </ItemGroup>
 
 </Project>
