@@ -13,7 +13,7 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
 {
     public class DapperServices<T>: IDapperServices<T>
     {
-        private string constring = "Server=WHIZTEK1\\SQLEXPRESS;database=PayslipManagement;TrustServerCertificate=True;Trusted_Connection=true;MultipleActiveResultSets=true";
+        private string constring = "Server=localhost\\SQLEXPRESS01;database=PayslipManagement;TrustServerCertificate=True;Trusted_Connection=true;MultipleActiveResultSets=true";
         private SqlConnection con;
         public DapperServices()
         {
@@ -165,7 +165,7 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
         {
             try
             {
-                var sql = GetSelectStoredProcedureName(entity) + "Validate @Username,@Password";
+                var sql = GetSelectStoredProcedureName(entity) + "Validate @Email,@Password";
                 var parameters = new DynamicParameters();
                 foreach (var property in entity.GetType().GetProperties())
                 {

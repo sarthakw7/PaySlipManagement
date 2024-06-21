@@ -16,10 +16,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\PaySlipManagement.BAL\PaySlipManagement.BAL.csproj" />
+    <ProjectReference Include="..\PaySlipManagement.DAL\PaySlipManagement.DAL.csproj" />
   </ItemGroup>
 
 </Project>
