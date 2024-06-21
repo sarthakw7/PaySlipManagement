@@ -10,13 +10,13 @@
     <PackageReference Include="Dapper.Extensions.NetCore" Version="4.2.5" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
     <PackageReference Include="NPOI" Version="2.6.2" />
-    <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
+    <!--<PackageReference Include="PagedList.Mvc" Version="4.5.0" />-->
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PayslipManagement.common\PayslipManagement.Common.csproj" />
 
-    <ProjectReference Include="..\PayslipManagement.common\PaySlipManagement.Common.csproj" />
+    <!--<ProjectReference Include="..\PayslipManagement.common\PaySlipManagement.Common.csproj" />-->
   </ItemGroup>
 
 </Project>
