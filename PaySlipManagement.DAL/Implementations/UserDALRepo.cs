@@ -1,5 +1,4 @@
-﻿using PayslipManagement.Common.Models;
-using PaySlipManagement.DAL.Interfaces;
+﻿using PaySlipManagement.DAL.Interfaces;
 using PaySlipManagement.DAL.DapperServices.Implementations;
 using System;
 using System.Collections.Generic;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Microsoft.Identity.Client;
+using PaySlipManagement.Common.Models;
 
 namespace PaySlipManagement.DAL.Implementations
 {

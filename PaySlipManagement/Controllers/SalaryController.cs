@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using PaySlipManagement.BAL.Interfaces;
 using PaySlipManagement.Common.Models;
+using PaySlipManagement.BAL.Interfaces;
 
 namespace PaySlipManagement.API.Controllers
 {

@@ -1,13 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
-using PaySlipManagement.DAL.DapperServices.Implementations;
+﻿using PaySlipManagement.DAL.DapperServices.Implementations;
 using PaySlipManagement.DAL.Interfaces;
 using PaySlipManagement.Common.Models;
-using PaySlipManagement;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PaySlipManagement.DAL.Implementations
 {

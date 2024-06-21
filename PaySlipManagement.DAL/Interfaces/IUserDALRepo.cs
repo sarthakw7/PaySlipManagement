@@ -1,9 +1,5 @@
-﻿using PayslipManagement.Common.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PaySlipManagement.Common.Models;
+
 
  namespace PaySlipManagement.DAL.Interfaces
  {
@@ -15,7 +11,5 @@ using System.Threading.Tasks;
         Task<bool> Update(Users user);
         Task<bool> Delete(Users user);
         Task<Users> UserValidateUserCredentials(Users user);
-
-
     }
 }

@@ -1,11 +1,7 @@
-﻿using PayslipManagement.Common.Models;
-using PaySlipManagement.BAL.Interfaces;
+﻿using PaySlipManagement.BAL.Interfaces;
+using PaySlipManagement.Common.Models;
 using PaySlipManagement.DAL.Implementations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace PaySlipManagement.BAL.Implementations
 {
