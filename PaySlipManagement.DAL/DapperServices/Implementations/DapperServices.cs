@@ -161,7 +161,7 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
         {
             try
             {
-                var sql = GetSelectStoredProcedureName(entity) + "Validate @Username,@Password";
+                var sql = GetSelectStoredProcedureName(entity) + "Validate @Email,@Password";
                 var parameters = new DynamicParameters();
                 foreach (var property in entity.GetType().GetProperties())
                 {
