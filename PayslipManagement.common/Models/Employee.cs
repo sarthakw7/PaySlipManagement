@@ -8,7 +8,7 @@ namespace PaySlipManagement.Common.Models
 {
     public class Employee
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Emp_Code { get; set; }
         public string EmployeeName { get; set; }
         public int DepartmentId { get; set; }
@@ -16,6 +16,6 @@ namespace PaySlipManagement.Common.Models
         public String Division { get; set; }
         public String Email { get; set; }
         public string PAN_Number { get; set; }
-        public DateTime JoiningDate { get; set; }
+        public string JoiningDate { get; set; } 
     }
 }

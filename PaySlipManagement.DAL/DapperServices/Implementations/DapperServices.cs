@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using NPOI.SS.Formula.Functions;
+using PaySlipManagement.Common.Models;
 using PaySlipManagement.DAL.DapperServices.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -23,15 +24,18 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
         {
             try
             {
-                var sql = GetSelectStoredProcedureName(entity) + " @Id";
-                var parameters = new DynamicParameters();
-                foreach (var property in entity.GetType().GetProperties())
-                {
-                    parameters.Add("@" + property.Name, property.GetValue(entity));
-                };
-                var result = await con.QueryAsync<T>(sql, parameters);
-                con.Close();
-                return result;
+              
+                
+                    var sql = GetSelectStoredProcedureName(entity) + " @Id";
+                    var parameters = new DynamicParameters();
+                    foreach (var property in entity.GetType().GetProperties())
+                    {
+                        parameters.Add("@" + property.Name, property.GetValue(entity));
+                    };
+                    var result = await con.QueryAsync<T>(sql, parameters);
+                    con.Close();
+                    return result;
+                
             }
             catch (Exception ex)
             {
