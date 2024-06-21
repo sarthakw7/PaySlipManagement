@@ -7,12 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PayslipManagement.common\PaySlipManagement.Common.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.31" />
-    <ProjectReference Include="..\PayslipManagement.common\PayslipManagement.Common.csproj" />
     <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\PaySlipManagement.DAL\PaySlipManagement.DAL.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,13 @@
+using PaySlipManagement.BAL.Implementations;
+using PaySlipManagement.BAL.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IDepartmentBALRepo, DepartmentBALRepo>();
+builder.Services.AddScoped<IEmployeeBALRepo, EmployeeBALRepo>();
+
 
 var app = builder.Build();
 
