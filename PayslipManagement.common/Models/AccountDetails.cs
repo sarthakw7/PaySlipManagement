@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PayslipManagement.Common.Models
+namespace PaySlipManagement.Common.Models
 {
     public class AccountDetails
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public String Emp_Code { get; set; }
         public String BankName { get; set; }
         public long BankAccountNumber { get; set; }
