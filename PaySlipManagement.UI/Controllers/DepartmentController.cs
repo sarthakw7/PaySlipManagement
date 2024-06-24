@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using PaySlipManagement.Common.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using PaySlipManagement.UI.Models;
 
 namespace PaySlipManagement.UI.Controllers
 {
     public class DepartmentController : Controller
     {
-        private static List<Department> _departments = new List<Department>
+        private static List<DepartmentViewModel> _departments = new List<DepartmentViewModel>
         {
-            new Department { DepartmentId = 1, DepartmentName = "HR" },
-            new Department { DepartmentId = 2, DepartmentName = "Finance" },
+            new DepartmentViewModel { DepartmentId = 1, DepartmentName = "HR" },
+            new DepartmentViewModel { DepartmentId = 2, DepartmentName = "Finance" },
             // Add more departments as needed
         };
         // GET: DepartmentController
@@ -38,7 +37,7 @@ namespace PaySlipManagement.UI.Controllers
         // POST: DepartmentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Department department)
+        public IActionResult Create(DepartmentViewModel department)
         {
             if (ModelState.IsValid)
             {
@@ -63,7 +62,7 @@ namespace PaySlipManagement.UI.Controllers
         // POST: DepartmentController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Department department)
+        public IActionResult Edit(int id, DepartmentViewModel department)
         {
             if (id != department.DepartmentId)
             {
