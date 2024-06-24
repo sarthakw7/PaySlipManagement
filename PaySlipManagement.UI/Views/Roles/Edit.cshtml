@@ -1,4 +1,4 @@
-﻿@model PaySlipManagement.Common.Models.Roles
+﻿@model RolesViewModel
 
 <h1>Edit Role</h1>
 
@@ -7,7 +7,7 @@
         <input type="hidden" asp-for="Id" />
         <div class="form-group">
             <label asp-for="Role"></label>
-            <input asp-for="Role" class="form-control" />
+            <input asp-for="Role" type="text" class="form-control" id="Role" name="Role" />
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>

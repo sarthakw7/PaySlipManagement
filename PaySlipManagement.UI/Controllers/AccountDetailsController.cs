@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaySlipManagement.Common.Models;
+using PaySlipManagement.UI.Models;
 
 namespace PaySlipManagement.UI.Controllers
 {
     public class AccountDetailsController : Controller
     {
-        private static List<AccountDetails> _accountDetails = new List<AccountDetails>
+        private static List<AccountDetailsViewModel> _accountDetails = new List<AccountDetailsViewModel>
         {
-            new AccountDetails { Id = 1, Emp_Code = "E001", BankName = "Bank A", BankAccountNumber = 1234567890, UANNumber = 9876543210, PFAccountNumber = "PF001" },
+            new AccountDetailsViewModel { Id = 1, Emp_Code = "E001", BankName = "Bank A", BankAccountNumber = 1234567890, UANNumber = 9876543210, PFAccountNumber = "PF001" },
             // Add more account details as needed
         };
 
@@ -33,7 +33,7 @@ namespace PaySlipManagement.UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(AccountDetails account)
+        public IActionResult Create(AccountDetailsViewModel account)
         {
             if (ModelState.IsValid)
             {
@@ -56,7 +56,7 @@ namespace PaySlipManagement.UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, AccountDetails account)
+        public IActionResult Edit(int id, AccountDetailsViewModel account)
         {
             if (id != account.Id)
             {

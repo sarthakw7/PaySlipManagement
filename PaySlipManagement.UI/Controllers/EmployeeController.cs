@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using PaySlipManagement.Common.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using PaySlipManagement.UI.Models;
 
 namespace PaySlipManagement.UI.Controllers
 {
     public class EmployeeController : Controller
     {
-        private static List<Employee> _employees = new List<Employee>
+        private static List<EmployeeViewModel> _employees = new List<EmployeeViewModel>
         {
-            new Employee { Id = 1, Emp_Code = "E001", EmployeeName = "John Doe", DepartmentId = 1, Designation = "Manager", Division = "Sales", Email = "john.doe@example.com", PAN_Number = "ABCDE1234F", JoiningDate = DateTime.Now.AddYears(-5) },
-            new Employee { Id = 2, Emp_Code = "E002", EmployeeName = "Jane Smith", DepartmentId = 2, Designation = "Analyst", Division = "Finance", Email = "jane.smith@example.com", PAN_Number = "FGHIJ5678K", JoiningDate = DateTime.Now.AddYears(-3) },
+            new EmployeeViewModel { Id = 1, Emp_Code = "E001", EmployeeName = "John Doe", DepartmentId = 1, Designation = "Manager", Division = "Sales", Email = "john.doe@example.com", PAN_Number = "ABCDE1234F", JoiningDate = DateTime.Now.AddYears(-5) },
+            new EmployeeViewModel { Id = 2, Emp_Code = "E002", EmployeeName = "Jane Smith", DepartmentId = 2, Designation = "Analyst", Division = "Finance", Email = "jane.smith@example.com", PAN_Number = "FGHIJ5678K", JoiningDate = DateTime.Now.AddYears(-3) },
             // Add more employees as needed
         };
         // GET: EmployeeController
@@ -35,7 +34,7 @@ namespace PaySlipManagement.UI.Controllers
         // POST: EmployeeController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Employee employee)
+        public IActionResult Create(EmployeeViewModel employee)
         {
             if (ModelState.IsValid)
             {
@@ -58,7 +57,7 @@ namespace PaySlipManagement.UI.Controllers
         // POST: EmployeeController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Employee employee)
+        public IActionResult Edit(int id, EmployeeViewModel employee)
         {
             if (id != employee.Id)
             {

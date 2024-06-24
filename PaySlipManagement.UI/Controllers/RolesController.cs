@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaySlipManagement.Common.Models;
+using PaySlipManagement.UI.Models;
 
 namespace PaySlipManagement.UI.Controllers
 {
     public class RolesController : Controller
     {
-        private static List<Roles> _roles = new List<Roles>
+        private static List<RolesViewModel> _roles = new List<RolesViewModel>
         {
-            new Roles { Id = 1, Role = "Admin" },
-            new Roles { Id = 2, Role = "User" },
-            // Add more roles as needed
+            new RolesViewModel { Id = 1, Role = "Admin" },
+            new RolesViewModel { Id = 2, Role = "User" },
+            // Add more RolesViewModel as needed
         };
 
         // GET: Roles
@@ -38,7 +38,7 @@ namespace PaySlipManagement.UI.Controllers
         // POST: Roles/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Roles role)
+        public IActionResult Create(RolesViewModel role)
         {
             if (ModelState.IsValid)
             {
@@ -63,7 +63,7 @@ namespace PaySlipManagement.UI.Controllers
         // POST: Roles/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Roles role)
+        public IActionResult Edit(int id, RolesViewModel role)
         {
             if (id != role.Id)
             {
