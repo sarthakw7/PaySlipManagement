@@ -5,6 +5,7 @@ using PaySlipManagement.Common.Models;
 using PaySlipManagement.DAL.DapperServices.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
 {
     public class DapperServices<T>: IDapperServices<T>
     {
-        private string constring = "Server=localhost\\SQLEXPRESS01;database=PayslipManagement;TrustServerCertificate=True;Trusted_Connection=true;MultipleActiveResultSets=true";
+        private string constring = "Server=RAVIKIRAN\\SQLEXPRESS01;database=PayslipManagement;TrustServerCertificate=True;Trusted_Connection=true;MultipleActiveResultSets=true";
         private SqlConnection con;
         public DapperServices()
         {
@@ -181,6 +182,23 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
                 throw ex;
             }
         }
+
+        public async Task<bool> CheckEmployeeExistsAsync(string Emp_Code)
+        {
+            var parameters = new { Emp_Code = Emp_Code };
+            var result = await con.QueryFirstOrDefaultAsync<int>(
+                "sp_CheckEmployeeExists", parameters, commandType: CommandType.StoredProcedure);
+            return result > 0;
+        }
+
+        public async Task<bool> CheckRoleExistsAsync(int? RoleId)
+        {
+            var parameters = new { RoleId = RoleId };
+            var result = await con.QueryFirstOrDefaultAsync<int>(
+                "sp_CheckRoleExists", parameters, commandType: CommandType.StoredProcedure);
+            return result > 0;
+        }
+
 
         private string GetInsertStoredProcedureName(T entity)
         {
