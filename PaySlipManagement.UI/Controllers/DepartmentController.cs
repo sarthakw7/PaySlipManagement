@@ -1,31 +1,35 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PaySlipManagement.Common.Models;
+using PaySlipManagement.UI.Common;
 using PaySlipManagement.UI.Models;
 
 namespace PaySlipManagement.UI.Controllers
 {
     public class DepartmentController : Controller
     {
-        private static List<DepartmentViewModel> _departments = new List<DepartmentViewModel>
+        private readonly APIServices _apiService;
+        private readonly string baseUrl = "api/Department";
+        public DepartmentController(APIServices apiService)
         {
-            new DepartmentViewModel { DepartmentId = 1, DepartmentName = "HR" },
-            new DepartmentViewModel { DepartmentId = 2, DepartmentName = "Finance" },
-            // Add more departments as needed
-        };
+            _apiService = apiService;
+        }
         // GET: DepartmentController
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(_departments);
+            ViewData["ToastMessage"] = "Retrived all Departments.";
+            var data = await _apiService.GetAllAsync<DepartmentViewModel>($"{baseUrl}/GetAllDepartments");
+            return View(data);
         }
 
         // GET: DepartmentController/Details/5
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var department = _departments.FirstOrDefault(d => d.DepartmentId == id);
-            if (department == null)
+            var data = await _apiService.GetAsync<DepartmentViewModel>($"{baseUrl}/GetDepartmentById/{id}");
+            if (data == null)
             {
                 return NotFound();
             }
-            return View(department);
+            return View(data);
         }
 
         // GET: DepartmentController/Create
@@ -37,21 +41,26 @@ namespace PaySlipManagement.UI.Controllers
         // POST: DepartmentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(DepartmentViewModel department)
+        public async Task<IActionResult> Create(DepartmentViewModel department)
         {
             if (ModelState.IsValid)
             {
-                department.DepartmentId = _departments.Max(d => d.DepartmentId) + 1;
-                _departments.Add(department);
-                return RedirectToAction(nameof(Index));
+                Department d = new Department();
+                d.Id=department.Id;
+                d.DepartmentName=department.DepartmentName;
+                var data = await _apiService.PostAsync<Department,bool>($"{baseUrl}/CreateDepartment",d);
+                if (data)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(department);
         }
 
         // GET: DepartmentController/Edit/5
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var department = _departments.FirstOrDefault(d => d.DepartmentId == id);
+            var department = await _apiService.GetAsync<DepartmentViewModel>($"{baseUrl}/GetDepartmentById/{id}");
             if (department == null)
             {
                 return NotFound();
@@ -62,31 +71,32 @@ namespace PaySlipManagement.UI.Controllers
         // POST: DepartmentController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, DepartmentViewModel department)
+        public async Task<IActionResult> Edit(int id, DepartmentViewModel department)
         {
-            if (id != department.DepartmentId)
+            if (id != department.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                var existingDepartment = _departments.FirstOrDefault(d => d.DepartmentId == id);
+                Department d = new Department();
+                d.Id = department.Id;
+                d.DepartmentName = department.DepartmentName;
+                var existingDepartment = await _apiService.PutAsync<Department>($"{baseUrl}/UpdateDepartment", d); 
                 if (existingDepartment == null)
                 {
                     return NotFound();
                 }
-
-                existingDepartment.DepartmentName = department.DepartmentName;
                 return RedirectToAction(nameof(Index));
             }
             return View(department);
         }
 
         // GET: DepartmentController/Delete/5
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var department = _departments.FirstOrDefault(d => d.DepartmentId == id);
+            var department = await _apiService.GetAsync<DepartmentViewModel>($"{baseUrl}/GetDepartmentById/{id}");
             if (department == null)
             {
                 return NotFound();
@@ -97,14 +107,13 @@ namespace PaySlipManagement.UI.Controllers
         // POST: DepartmentController/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var department = _departments.FirstOrDefault(d => d.DepartmentId == id);
+            var department = await _apiService.GetAsync<bool>($"{baseUrl}/DeleteDepartment/{id}");
             if (department == null)
             {
                 return NotFound();
             }
-            _departments.Remove(department);
             return RedirectToAction(nameof(Index));
         }
     }
