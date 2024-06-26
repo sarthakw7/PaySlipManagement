@@ -1,29 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PaySlipManagement.UI.Common;
 using PaySlipManagement.UI.Models;
+using PaySlipManagement.Common.Models;
+
 
 namespace PaySlipManagement.UI.Controllers
 {
     public class AccountDetailsController : Controller
     {
-        private static List<AccountDetailsViewModel> _accountDetails = new List<AccountDetailsViewModel>
+        private APIServices _apiServices;
+        public AccountDetailsController(APIServices apiServices)
         {
-            new AccountDetailsViewModel { Id = 1, Emp_Code = "E001", BankName = "Bank A", BankAccountNumber = 1234567890, UANNumber = 9876543210, PFAccountNumber = "PF001" },
-            // Add more account details as needed
-        };
-
-        public IActionResult Index()
-        {
-            return View(_accountDetails);
+            this._apiServices = apiServices;
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Index()
         {
-            var account = _accountDetails.FirstOrDefault(a => a.Id == id);
-            if (account == null)
-            {
-                return NotFound();
-            }
-            return View(account);
+            var AccountDetails = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.AccountDetailsViewModel>("api/AccountDetails/GetAllAccountDetails");
+            return View(AccountDetails);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var response = await _apiServices.GetAsync<AccountDetailsViewModel>($"api/AccountDetails/GetAccountDetailsById/{id}");
+            return View(response);
         }
 
         public IActionResult Create()
@@ -33,76 +33,63 @@ namespace PaySlipManagement.UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(AccountDetailsViewModel account)
+        public async Task<IActionResult> Create(AccountDetails account)
         {
             if (ModelState.IsValid)
             {
-                account.Id = _accountDetails.Max(a => a.Id) + 1 ?? 1;
-                _accountDetails.Add(account);
-                return RedirectToAction(nameof(Index));
+                AccountDetails accountDetails = new AccountDetails();
+                accountDetails.Id = account.Id;
+                accountDetails.Emp_Code = account.Emp_Code;
+                accountDetails.BankName = account.BankName;
+                accountDetails.BankAccountNumber = account.BankAccountNumber;
+                accountDetails.UANNumber = account.UANNumber;
+                accountDetails.PFAccountNumber = account.PFAccountNumber;
+                var response = await _apiServices.PostAsync<AccountDetails>("api/AccountDetails/CreateAccountDetails", account);
+                if (response != null)
+                {
+                    return RedirectToAction("Index");
+                }
+                return View(account);
             }
             return View(account);
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var account = _accountDetails.FirstOrDefault(a => a.Id == id);
-            if (account == null)
-            {
-                return NotFound();
-            }
-            return View(account);
+            var response = await _apiServices.GetAsync<AccountDetailsViewModel>($"api/AccountDetails/GetAccountDetailsById/{id}");
+            return View(response);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, AccountDetailsViewModel account)
+        public async Task<IActionResult> Edit(int id, AccountDetails model)
         {
-            if (id != account.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                var existingAccount = _accountDetails.FirstOrDefault(a => a.Id == id);
-                if (existingAccount == null)
-                {
-                    return NotFound();
-                }
-
-                existingAccount.Emp_Code = account.Emp_Code;
-                existingAccount.BankName = account.BankName;
-                existingAccount.BankAccountNumber = account.BankAccountNumber;
-                existingAccount.UANNumber = account.UANNumber;
-                existingAccount.PFAccountNumber = account.PFAccountNumber;
-
+                await _apiServices.PutAsync("api/AccountDetails/UpdateAccountDetails", model);
                 return RedirectToAction(nameof(Index));
             }
-            return View(account);
+            return View(model);
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var account = _accountDetails.FirstOrDefault(a => a.Id == id);
-            if (account == null)
-            {
-                return NotFound();
-            }
-            return View(account);
+            var response = await _apiServices.GetAsync<AccountDetailsViewModel>($"api/AccountDetails/GetAccountDetailsById/{id}");
+            return View(response);
         }
 
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var account = _accountDetails.FirstOrDefault(a => a.Id == id);
-            if (account == null)
+            var response = await _apiServices.GetAsync<bool>($"api/AccountDetails/DeleteAccountDetails/{id}");
+            if (response == true)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
-            _accountDetails.Remove(account);
-            return RedirectToAction(nameof(Index));
+            return View("Delete");
         }
     }
 }

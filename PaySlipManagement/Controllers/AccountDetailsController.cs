@@ -20,9 +20,11 @@ namespace PaySlipManagement.API.Controllers
         {
             return await _accountdetailsBALRepo.GetAllAccountDetailsAsync();
         }
-        [HttpPost("GetAccountDetailsById")]
-        public async Task<AccountDetails> GetAccountDetailsByidAsync(AccountDetails _accountDetails)
+        [HttpGet("GetAccountDetailsById/{id}")]
+        public async Task<AccountDetails> GetAccountDetailsByidAsync(int id)
         {
+            AccountDetails _accountDetails = new AccountDetails();
+            _accountDetails.Id= id;
             return await _accountdetailsBALRepo.GetAccountDetailsByidAsync(_accountDetails);
         }
         [HttpPost("CreateAccountDetails")]
@@ -37,9 +39,11 @@ namespace PaySlipManagement.API.Controllers
             return await _accountdetailsBALRepo.UpdateAccountDetails(_accountDetails);
 
         }
-        [HttpPost("DeleteAccountDetails")]
-        public async Task<bool> DeleteAccountDetails(AccountDetails accountDetails)
+        [HttpGet("DeleteAccountDetails/{id}")]
+        public async Task<bool> DeleteAccountDetails(int id)
         {
+            AccountDetails accountDetails = new AccountDetails();
+            accountDetails.Id= id;
             return await _accountdetailsBALRepo.DeleteAccountDetails(accountDetails);
         }
     }
