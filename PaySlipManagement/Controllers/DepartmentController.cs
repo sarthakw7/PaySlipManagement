@@ -19,10 +19,12 @@ namespace PaySlipManagement.API.Controllers
         {
             return await _departmentBALRepo.GetAllDepartmentsAsync();
         }
-        [HttpPost("GetDepartmentById")]
-        public async Task<Department> GetDepartmentByidAsync(Department _department)
+        [HttpGet("GetDepartmentById/{id}")]
+        public async Task<Department> GetDepartmentByidAsync(int id)
         {
-            return await _departmentBALRepo.GetDepartmentByidAsync(_department);
+            Department d = new Department();
+            d.Id = id;
+            return await _departmentBALRepo.GetDepartmentByidAsync(d);
         }
         [HttpPost("CreateDepartment")]
         public async Task<bool> Create(Department _department)
@@ -36,11 +38,12 @@ namespace PaySlipManagement.API.Controllers
             return await _departmentBALRepo.Update(_department);
 
         }
-        [HttpPost("DeleteDepartment")]
-        public async Task<bool> Delete(Department _department)
+        [HttpGet("DeleteDepartment/{id}")]
+        public async Task<bool> Delete(int id)
         {
-            return await _departmentBALRepo.Delete(_department);
-
+            Department d = new Department();
+            d.Id = id;
+            return await _departmentBALRepo.Delete(d);
         }
     }
 }
