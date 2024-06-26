@@ -1,4 +1,16 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿// In your JavaScript file (e.g., script.js)
+function showToast(message, type) {
+    debugger
+    // Create a toast element
+    const toast = document.createElement('div');
+    toast.classList.add('toast', type);
+    toast.textContent = message;
 
-// Write your JavaScript code.
+    // Append the toast to the body
+    document.body.appendChild(toast);
+
+    // Automatically hide the toast after a few seconds
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
