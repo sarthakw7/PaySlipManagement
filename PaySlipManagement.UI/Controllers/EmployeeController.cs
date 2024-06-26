@@ -18,10 +18,10 @@ namespace PaySlipManagement.UI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            TempData["message"] = "This is Employee Index";
+            TempData["message"] = "This is Department Index";
 
-            var Employees = await _apiServices.GetAllAsync<PaySlipManagement.Common.Models.Employee>("api/Employee/GetAllEmployees");
-            return View(Employees);
+            var Departments = await _apiServices.GetAllAsync<PaySlipManagement.Common.Models.Employee>("api/Employee/GetAllEmployees");
+            return View(Departments);
         }
 
 
