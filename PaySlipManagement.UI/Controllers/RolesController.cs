@@ -20,7 +20,7 @@ namespace PaySlipManagement.UI.Controllers
         {
             TempData["message"] = "This is Role Index";
 
-            var roles = await _apiServices.GetAllAsync<PaySlipManagement.Common.Models.Roles>("/api/Roles/GetAllAsyncRoles");
+            var roles = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.RolesViewModel>("/api/Roles/GetAllAsyncRoles");
 
             return View(roles);
         }
