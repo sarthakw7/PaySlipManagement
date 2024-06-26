@@ -19,10 +19,12 @@ namespace PaySlipManagement.API.Controllers
         {
             return await _salaryBALRepo.GetAllSalaryMetadataAsync();
         }
-        [HttpPost("GetSalaryMetadataById")]
-        public async Task<SalaryMetadata> GetSalaryMetadataByidAsync(SalaryMetadata _salaryMetadata)
+        [HttpGet("GetSalaryMetadataById/{id}")]
+        public async Task<SalaryMetadata> GetSalaryMetadataByidAsync(int id)
         {
-            return await _salaryBALRepo.GetSalaryMetadataByidAsync(_salaryMetadata);
+            SalaryMetadata s = new SalaryMetadata();
+            s.Id = id;
+            return await _salaryBALRepo.GetSalaryMetadataByidAsync(s);
         }
         [HttpPost("CreateSalaryMetadata")]
         public async Task<bool> CreateSalaryMetadata(SalaryMetadata _salaryMetadata)
@@ -36,10 +38,12 @@ namespace PaySlipManagement.API.Controllers
             return await _salaryBALRepo.UpdateSalaryMetadata(_salaryMetadata);
 
         }
-        [HttpPost("DeleteSalaryMetadata")]
-        public async Task<bool> DeleteSalaryMetadata(SalaryMetadata salaryMetadata)
+        [HttpGet("DeleteSalaryMetadata/{id}")]
+        public async Task<bool> DeleteSalaryMetadata(int id)
         {
-            return await _salaryBALRepo.DeleteSalaryMetadata(salaryMetadata);
+            SalaryMetadata s = new SalaryMetadata();
+            s.Id = id;
+            return await _salaryBALRepo.DeleteSalaryMetadata(s);
         }
     }
 }

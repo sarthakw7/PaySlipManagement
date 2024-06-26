@@ -1,83 +1,86 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using PaySlipManagement.Common.Models;
+using PaySlipManagement.UI.Common;
+using PaySlipManagement.UI.Models;
 
 namespace PaySlipManagement.UI.Controllers
 {
     public class SalaryMetadataController : Controller
     {
-        // GET: SalaryMetadataController
-        public ActionResult Index()
+        private readonly APIServices _apiService;
+        private readonly string baseUrl = "api/Salary";
+        public SalaryMetadataController(APIServices apiService)
+        {
+            _apiService = apiService;
+        }
+        // GET: SalaryMetadata
+        public async Task<IActionResult> Index()
+        {
+            var response = await _apiService.GetAllAsync<SalaryMetadata>($"{baseUrl}/GetAllSalaryMetadata");
+            return View(response);
+        }
+        // GET: SalaryMetadata/Details/5
+        public async Task<IActionResult> Details(int id)
+        {
+            var response = await _apiService.GetAsync<SalaryMetadataViewModel>($"{baseUrl}/GetSalaryMetadataById/{id}");
+            return View(response);
+        }
+        // GET: SalaryMetadata/Create
+        public IActionResult Create()
         {
             return View();
         }
 
-        // GET: SalaryMetadataController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: SalaryMetadataController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: SalaryMetadataController/Create
+        // POST: SalaryMetadata/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(SalaryMetadataViewModel model)
         {
-            try
+            if (ModelState.IsValid)
+            {
+                await _apiService.PostAsync($"{baseUrl}/CreateSalaryMetadata", model);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
+        // GET: SalaryMetadata/Edit/5
+        public async Task<IActionResult> Edit(int id)
+        {
+            var response = await _apiService.GetAsync<SalaryMetadataViewModel>($"{baseUrl}/GetSalaryMetadataById/{id}");
+            return View(response);
+        }
+
+        // POST: SalaryMetadata/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, SalaryMetadata model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _apiService.PutAsync($"{baseUrl}/UpdateSalaryMetadata", model);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
+
+        // GET: SalaryMetadata/Delete/5
+        public async Task<IActionResult> Delete(int id)
+        {
+            var response = await _apiService.GetAsync<SalaryMetadataViewModel>($"{baseUrl}/GetSalaryMetadataById/{id}");
+            return View(response);
+        }
+
+        // POST: SalaryMetadata/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var data = await _apiService.GetAsync<bool>($"{baseUrl}/DeleteSalaryMetadata/{id}");
+            if (data==true)
             {
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: SalaryMetadataController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: SalaryMetadataController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: SalaryMetadataController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: SalaryMetadataController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return View("Delete");
         }
     }
 }
