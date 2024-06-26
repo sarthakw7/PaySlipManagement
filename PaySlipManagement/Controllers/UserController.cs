@@ -28,10 +28,12 @@ namespace PaySlipManagement.API.Controllers
             return await _userBALRepo.GetAllAsync();
         }
 
-        [HttpPost("GetUserById")]
-        public async Task<Users> GetByIdUser(Users _user)
+        [HttpGet("GetUserById/Id")]
+        public async Task<Users> GetByIdUser(int Id)
         {
-            return await _userBALRepo.GetByIdAsync(_user);
+            Users u = new Users();
+            u.Id = Id;
+            return await _userBALRepo.GetByIdAsync(u);
         }
 
         [HttpPost("Register")]
