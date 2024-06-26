@@ -21,11 +21,11 @@ namespace PaySlipManagement.API.Controllers
         {
             return await _employeeBALRepo.GetAllEmployees();
         }
-        [HttpGet("GetEmployeeById/Id")]
-        public async Task<Employee> GetEmployeeByidAsync(int Id)
+        [HttpGet("GetEmployeeById/{id}")]
+        public async Task<Employee> GetEmployeeByidAsync(int id)
         {
             Employee emp = new Employee();
-            emp.Id = Id;
+            emp.Id = id;
             return await _employeeBALRepo.GetEmployeeById(emp);
         }
         [HttpPost("CreateEmployee")]
