@@ -1,138 +1,111 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaySlipManagement.Common.Models;
-using PaySlipManagement.UI.Common;
 using PaySlipManagement.UI.Models;
 
 namespace PaySlipManagement.UI.Controllers
 {
     public class DepartmentController : Controller
     {
-        private APIServices _apiServices;
-        public DepartmentController(APIServices apiService)
+        private static List<DepartmentViewModel> _departments = new List<DepartmentViewModel>
         {
-            this._apiServices = apiService;
+            new DepartmentViewModel { DepartmentId = 1, DepartmentName = "HR" },
+            new DepartmentViewModel { DepartmentId = 2, DepartmentName = "Finance" },
+            // Add more departments as needed
+        };
+        // GET: DepartmentController
+        public IActionResult Index()
+        {
+            return View(_departments);
         }
 
-        public async Task<IActionResult> Index()
+        // GET: DepartmentController/Details/5
+        public IActionResult Details(int id)
         {
-            TempData["message"] = "This is Department Index";
-
-            var Departments = await _apiServices.GetAllAsync<PaySlipManagement.Common.Models.Department>("api/Department/GetAllDepartments");
-            return View(Departments);
+            var department = _departments.FirstOrDefault(d => d.DepartmentId == id);
+            if (department == null)
+            {
+                return NotFound();
+            }
+            return View(department);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Create()
+        // GET: DepartmentController/Create
+        public IActionResult Create()
         {
             return View();
         }
 
+        // POST: DepartmentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(DepartmentViewModel model)
+        public IActionResult Create(DepartmentViewModel department)
         {
             if (ModelState.IsValid)
             {
-                Department department = new Department();
-                department.Id = model.DepartmentId;
-                department.DepartmentName = model.DepartmentName;             
-
-                // Make a POST request to the Web API
-                var response = await _apiServices.PostAsync("api/Department/CreateDepartment", model);
-
-                if (!string.IsNullOrEmpty(response) && response == "Department Registered Successfully" || response == "true")
-                {
-                    TempData["message"] = response;
-                    // Handle a successful Register
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-
-                    // Handle the case where the API request fails or register is unsuccessful
-                    if (response != null)
-                    {
-                        ModelState.AddModelError(string.Empty, response);
-                    }
-                    ModelState.AddModelError(string.Empty, "API request failed or Create was unsuccessful");
-                }
+                department.DepartmentId = _departments.Max(d => d.DepartmentId) + 1;
+                _departments.Add(department);
+                return RedirectToAction(nameof(Index));
             }
-
-            ModelState.AddModelError(string.Empty, "Invalid Create attempt");
-            return View();
+            return View(department);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Update(int id)
+        // GET: DepartmentController/Edit/5
+        public IActionResult Edit(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Department>("api/Department/GetDepartmentById/{id}");
-            return View(data);
+            var department = _departments.FirstOrDefault(d => d.DepartmentId == id);
+            if (department == null)
+            {
+                return NotFound();
+            }
+            return View(department);
         }
+
+        // POST: DepartmentController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(DepartmentViewModel model)
+        public IActionResult Edit(int id, DepartmentViewModel department)
         {
+            if (id != department.DepartmentId)
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
-                // Make a POST request to the Web API
-                var response = await _apiServices.PutAsync("/api/Department/UpdateDepartment", model);
+                var existingDepartment = _departments.FirstOrDefault(d => d.DepartmentId == id);
+                if (existingDepartment == null)
+                {
+                    return NotFound();
+                }
 
-                if (!string.IsNullOrEmpty(response) && response == "Department Updated Successfully" || response == "true")
-                {
-                    TempData["message"] = response;
-                    // Handle a successful Updated
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    // Handle the case where the API request fails or register is unsuccessful
-                    if (response != null)
-                    {
-                        ModelState.AddModelError(string.Empty, response);
-                    }
-                    ModelState.AddModelError(string.Empty, "API request failed or Update was unsuccessful");
-                }
+                existingDepartment.DepartmentName = department.DepartmentName;
+                return RedirectToAction(nameof(Index));
             }
-
-            ModelState.AddModelError(string.Empty, "Invalid Update attempt");
-            return View("Update");
+            return View(department);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        // GET: DepartmentController/Delete/5
+        public IActionResult Delete(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Department>("api/Department/GetDepartmentById/{id}");
-            return View(data);
-        }
-        [HttpGet]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Department>("api/Department/GetDepartmentById/{id}");
-            return View(data);
-        }
-        [HttpPost]
-        public async Task<IActionResult> Delete(DepartmentViewModel model)
-        {
-            var response = await _apiServices.PostAsync<PaySlipManagement.Common.Models.Department>("/api/Department/DeleteDepartment", new Department() { Id = model.DepartmentId });
-            if (!string.IsNullOrEmpty(response) && response == "true")
+            var department = _departments.FirstOrDefault(d => d.DepartmentId == id);
+            if (department == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
-            else
-            {
-                // Handle the case where the API request fails or register is unsuccessful
-                if (response != null)
-                {
-                    TempData["message"] = "Department Deleted Successfully";
-                    ModelState.AddModelError(string.Empty, response);
-                }
-                ModelState.AddModelError(string.Empty, "API request failed or register was unsuccessful");
-            }
-            ModelState.AddModelError(string.Empty, "Invalid register attempt");
-            return View("Index");
+            return View(department);
         }
 
-
-
+        // POST: DepartmentController/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var department = _departments.FirstOrDefault(d => d.DepartmentId == id);
+            if (department == null)
+            {
+                return NotFound();
+            }
+            _departments.Remove(department);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
