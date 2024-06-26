@@ -17,29 +17,31 @@ namespace PaySlipManagement.API.Controllers
             _roleBALRepo = roleBALRepo;
         }
 
-        [HttpGet("GetAllAsyncUserRoles")]
+        [HttpGet("GetAllAsyncRoles")]
         public async Task<IEnumerable<Roles>> GetAllAsyncRoles()
         {
             return await _roleBALRepo.GetAllAsync();
         }
-        [HttpPost("GetByIdAsyncUserRoles")]
-        public async Task<Roles> GetByIdAsyncRoles(Roles roles)
+        [HttpGet("GetByIdAsyncRoles/{Id}")]
+        public async Task<Roles> GetByIdAsyncRoles(int id)
         {
-            return await _roleBALRepo.GetByIdAsync(roles);
+            Roles r = new Roles();
+            r.Id = id;
+            return await _roleBALRepo.GetByIdAsync(r);
         }
-        [HttpPost("CreateUserRoles")]
+        [HttpPost("CreateRoles")]
         public async Task<bool> CreateRoles(Roles roles)
         {
             return await _roleBALRepo.Create(roles);
 
         }
-        [HttpPut("UpdateUserRoles")]
+        [HttpPut("UpdateRoles")]
         public async Task<bool> UpdateRoles(Roles roles)
         {
             return await _roleBALRepo.Update(roles);
 
         }
-        [HttpPost("DeleteUserRoles")]
+        [HttpPost("DeleteRoles")]
         public async Task<bool> DeleteRoles(Roles roles)
         {
             return await _roleBALRepo.Delete(roles);
