@@ -22,10 +22,12 @@ namespace PaySlipManagement.API.Controllers
         {
             return await _userRoleBALRepo.GetAllAsync();
         }
-        [HttpPost("GetByIdAsyncUserRoles")]
-        public async Task<UserRoles> GetByIdAsyncUserRoles(UserRoles userRoles)
+        [HttpGet("GetByIdAsyncUserRoles/Id")]
+        public async Task<UserRoles> GetByIdAsyncUserRoles(int Id)
         {
-            return await _userRoleBALRepo.GetByIdAsync(userRoles);
+            UserRoles ur = new UserRoles();
+            ur.Id = Id;
+            return await _userRoleBALRepo.GetByIdAsync(ur);
         }
         [HttpPost("CreateUserRoles")]
         public async Task<bool> CreateUserRoles(UserRoles userRoles)
