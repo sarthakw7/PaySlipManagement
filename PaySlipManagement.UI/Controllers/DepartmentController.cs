@@ -1,111 +1,138 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PaySlipManagement.Common.Models;
+using PaySlipManagement.UI.Common;
 using PaySlipManagement.UI.Models;
 
 namespace PaySlipManagement.UI.Controllers
 {
     public class DepartmentController : Controller
     {
-        private static List<DepartmentViewModel> _departments = new List<DepartmentViewModel>
+        private APIServices _apiServices;
+        public DepartmentController(APIServices apiService)
         {
-            new DepartmentViewModel { DepartmentId = 1, DepartmentName = "HR" },
-            new DepartmentViewModel { DepartmentId = 2, DepartmentName = "Finance" },
-            // Add more departments as needed
-        };
-        // GET: DepartmentController
-        public IActionResult Index()
-        {
-            return View(_departments);
+            this._apiServices = apiService;
         }
 
-        // GET: DepartmentController/Details/5
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Index()
         {
-            var department = _departments.FirstOrDefault(d => d.DepartmentId == id);
-            if (department == null)
-            {
-                return NotFound();
-            }
-            return View(department);
+            TempData["message"] = "This is Department Index";
+
+            var Departments = await _apiServices.GetAllAsync<PaySlipManagement.Common.Models.Department>("api/Department/GetAllDepartments");
+            return View(Departments);
         }
 
-        // GET: DepartmentController/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
             return View();
         }
 
-        // POST: DepartmentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(DepartmentViewModel department)
+        public async Task<IActionResult> Create(DepartmentViewModel model)
         {
             if (ModelState.IsValid)
             {
-                department.DepartmentId = _departments.Max(d => d.DepartmentId) + 1;
-                _departments.Add(department);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(department);
-        }
+                Department department = new Department();
+                department.Id = model.DepartmentId;
+                department.DepartmentName = model.DepartmentName;             
 
-        // GET: DepartmentController/Edit/5
-        public IActionResult Edit(int id)
-        {
-            var department = _departments.FirstOrDefault(d => d.DepartmentId == id);
-            if (department == null)
-            {
-                return NotFound();
-            }
-            return View(department);
-        }
+                // Make a POST request to the Web API
+                var response = await _apiServices.PostAsync("api/Department/CreateDepartment", model);
 
-        // POST: DepartmentController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, DepartmentViewModel department)
-        {
-            if (id != department.DepartmentId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                var existingDepartment = _departments.FirstOrDefault(d => d.DepartmentId == id);
-                if (existingDepartment == null)
+                if (!string.IsNullOrEmpty(response) && response == "Department Registered Successfully" || response == "true")
                 {
-                    return NotFound();
+                    TempData["message"] = response;
+                    // Handle a successful Register
+                    return RedirectToAction("Index");
                 }
+                else
+                {
 
-                existingDepartment.DepartmentName = department.DepartmentName;
-                return RedirectToAction(nameof(Index));
+                    // Handle the case where the API request fails or register is unsuccessful
+                    if (response != null)
+                    {
+                        ModelState.AddModelError(string.Empty, response);
+                    }
+                    ModelState.AddModelError(string.Empty, "API request failed or Create was unsuccessful");
+                }
             }
-            return View(department);
+
+            ModelState.AddModelError(string.Empty, "Invalid Create attempt");
+            return View();
         }
 
-        // GET: DepartmentController/Delete/5
-        public IActionResult Delete(int id)
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
         {
-            var department = _departments.FirstOrDefault(d => d.DepartmentId == id);
-            if (department == null)
-            {
-                return NotFound();
-            }
-            return View(department);
+            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Department>("api/Department/GetDepartmentById/{id}");
+            return View(data);
         }
-
-        // POST: DepartmentController/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> Edit(DepartmentViewModel model)
         {
-            var department = _departments.FirstOrDefault(d => d.DepartmentId == id);
-            if (department == null)
+            if (ModelState.IsValid)
             {
-                return NotFound();
+                // Make a POST request to the Web API
+                var response = await _apiServices.PutAsync("/api/Department/UpdateDepartment", model);
+
+                if (!string.IsNullOrEmpty(response) && response == "Department Updated Successfully" || response == "true")
+                {
+                    TempData["message"] = response;
+                    // Handle a successful Updated
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    // Handle the case where the API request fails or register is unsuccessful
+                    if (response != null)
+                    {
+                        ModelState.AddModelError(string.Empty, response);
+                    }
+                    ModelState.AddModelError(string.Empty, "API request failed or Update was unsuccessful");
+                }
             }
-            _departments.Remove(department);
-            return RedirectToAction(nameof(Index));
+
+            ModelState.AddModelError(string.Empty, "Invalid Update attempt");
+            return View("Update");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Department>("api/Department/GetDepartmentById/{id}");
+            return View(data);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Department>("api/Department/GetDepartmentById/{id}");
+            return View(data);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(DepartmentViewModel model)
+        {
+            var response = await _apiServices.PostAsync<PaySlipManagement.Common.Models.Department>("/api/Department/DeleteDepartment", new Department() { Id = model.DepartmentId });
+            if (!string.IsNullOrEmpty(response) && response == "true")
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                // Handle the case where the API request fails or register is unsuccessful
+                if (response != null)
+                {
+                    TempData["message"] = "Department Deleted Successfully";
+                    ModelState.AddModelError(string.Empty, response);
+                }
+                ModelState.AddModelError(string.Empty, "API request failed or register was unsuccessful");
+            }
+            ModelState.AddModelError(string.Empty, "Invalid register attempt");
+            return View("Index");
+        }
+
+
+
     }
 }
