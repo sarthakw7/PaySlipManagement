@@ -11,7 +11,6 @@ builder.Services.AddHttpClient<APIServices>(client =>
     client.BaseAddress = new Uri("https://localhost:7181");
     // Add any additional client configuration here (e.g., headers, timeouts, etc.).
 });
-
 builder.Services.AddScoped<IDepartmentBALRepo, DepartmentBALRepo>();
 builder.Services.AddScoped<IEmployeeBALRepo, EmployeeBALRepo>();
 
