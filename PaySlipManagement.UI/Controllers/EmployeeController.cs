@@ -20,7 +20,7 @@ namespace PaySlipManagement.UI.Controllers
         {
             TempData["message"] = "This is Department Index";
 
-            var Departments = await _apiServices.GetAllAsync<PaySlipManagement.Common.Models.Employee>("api/Department/GetAllDepartments");
+            var Departments = await _apiServices.GetAllAsync<PaySlipManagement.Common.Models.Employee>("api/Employee/GetAllEmployees");
             return View(Departments);
         }
 
@@ -49,7 +49,7 @@ namespace PaySlipManagement.UI.Controllers
                 employee.JoiningDate = model.JoiningDate;
 
                 // Make a POST request to the Web API
-                var response = await _apiServices.PostAsync("api/Department/CreateDepartment", model);
+                var response = await _apiServices.PostAsync("api/Employee/CreateEmployee", model);
 
                 if (!string.IsNullOrEmpty(response) && response == "Employee Registered Successfully" || response == "true")
                 {
@@ -74,9 +74,9 @@ namespace PaySlipManagement.UI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Update(int Id)
+        public async Task<IActionResult> Update(int id)
         {
-            var data = await _apiServices.PostAsync<PaySlipManagement.Common.Models.Employee, PaySlipManagement.Common.Models.Employee>("api/Department/GetDepartmentById", new Employee() { Id = Id, Emp_Code = string.Empty, EmployeeName = string.Empty, DepartmentId =Id, Designation = string.Empty, Division = string.Empty, Email = string.Empty, PAN_Number = string.Empty, JoiningDate = string.Empty });
+            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Employee>("api/Employee/GetEmployeeById/{id}");
             return View(data);
         }
         [HttpPost]
@@ -86,7 +86,7 @@ namespace PaySlipManagement.UI.Controllers
             if (ModelState.IsValid)
             {
                 // Make a POST request to the Web API
-                var response = await _apiServices.PutAsync("/api/Department/UpdateDepartment", model);
+                var response = await _apiServices.PutAsync("/api/Employee/UpdateEmployee", model);
 
                 if (!string.IsNullOrEmpty(response) && response == "Employee Updated Successfully" || response == "true")
                 {
@@ -110,21 +110,21 @@ namespace PaySlipManagement.UI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int Id)
+        public async Task<IActionResult> Details(int id)
         {
-            var data = await _apiServices.PostAsync<PaySlipManagement.Common.Models.Employee, PaySlipManagement.Common.Models.Employee>("api/Department/GetDepartmentById", new Employee() { Id = Id, Emp_Code = string.Empty, EmployeeName = string.Empty, /*DepartmentId =,*/ Designation = string.Empty, Division = string.Empty, Email = string.Empty, PAN_Number = string.Empty, JoiningDate = string.Empty });
+            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Employee>("api/Employee/GetEmployeeById/{id}");
             return View(data);
         }
         [HttpGet]
-        public async Task<IActionResult> Delete(int Id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var data = await _apiServices.PostAsync<PaySlipManagement.Common.Models.Employee, PaySlipManagement.Common.Models.Employee>("api/Department/GetDepartmentById", new Employee() { Id = Id, Emp_Code = string.Empty, EmployeeName = string.Empty, /*DepartmentId =,*/ Designation = string.Empty, Division = string.Empty, Email = string.Empty, PAN_Number = string.Empty, JoiningDate = string.Empty });
+            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Employee>("api/Employee/GetEmployeeById/{id}");
             return View(data);
         }
         [HttpPost]
-        public async Task<IActionResult> Delete(EmployeeController model)
+        public async Task<IActionResult> Delete(EmployeeViewModel model)
         {
-            var response = await _apiServices.PostAsync<PaySlipManagement.Common.Models.Employee>("/api/Department/DeleteDepartment", new Employee() { Id = Id, Emp_Code = string.Empty, EmployeeName = string.Empty, /*DepartmentId =,*/ Designation = string.Empty, Division = string.Empty, Email = string.Empty, PAN_Number = string.Empty, JoiningDate = string.Empty });
+            var response = await _apiServices.PostAsync<PaySlipManagement.Common.Models.Employee>("/api/Employee/DeleteEmployee", new Employee() { Id = model.Id});
             if (!string.IsNullOrEmpty(response) && response == "true")
             {
                 return RedirectToAction("Index");
@@ -134,7 +134,7 @@ namespace PaySlipManagement.UI.Controllers
                 // Handle the case where the API request fails or register is unsuccessful
                 if (response != null)
                 {
-                    TempData["message"] = "Department Deleted Successfully";
+                    TempData["message"] = "Employee Deleted Successfully";
                     ModelState.AddModelError(string.Empty, response);
                 }
                 ModelState.AddModelError(string.Empty, "API request failed or register was unsuccessful");

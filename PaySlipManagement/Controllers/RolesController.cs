@@ -22,11 +22,11 @@ namespace PaySlipManagement.API.Controllers
         {
             return await _roleBALRepo.GetAllAsync();
         }
-        [HttpGet("GetByIdAsyncRoles/Id")]
-        public async Task<Roles> GetByIdAsyncRoles(int Id)
+        [HttpGet("GetByIdAsyncRoles/{Id}")]
+        public async Task<Roles> GetByIdAsyncRoles(int id)
         {
             Roles r = new Roles();
-            r.Id = Id;
+            r.Id = id;
             return await _roleBALRepo.GetByIdAsync(r);
         }
         [HttpPost("CreateRoles")]
