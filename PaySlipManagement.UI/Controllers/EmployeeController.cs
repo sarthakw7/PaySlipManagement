@@ -20,7 +20,7 @@ namespace PaySlipManagement.UI.Controllers
         {
             TempData["message"] = "This is Department Index";
 
-            var Departments = await _apiServices.GetAllAsync<PaySlipManagement.Common.Models.Employee>("api/Employee/GetAllEmployees");
+            var Departments = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.EmployeeViewModel>("api/Employee/GetAllEmployees");
             return View(Departments);
         }
 
