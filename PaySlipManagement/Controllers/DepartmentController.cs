@@ -19,10 +19,12 @@ namespace PaySlipManagement.API.Controllers
         {
             return await _departmentBALRepo.GetAllDepartmentsAsync();
         }
-        [HttpPost("GetDepartmentById")]
-        public async Task<Department> GetDepartmentByidAsync(Department _department)
+        [HttpGet("GetDepartmentById/Id")]
+        public async Task<Department> GetDepartmentByidAsync(int Id)
         {
-            return await _departmentBALRepo.GetDepartmentByidAsync(_department);
+            Department dep = new Department();
+            dep.Id = Id;    
+            return await _departmentBALRepo.GetDepartmentByidAsync(dep);
         }
         [HttpPost("CreateDepartment")]
         public async Task<bool> Create(Department _department)
