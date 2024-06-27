@@ -118,29 +118,19 @@ namespace PaySlipManagement.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Employee>($"api/Employee/GetEmployeeById/{id}");
+            var data = await _apiServices.GetAsync<EmployeeViewModel>($"api/Employee/GetEmployeeById/{id}");
             return View(data);
         }
         [HttpPost]
-        public async Task<IActionResult> Delete(EmployeeViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirm(int id)
         {
-            var response = await _apiServices.PostAsync<PaySlipManagement.Common.Models.Employee>("/api/Employee/DeleteEmployee", new Employee() { Id = model.Id});
-            if (!string.IsNullOrEmpty(response) && response == "true")
+            var response = await _apiServices.GetAsync<bool>($"api/Employee/DeleteEmployee/{id}");
+            if (response == true)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                // Handle the case where the API request fails or register is unsuccessful
-                if (response != null)
-                {
-                    TempData["message"] = "Employee Deleted Successfully";
-                    ModelState.AddModelError(string.Empty, response);
-                }
-                ModelState.AddModelError(string.Empty, "API request failed or register was unsuccessful");
-            }
-            ModelState.AddModelError(string.Empty, "Invalid register attempt");
-            return View("Index");
+            return View("Delete");
         }
     }  
 }
