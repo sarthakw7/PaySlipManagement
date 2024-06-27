@@ -1,24 +1,40 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PaySlipManagement.Common.Models;
+using PaySlipManagement.UI.Common;
+using PaySlipManagement.UI.Models;
 
 namespace PaySlipManagement.UI.Controllers
 {
     public class UserController : Controller
     {
-        // GET: UserController
-        public ActionResult Index()
+        private readonly APIServices _apiService;
+        private readonly string baseUrl = "api/Users";
+        public UserController(APIServices apiService)
         {
-            return View();
+            _apiService = apiService;
+        }
+        // GET: UserController
+        public async Task<IActionResult> Index()
+        {
+            ViewData["ToastMessage"] = "Retrieved all Users.";
+            var data = await _apiService.GetAllAsync<UsersViewModel>($"{baseUrl}/GetAllUsers");
+            return View(data);
         }
 
         // GET: UserController/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            return View();
+            var data = await _apiService.GetAsync<UsersViewModel>($"{baseUrl}/GetByIdUser/{id}");
+            if (data == null)
+            {
+                return NotFound();
+            }
+            return View(data);
         }
 
         // GET: UserController/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -26,58 +42,86 @@ namespace PaySlipManagement.UI.Controllers
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(UsersViewModel user)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                Users u = new Users();
+                u.Id = user.Id;
+                u.Emp_Code = user.Emp_Code;
+                u.Password = user.Password;
+                u.Email = user.Email;
+                //u.Role = user.Role;
+                var data = await _apiService.PostAsync<Users, bool>($"{baseUrl}/RegisterUser", u);
+                if (data)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View(user);
         }
 
         // GET: UserController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            var user = await _apiService.GetAsync<UsersViewModel>($"{baseUrl}/GetByIdUser/{id}");
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
         }
 
         // POST: UserController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, UsersViewModel user)
         {
-            try
+            if (id != user.Id)
             {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                Users u = new Users();
+                u.Id = user.Id;
+                u.Emp_Code = user.Emp_Code;
+                u.Password = user.Password;
+                u.Email = user.Email;
+                //u.Role = user.Role;
+                var existinguser= await _apiService.PutAsync<Users>($"{baseUrl}/UpdateUser", u);
+                if (existinguser == null)
+                {
+                    return NotFound();
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(user);
         }
 
         // GET: UserController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return View();
+            var users = await _apiService.GetAsync<UsersViewModel>($"{baseUrl}/GetByIdUser/{id}");
+            if (users == null)
+            {
+                return NotFound();
+            }
+            return View(users);
         }
 
-        // POST: UserController/Delete/5
-        [HttpPost]
+        // POST: UsersController/Delete/5
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> UserConfirmed(int id)
         {
-            try
+            var users = await _apiService.GetAsync<bool>($"{baseUrl}/DeleteUser/{id}");
+            if (users == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }
