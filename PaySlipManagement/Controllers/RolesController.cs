@@ -22,7 +22,7 @@ namespace PaySlipManagement.API.Controllers
         {
             return await _roleBALRepo.GetAllAsync();
         }
-        [HttpGet("GetByIdAsyncRoles/{Id}")]
+        [HttpGet("GetByIdAsyncRoles/{id}")]
         public async Task<Roles> GetByIdAsyncRoles(int id)
         {
             Roles r = new Roles();
@@ -41,10 +41,12 @@ namespace PaySlipManagement.API.Controllers
             return await _roleBALRepo.Update(roles);
 
         }
-        [HttpPost("DeleteRoles")]
-        public async Task<bool> DeleteRoles(Roles roles)
+        [HttpGet("DeleteRoles/{id}")]
+        public async Task<bool> DeleteRoles(int id)
         {
-            return await _roleBALRepo.Delete(roles);
+            Roles roles1 = new Roles(); 
+            roles1.Id = id;
+            return await _roleBALRepo.Delete(roles1);
         }
 
 

@@ -16,7 +16,7 @@ namespace PaySlipManagement.UI.Controllers
         // GET: DepartmentController
         public async Task<IActionResult> Index()
         {
-            ViewData["ToastMessage"] = "Retrived all Departments.";
+            ViewData["ToastMessage"] = "Retrieved all Departments.";
             var data = await _apiService.GetAllAsync<DepartmentViewModel>($"{baseUrl}/GetAllDepartments");
             return View(data);
         }
