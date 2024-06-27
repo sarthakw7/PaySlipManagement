@@ -40,10 +40,14 @@ namespace PaySlipManagement.API.Controllers
             return await _employeeBALRepo.UpdateEmployee(_employee);
 
         }
-        [HttpPost("DeleteEmployee")]
-        public async Task<bool> Delete(Employee employee)
+        [HttpGet("DeleteEmployee/{id}")]
+        public async Task<bool> Delete(int id)
         {
-            return await _employeeBALRepo.DeleteEmployee(employee);
+            Employee emp = new Employee();
+            
+                emp.Id = id;
+            
+            return await _employeeBALRepo.DeleteEmployee(emp);
         }
     }
 }

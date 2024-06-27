@@ -41,9 +41,12 @@ namespace PaySlipManagement.API.Controllers
             return await _userRoleBALRepo.Update(userRoles);
 
         }
-        [HttpPost("DeleteUserRoles")]
-        public async Task<bool> DeleteUserRoles(UserRoles userRoles)
+        [HttpPost("DeleteUserRoles/{id}")]
+        public async Task<bool> DeleteUserRoles(int id)
         {
+            UserRoles userRoles = new UserRoles();  
+            userRoles.Id = id;
+
             return await _userRoleBALRepo.Delete(userRoles);
         }
     }
