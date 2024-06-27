@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NPOI.SS.Formula.Functions;
 using PaySlipManagement.Common.Models;
 using PaySlipManagement.UI.Common;
 using PaySlipManagement.UI.Models;
@@ -18,10 +19,24 @@ namespace PaySlipManagement.UI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            TempData["message"] = "This is Department Index";
 
-            var Departments = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.EmployeeViewModel>("api/Employee/GetAllEmployees");
-            return View(Departments);
+            var emp = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.EmployeeViewModel>("api/Employee/GetAllEmployees");
+            var departments = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.DepartmentViewModel>("api/Department/GetAllDepartments");
+            var employeeWithDepartmentList = emp.Select(e => new EmployeeViewModel
+            {
+                Id = e.Id,
+                Emp_Code = e.Emp_Code,
+                EmployeeName = e.EmployeeName,
+                DepartmentId = e.DepartmentId,
+                Designation = e.Designation,
+                Division = e.Division,
+                Email = e.Email,
+                PAN_Number = e.PAN_Number,
+                JoiningDate = e.JoiningDate,
+                DepartmentName = departments.FirstOrDefault(d => d.Id == e.DepartmentId)?.DepartmentName
+            }).ToList();
+
+            return View(employeeWithDepartmentList);
         }
 
 
@@ -113,12 +128,16 @@ namespace PaySlipManagement.UI.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var data = await _apiServices.GetAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"api/Employee/GetEmployeeById/{id}");
+            var departments = await _apiServices.GetAsync<PaySlipManagement.UI.Models.DepartmentViewModel>($"api/Department/GetDepartmentById/{data.DepartmentId}");
+            data.DepartmentName=departments.DepartmentName;
             return View(data);
         }
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             var data = await _apiServices.GetAsync<EmployeeViewModel>($"api/Employee/GetEmployeeById/{id}");
+            var departments = await _apiServices.GetAsync<PaySlipManagement.UI.Models.DepartmentViewModel>($"api/Department/GetDepartmentById/{data.DepartmentId}");
+            data.DepartmentName = departments.DepartmentName;
             return View(data);
         }
         [HttpPost]
