@@ -74,9 +74,9 @@ namespace PaySlipManagement.UI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Update(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Employee>("api/Employee/GetEmployeeById/{id}");
+            var data = await _apiServices.GetAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"api/Employee/GetEmployeeById/{id}");
             return View(data);
         }
         [HttpPost]
@@ -86,7 +86,7 @@ namespace PaySlipManagement.UI.Controllers
             if (ModelState.IsValid)
             {
                 // Make a POST request to the Web API
-                var response = await _apiServices.PutAsync("/api/Employee/UpdateEmployee", model);
+                var response = await _apiServices.PutAsync<EmployeeViewModel>("/api/Employee/UpdateEmployee", model);
 
                 if (!string.IsNullOrEmpty(response) && response == "Employee Updated Successfully" || response == "true")
                 {
@@ -106,19 +106,19 @@ namespace PaySlipManagement.UI.Controllers
             }
 
             ModelState.AddModelError(string.Empty, "Invalid Update attempt");
-            return View("Update");
+            return View("Edit");
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Employee>("api/Employee/GetEmployeeById/{id}");
+            var data = await _apiServices.GetAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"api/Employee/GetEmployeeById/{id}");
             return View(data);
         }
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Employee>("api/Employee/GetEmployeeById/{id}");
+            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Employee>($"api/Employee/GetEmployeeById/{id}");
             return View(data);
         }
         [HttpPost]
