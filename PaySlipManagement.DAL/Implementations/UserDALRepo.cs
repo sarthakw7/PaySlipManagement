@@ -36,7 +36,13 @@ namespace PaySlipManagement.DAL.Implementations
         public async  Task<bool> Create(Users user)
         {
             if(user != null) 
-            { 
+            {
+                var employeeExists = await _userRepository.CheckEmployeeExistsAsync(user.Emp_Code);
+                if (!employeeExists)
+                {
+                    return false;
+                }
+
                 await  _userRepository.CreateAsync(user);
                 return true;
             }
@@ -58,6 +64,12 @@ namespace PaySlipManagement.DAL.Implementations
         {
             if(user != null)
             {
+                var employeeExists = await _userRepository.CheckEmployeeExistsAsync(user.Emp_Code);
+                if (!employeeExists)
+                {
+                    return false;
+                }
+
                 await _userRepository.UpdateAsync(user);
                 return true;
             }

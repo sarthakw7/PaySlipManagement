@@ -28,7 +28,7 @@ namespace PaySlipManagement.API.Controllers
             return await _userBALRepo.GetAllAsync();
         }
 
-        [HttpGet("GetUserById/Id")]
+        [HttpGet("GetUserById/{Id}")]
         public async Task<Users> GetByIdUser(int Id)
         {
             Users u = new Users();
@@ -48,7 +48,7 @@ namespace PaySlipManagement.API.Controllers
                 }
                 else
                 {
-                    return Ok("Make sure the credentials are correct");
+                    return Ok("Check the credentials are correct");
                 }
 
             }
@@ -69,7 +69,7 @@ namespace PaySlipManagement.API.Controllers
                 }
                 else
                 {
-                    return Ok("Make sure the credentials are correct");
+                    return Ok("Check the credentials are correct");
                 }
             }
             else
@@ -109,7 +109,7 @@ namespace PaySlipManagement.API.Controllers
                     var claims = new List<Claim>
                     {
                     new Claim(ClaimTypes.Name,data.Email),
-                    new Claim(ClaimTypes.Role, data.Role)
+                    //new Claim(ClaimTypes.Role, data.Role)
                     };
 
                     var tokenDescriptor = new SecurityTokenDescriptor
