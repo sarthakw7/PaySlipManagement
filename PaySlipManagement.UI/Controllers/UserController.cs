@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NPOI.SS.Formula.Functions;
 using PaySlipManagement.Common.Models;
 using PaySlipManagement.UI.Common;
 using PaySlipManagement.UI.Models;
@@ -9,7 +10,7 @@ namespace PaySlipManagement.UI.Controllers
     public class UserController : Controller
     {
         private readonly APIServices _apiService;
-        private readonly string baseUrl = "api/Users";
+        private readonly string baseUrl = "/api/User";
         public UserController(APIServices apiService)
         {
             _apiService = apiService;
@@ -25,7 +26,7 @@ namespace PaySlipManagement.UI.Controllers
         // GET: UserController/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var data = await _apiService.GetAsync<UsersViewModel>($"{baseUrl}/GetByIdUser/{id}");
+            var data = await _apiService.GetAsync<UsersViewModel>($"{baseUrl}/GetUserById/{id}");
             if (data == null)
             {
                 return NotFound();
@@ -64,7 +65,7 @@ namespace PaySlipManagement.UI.Controllers
         // GET: UserController/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var user = await _apiService.GetAsync<UsersViewModel>($"{baseUrl}/GetByIdUser/{id}");
+            var user = await _apiService.GetAsync<UsersViewModel>($"{baseUrl}/GetUserById/{id}");
             if (user == null)
             {
                 return NotFound();
@@ -103,7 +104,7 @@ namespace PaySlipManagement.UI.Controllers
         // GET: UserController/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var users = await _apiService.GetAsync<UsersViewModel>($"{baseUrl}/GetByIdUser/{id}");
+            var users = await _apiService.GetAsync<UsersViewModel>($"{baseUrl}/GetUserById/{id}");
             if (users == null)
             {
                 return NotFound();
