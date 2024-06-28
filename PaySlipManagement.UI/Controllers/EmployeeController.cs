@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NPOI.SS.Formula.Functions;
 using PaySlipManagement.Common.Models;
 using PaySlipManagement.UI.Common;
 using PaySlipManagement.UI.Models;
@@ -18,10 +19,24 @@ namespace PaySlipManagement.UI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            TempData["message"] = "This is Department Index";
 
-            var Departments = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.EmployeeViewModel>("api/Employee/GetAllEmployees");
-            return View(Departments);
+            var emp = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.EmployeeViewModel>("api/Employee/GetAllEmployees");
+            var departments = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.DepartmentViewModel>("api/Department/GetAllDepartments");
+            var employeeWithDepartmentList = emp.Select(e => new EmployeeViewModel
+            {
+                Id = e.Id,
+                Emp_Code = e.Emp_Code,
+                EmployeeName = e.EmployeeName,
+                DepartmentId = e.DepartmentId,
+                Designation = e.Designation,
+                Division = e.Division,
+                Email = e.Email,
+                PAN_Number = e.PAN_Number,
+                JoiningDate = e.JoiningDate,
+                DepartmentName = departments.FirstOrDefault(d => d.Id == e.DepartmentId)?.DepartmentName
+            }).ToList();
+
+            return View(employeeWithDepartmentList);
         }
 
 
@@ -74,9 +89,9 @@ namespace PaySlipManagement.UI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Update(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Employee>("api/Employee/GetEmployeeById/{id}");
+            var data = await _apiServices.GetAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"api/Employee/GetEmployeeById/{id}");
             return View(data);
         }
         [HttpPost]
@@ -86,7 +101,7 @@ namespace PaySlipManagement.UI.Controllers
             if (ModelState.IsValid)
             {
                 // Make a POST request to the Web API
-                var response = await _apiServices.PutAsync("/api/Employee/UpdateEmployee", model);
+                var response = await _apiServices.PutAsync<EmployeeViewModel>("/api/Employee/UpdateEmployee", model);
 
                 if (!string.IsNullOrEmpty(response) && response == "Employee Updated Successfully" || response == "true")
                 {
@@ -106,41 +121,35 @@ namespace PaySlipManagement.UI.Controllers
             }
 
             ModelState.AddModelError(string.Empty, "Invalid Update attempt");
-            return View("Update");
+            return View("Edit");
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Employee>("api/Employee/GetEmployeeById/{id}");
+            var data = await _apiServices.GetAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"api/Employee/GetEmployeeById/{id}");
+            var departments = await _apiServices.GetAsync<PaySlipManagement.UI.Models.DepartmentViewModel>($"api/Department/GetDepartmentById/{data.DepartmentId}");
+            data.DepartmentName=departments.DepartmentName;
             return View(data);
         }
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Employee>("api/Employee/GetEmployeeById/{id}");
+            var data = await _apiServices.GetAsync<EmployeeViewModel>($"api/Employee/GetEmployeeById/{id}");
+            var departments = await _apiServices.GetAsync<PaySlipManagement.UI.Models.DepartmentViewModel>($"api/Department/GetDepartmentById/{data.DepartmentId}");
+            data.DepartmentName = departments.DepartmentName;
             return View(data);
         }
         [HttpPost]
-        public async Task<IActionResult> Delete(EmployeeViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirm(int id)
         {
-            var response = await _apiServices.PostAsync<PaySlipManagement.Common.Models.Employee>("/api/Employee/DeleteEmployee", new Employee() { Id = model.Id});
-            if (!string.IsNullOrEmpty(response) && response == "true")
+            var response = await _apiServices.GetAsync<bool>($"api/Employee/DeleteEmployee/{id}");
+            if (response == true)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                // Handle the case where the API request fails or register is unsuccessful
-                if (response != null)
-                {
-                    TempData["message"] = "Employee Deleted Successfully";
-                    ModelState.AddModelError(string.Empty, response);
-                }
-                ModelState.AddModelError(string.Empty, "API request failed or register was unsuccessful");
-            }
-            ModelState.AddModelError(string.Empty, "Invalid register attempt");
-            return View("Index");
+            return View("Delete");
         }
     }  
 }

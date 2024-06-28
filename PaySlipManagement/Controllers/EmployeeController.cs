@@ -44,9 +44,7 @@ namespace PaySlipManagement.API.Controllers
         public async Task<bool> Delete(int id)
         {
             Employee emp = new Employee();
-            
-                emp.Id = id;
-            
+            emp.Id = id;
             return await _employeeBALRepo.DeleteEmployee(emp);
         }
     }
