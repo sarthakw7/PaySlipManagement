@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IDepartmentBALRepo, DepartmentBALRepo>();
 builder.Services.AddScoped<IEmployeeBALRepo,EmployeeBALRepo>();
 builder.Services.AddScoped<IAccountDetailsBALRepo, AccountDetailsBALRepo>();
+builder.Services.AddScoped<ICompanyDetailsBALRepo, CompanyDetailsBALRepo>();
 builder.Services.AddScoped<ISalaryBALRepo, SalaryBALRepo>();
 builder.Services.AddScoped<IUserRoleBALRepo, UserRoleBALRepo>();
 builder.Services.AddScoped<IRoleBALRepo, RoleBALRepo>();
