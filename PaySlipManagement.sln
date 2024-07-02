@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySlipManagement.DAL", "Pa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySlipManagement.BAL", "PaySlipManagement.BAL\PaySlipManagement.BAL.csproj", "{2739F740-366D-4FB9-9857-DAE063F1868D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PayslipManagement.Common", "PayslipManagement.common\PayslipManagement.Common.csproj", "{097B26E5-066D-425A-AA18-33DBBAC1518F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySlipManagement.Common", "PayslipManagement.common\PaySlipManagement.Common.csproj", "{097B26E5-066D-425A-AA18-33DBBAC1518F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
