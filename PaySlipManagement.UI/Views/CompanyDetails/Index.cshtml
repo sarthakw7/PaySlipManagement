@@ -1,0 +1,33 @@
+﻿@model List<CompanyDetailsViewModel>
+
+<h1>Company Details</h1>
+
+<a asp-action="Create" class="btn btn-primary">Add New</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Company Name</th>
+            <th>Company Address</th>
+            <th>Division</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var details in Model)
+        {
+            <tr>
+                <td>@details.Id</td>
+                <td>@details.CompanyName</td>
+                <td>@details.CompanyAddress</td>
+                <td>@details.Division</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@details.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@details.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@details.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@* <a asp-action="Create" class="btn btn-primary">Add New</a> *@

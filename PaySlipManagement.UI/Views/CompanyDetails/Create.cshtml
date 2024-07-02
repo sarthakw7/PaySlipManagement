@@ -1,0 +1,25 @@
+﻿@model CompanyDetailsViewModel
+@{
+
+}
+<h1>ADD</h1>
+
+<div>
+    <form asp-action="Create">
+        <div class="form-group">
+            <label asp-for="CompanyName"></label>
+            <input asp-for="CompanyName" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="CompanyAddress"></label>
+            <input asp-for="CompanyAddress" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Division"></label>
+            <input asp-for="Division" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+</div>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+
