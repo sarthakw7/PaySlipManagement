@@ -1,0 +1,84 @@
+﻿CREATE DATABASE PayslipManagement
+
+Use PayslipManagement
+CREATE PROCEDURE spSelectEmployeeDetailsFullDetails
+    @Emp_Code VARCHAR(255)
+AS
+BEGIN
+    SELECT 
+        e.Emp_Code,
+        e.EmployeeName,
+        d.DepartmentName,
+        e.Designation,
+        e.Division,
+        e.Email,
+        e.PAN_Number,
+        e.JoiningDate,
+        sm.PaySlipForMonth,
+        sm.DaysPaid,
+        sm.AbsentDays,
+        sm.EarnedBasic,
+        sm.HRA,
+        sm.SpecialAllowance,
+        sm.PFEmployeeShare,
+        sm.ProfessionalTax,
+        sm.TDS,
+        sm.EarningTotal,
+        sm.TotalDeductions,
+        sm.NetPay,
+        ad.BankName,
+        ad.BankAccountNumber,
+        ad.UANNumber,
+        ad.PFAccountNumber
+    FROM 
+        Employee e
+    LEFT JOIN 
+        Department d ON e.DepartmentId = d.Id
+    LEFT JOIN 
+        SalaryMetadata sm ON e.Emp_Code = sm.Emp_Code
+    LEFT JOIN 
+        AccountDetails ad ON e.Emp_Code = ad.Emp_Code
+    LEFT JOIN 
+        UserRoles ur ON e.Emp_Code = ur.Emp_Code
+    LEFT JOIN 
+        Roles r ON ur.RoleId = r.Id
+    WHERE 
+        e.Emp_Code = @Emp_Code;
+END
+
+EXEC spSelectEmployeeDetailsFullDetails 'WHIZ2301';
+
+
+
+CREATE PROCEDURE spSelectUsersWithRole
+    @Emp_Code VARCHAR(255) = NULL
+AS
+BEGIN
+    IF @Emp_Code IS NULL
+    BEGIN
+        SELECT 
+            u.Id, 
+            u.Emp_Code, 
+            u.Email, 
+            u.Password,
+            r.Role AS Role
+        FROM Users u
+        LEFT JOIN UserRoles ur ON u.Emp_Code = ur.Emp_Code
+        LEFT JOIN Roles r ON ur.RoleId = r.Id;
+    END
+    ELSE
+    BEGIN
+        SELECT 
+            u.Id, 
+            u.Emp_Code, 
+            u.Email, 
+            u.Password,
+            r.Role AS Role
+        FROM Users u
+        LEFT JOIN UserRoles ur ON u.Emp_Code = ur.Emp_Code
+        LEFT JOIN Roles r ON ur.RoleId = r.Id
+        WHERE u.Emp_Code = @Emp_Code;
+    END
+END;
+
+EXEC spSelectUsersWithRole null;
