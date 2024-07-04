@@ -4,6 +4,8 @@ using PaySlipManagement.Common.Models;
 using PaySlipManagement.BAL.Implementations;
 using PaySlipManagement.BAL.Interfaces;
 using PaySlipManagement.DAL.Interfaces;
+using PayslipManagement.Common.Models;
+using PaySlipManagement.DAL.Implementations;
 
 namespace PaySlipManagement.API.Controllers
 {
@@ -27,6 +29,16 @@ namespace PaySlipManagement.API.Controllers
             Employee emp = new Employee();
             emp.Id = id;
             return await _employeeBALRepo.GetEmployeeById(emp);
+        }
+        [HttpGet("GetAllEmployeesDetails")]
+        public async Task<IEnumerable<EmployeeDetails>> GetAllEmployeesDetailsAsync()
+        {
+            return await _employeeBALRepo.GetAllEmployeesDetailsAsync();
+        }
+        [HttpGet("GetEmployeeByEmpCode/{empcode}")]
+        public async Task<EmployeeDetails> GetEmployeeByidAsync(string empcode)
+        {
+            return await _employeeBALRepo.GetEmployeeByCodeAsync(empcode);
         }
         [HttpPost("CreateEmployee")]
         public async Task<bool> Create(Employee _employee)
