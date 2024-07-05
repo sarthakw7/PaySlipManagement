@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using iText.Html2pdf;
+using iText.Kernel.Exceptions;
+using iText.Kernel.Pdf;
+using Microsoft.AspNetCore.Mvc;
 using NPOI.SS.Formula.Functions;
+using PayslipManagement.Common.Models;
 using PaySlipManagement.Common.Models;
+using PaySlipManagement.Common.Utilities;
 using PaySlipManagement.UI.Common;
 using PaySlipManagement.UI.Models;
 
@@ -35,7 +40,7 @@ namespace PaySlipManagement.UI.Controllers
                 JoiningDate = e.JoiningDate,
                 DepartmentName = departments.FirstOrDefault(d => d.Id == e.DepartmentId)?.DepartmentName
             }).ToList();
-
+            Response.Cookies.Append("empCode", "WHIZ2301");
             return View(employeeWithDepartmentList);
         }
 
@@ -129,7 +134,7 @@ namespace PaySlipManagement.UI.Controllers
         {
             var data = await _apiServices.GetAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"api/Employee/GetEmployeeById/{id}");
             var departments = await _apiServices.GetAsync<PaySlipManagement.UI.Models.DepartmentViewModel>($"api/Department/GetDepartmentById/{data.DepartmentId}");
-            data.DepartmentName=departments.DepartmentName;
+            data.DepartmentName = departments.DepartmentName;
             return View(data);
         }
         [HttpGet]
@@ -151,9 +156,129 @@ namespace PaySlipManagement.UI.Controllers
             }
             return View("Delete");
         }
-    }  
+        [HttpGet]
+        public async Task<IActionResult> GeneratePdf()
+        {
+            var empCode = Request.Cookies["empCode"];
+
+            var employee = await _apiServices.GetAsync<EmployeeDetails>($"api/Employee/GetEmployeeByEmpCode/{empCode}");
+
+            if (employee == null)
+            {
+                return NotFound("Employee not found.");
+            }
+
+            var payPeriods = CalculatePayPeriods(employee.JoiningDate, DateTime.Now);
+
+            var model = new EmployeePayPeriodsViewModel
+            {
+                Employee = employee,
+                PayPeriods = payPeriods
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> GenerateEmployeePdf(string empCode, string payPeriod)
+        {
+            try
+            {
+                // Fetch employee details from API
+                var employee = await _apiServices.GetAsync<EmployeeDetails>($"api/Employee/GetEmployeeByEmpCode/{empCode}");
+
+                if (employee == null)
+                {
+                    return NotFound("Employee not found.");
+                }
+
+                // Create a unique directory to store generated PDFs
+                string directory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+                Directory.CreateDirectory(directory);
+
+                // Generate the PDF
+                string filePath = Path.Combine(directory, $"{employee.Emp_Code}_{employee.PaySlipForMonth}_PaySlip.pdf");
+                GenerateEmployeePdf(employee, filePath);
+
+                // Provide download link
+                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+                return File(fileBytes, "application/pdf", $"{employee.Emp_Code}_{employee.PaySlipForMonth}_PaySlip.pdf");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"An error occurred: {ex.Message}");
+                return View("Error");
+            }
+        }
+        private void GenerateEmployeePdf(EmployeeDetails employee, string filePath)
+        {
+            string htmlContent = System.IO.File.ReadAllText("wwwroot/Payslip.html");
+            htmlContent = htmlContent.Replace("{{payPeriod}}", employee.PaySlipForMonth)
+                                     .Replace("{{empCode}}", employee.Emp_Code)
+                                     .Replace("{{empName}}", employee.EmployeeName)
+                                     .Replace("{{designation}}", employee.Designation)
+                                     .Replace("{{department}}", employee.DepartmentName)
+                                     .Replace("{{BnNo}}", employee.BankAccountNumber.ToString())
+                                     .Replace("{{jod}}", employee.JoiningDate.ToString())
+                                     .Replace("{{bankName}}", employee.BankName)
+                                     .Replace("{{panNo}}", employee.PAN_Number)
+                                     .Replace("{{uanNo}}", employee.UANNumber.ToString())
+                                     .Replace("{{pfNo}}", employee.PFAccountNumber)
+                                     .Replace("{{lwp}}", employee.AbsentDays.ToString())
+                                     .Replace("{{absentDays}}", employee.AbsentDays.ToString())
+                                     .Replace("{{totalDays}}", employee.DaysPaid.ToString())
+                                     .Replace("{{eb}}", employee.EarnedBasic.ToString("C"))
+                                     .Replace("{{pfes}}", employee.PFEmployeeShare.ToString("C"))
+                                     .Replace("{{hra}}", employee.HRA.ToString("C"))
+                                     .Replace("{{pt}}", employee.ProfessionalTax.ToString("C"))
+                                     .Replace("{{sa}}", employee.SpecialAllowance.ToString("C"))
+                                     .Replace("{{tds}}", employee.TDS.ToString("C"))
+                                     .Replace("{{eamounttotal}}", employee.EarningTotal.ToString("C"))
+                                     .Replace("{{damounttotal}}", employee.TotalDeductions.ToString("C"))
+                                     .Replace("{{netpay}}", employee.NetPay.ToString("C"))
+                                     .Replace("{{location}}", employee.Emp_Code)
+                                     .Replace("{{netpayword}}", NumberToWordsConverter.ConvertToWords(employee.NetPay) + " Rupees")
+                                     .Replace("{{address}}", employee.Emp_Code);
+
+            // Pass the correct file path
+            Generatepdf(filePath, htmlContent);
+        }
+        private void Generatepdf(string filePath, string htmlContent)
+        {
+            try
+            {
+                using (FileStream stream = new FileStream(filePath, FileMode.Create))
+                {
+                    PdfWriter writer = new PdfWriter(stream);
+                    HtmlConverter.ConvertToPdf(htmlContent, writer);
+                }
+            }
+            catch (PdfException pdfEx)
+            {
+                // Log detailed PDF exception
+                Console.WriteLine($"PDF Exception: {pdfEx.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                // Log other exceptions
+                Console.WriteLine($"Exception: {ex.Message}");
+                throw;
+            }
+        }
+        private List<string> CalculatePayPeriods(DateTime? joiningDate, DateTime endDate)
+        {
+            var payPeriods = new List<string>();
+            var currentDate = endDate;
+            var startDate = endDate.AddMonths(-6);
+
+            while (currentDate >= startDate && (joiningDate == null || currentDate >= joiningDate))
+            {
+                payPeriods.Add(currentDate.ToString("yyyy-MMMM"));
+            }
+            payPeriods.Reverse();
+            return payPeriods;
+        }
+    }
 }
-
-
 
 
