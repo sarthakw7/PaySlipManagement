@@ -1,5 +1,6 @@
 ﻿
 
+using PayslipManagement.Common.Models;
 namespace PaySlipManagement.UI.Models
 {
     public class EmployeeViewModel
@@ -14,5 +15,10 @@ namespace PaySlipManagement.UI.Models
         public string PAN_Number { get; set; }
         public string JoiningDate { get; set; }
         public string DepartmentName { get; set; }
+    }
+    public class EmployeePayPeriodsViewModel
+    {
+        public EmployeeDetails Employee { get; set; }
+        public List<string> PayPeriods { get; set; }
     }
 }
