@@ -40,8 +40,11 @@ namespace PaySlipManagement.UI.Controllers
                 JoiningDate = e.JoiningDate,
                 DepartmentName = departments.FirstOrDefault(d => d.Id == e.DepartmentId)?.DepartmentName
             }).ToList();
+
             Response.Cookies.Append("empCode", "WHIZ2301");
+
             return View(employeeWithDepartmentList);
+
         }
 
 
