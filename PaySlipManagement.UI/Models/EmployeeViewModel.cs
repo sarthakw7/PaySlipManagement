@@ -15,4 +15,5 @@ namespace PaySlipManagement.UI.Models
         public string JoiningDate { get; set; }
         public string DepartmentName { get; set; }
     }
+    
 }

@@ -36,7 +36,10 @@ namespace PaySlipManagement.UI.Controllers
                 DepartmentName = departments.FirstOrDefault(d => d.Id == e.DepartmentId)?.DepartmentName
             }).ToList();
 
+            Console.WriteLine(Request.Cookies["empCode"]);
+            Console.WriteLine(Request.Cookies["AuthToken"]);
             return View(employeeWithDepartmentList);
+
         }
 
 

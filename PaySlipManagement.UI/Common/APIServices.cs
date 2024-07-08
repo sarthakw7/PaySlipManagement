@@ -23,6 +23,7 @@ namespace PaySlipManagement.UI.Common
             // Handle error scenarios or throw exceptions as needed
         }
         public async Task<T> GetAsync<T>(string requestUri)
+        
         {
             var response = await _httpClient.GetAsync(requestUri);
 
