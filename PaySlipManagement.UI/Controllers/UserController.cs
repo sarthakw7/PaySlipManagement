@@ -53,8 +53,8 @@ namespace PaySlipManagement.UI.Controllers
                 u.Password = user.Password;
                 u.Email = user.Email;
                 //u.Role = user.Role;
-                var data = await _apiService.PostAsync<Users, bool>($"{baseUrl}/RegisterUser", u);
-                if (data)
+                var data = await _apiService.PostAsync<Users, bool>($"{baseUrl}/Register", u);
+                if (data !=null && data==true)
                 {
                     return RedirectToAction(nameof(Index));
                 }
@@ -118,11 +118,11 @@ namespace PaySlipManagement.UI.Controllers
         public async Task<IActionResult> UserConfirmed(int id)
         {
             var users = await _apiService.GetAsync<bool>($"{baseUrl}/DeleteUser/{id}");
-            if (users == null)
+            if (users != null && users == true)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+            return NotFound();
         }
     }
 }

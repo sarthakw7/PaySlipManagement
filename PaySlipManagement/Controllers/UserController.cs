@@ -37,65 +37,74 @@ namespace PaySlipManagement.API.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> RegisterUser([FromBody] Users _user)
+        public async Task<bool> RegisterUser([FromBody] Users _user)
         {
             if (_user != null)
             {
                 var data = await _userBALRepo.Create(_user);
                 if (data)
                 {
-                    return Ok("Register Successfull");
+                    return true;
                 }
                 else
                 {
-                    return Ok("Check the credentials are correct");
+                    return false;
                 }
 
             }
             else
             {
-                return Unauthorized("Invalid credentials");
+                return false;
             }
         }
         [HttpPut("UpdateUser")]
-        public async Task<IActionResult> UpdateUser(Users _user)
+        public async Task<bool> UpdateUser(Users _user)
         {
             if (_user != null)
             {
-                var data = await _userBALRepo.Update(_user);
-                if (data)
-                {
-                    return Ok("Update Successfull");
-                }
-                else
-                {
-                    return Ok("Check the credentials are correct");
-                }
-            }
-            else
-            {
-                return Unauthorized("Invalid credentials");
-            }
+                var existinguser = await _userBALRepo.GetByIdAsync(_user);
 
-        }
-        [HttpPost("DeleteUser")]
-        public async Task<IActionResult> DeleteUser(Users _user)
-        {
-            if (_user != null)
-            {
-                var data = await _userBALRepo.Delete(_user);
-                if (data)
+                if (existinguser != null)
                 {
-                    return Ok("Delete Successfull");
+                    var updateUser = await _userBALRepo.Update(_user);
+
+                    if (updateUser)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
-                    return Ok("Make sure the credentials are correct");
+                    return false;
                 }
             }
             else
             {
-                return Unauthorized("Invalid credentials");
+                return false;
+            }
+        }
+
+        [HttpGet("DeleteUser/{id}")]
+        public async Task<bool> DeleteUser(int id)
+        {
+
+            Users u = new Users();
+            u.Id = id;
+            if (u.Id != null)
+            {
+                var data = await _userBALRepo.Delete(u);
+                if (data)
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                    return false;
             }
         }
         [HttpPost("Login")]
@@ -103,13 +112,17 @@ namespace PaySlipManagement.API.Controllers
         {
             if (_user != null)
             {
-                var data = await _userBALRepo.UserValidateUserCredentials(_user);
+                Users u = new Users();
+                u.Emp_Code = _user.Emp_Code;
+                u.Password = _user.Password;
+                var data = await _userBALRepo.UserValidateUserCredentials(u);
                 if (data != null)
                 {
                     var claims = new List<Claim>
                     {
                     new Claim(ClaimTypes.Name,data.Email),
-                    //new Claim(ClaimTypes.Role, data.Role)
+                    new Claim(ClaimTypes.Role, data.Role)
+                    
                     };
 
                     var tokenDescriptor = new SecurityTokenDescriptor
@@ -122,7 +135,7 @@ namespace PaySlipManagement.API.Controllers
                     var token = tokenHandler.CreateToken(tokenDescriptor);
                     var tokenString = tokenHandler.WriteToken(token);
 
-                    return Ok(new { User = _user.Email,/*User1 =_user.Password*/ Token = tokenString });
+                    return Ok(new { User = new { Email = data.Email, EmpCode = data.Emp_Code }, Token = tokenString });
                 }
                 else
                 {
