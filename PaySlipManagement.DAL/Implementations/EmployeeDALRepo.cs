@@ -1,4 +1,6 @@
-﻿using PaySlipManagement.Common.Models;
+﻿using NPOI.SS.Formula.Functions;
+using PayslipManagement.Common.Models;
+using PaySlipManagement.Common.Models;
 using PaySlipManagement.DAL.DapperServices.Implementations;
 using PaySlipManagement.DAL.Interfaces;
 using System;
@@ -35,6 +37,33 @@ namespace PaySlipManagement.DAL.Implementations
             try
             {
                 return await _employeeDALRepo.ReadGetByIdAsync(_employee);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IEnumerable<EmployeeDetails>> GetAllEmployeesDetailsAsync()
+        {
+            try
+            {
+                DapperServices<EmployeeDetails> _employeeDetailsRepo = new DapperServices<EmployeeDetails>();
+                var result = await _employeeDetailsRepo.ReadGetByAllNullCodeAsync(new EmployeeDetails() { Emp_Code = null });
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<EmployeeDetails> GetEmployeeByCodeAsync(string empcode)
+        {
+            try
+            {
+                EmployeeDetails e = new EmployeeDetails();
+                e.Emp_Code = empcode;
+                DapperServices<EmployeeDetails> empdetails = new DapperServices<EmployeeDetails>();
+                return await empdetails.ReadGetByCodeAsync(e);
             }
             catch (Exception ex)
             {
