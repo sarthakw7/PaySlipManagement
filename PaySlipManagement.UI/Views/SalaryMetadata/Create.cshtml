@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-controller="SalaryMetadata" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Id" class="control-label"></label>
@@ -37,7 +37,7 @@
                 <input asp-for="AbsentDays" class="form-control" />
                 <span asp-validation-for="AbsentDays" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @* <div class="form-group">
                 <label asp-for="EarnedBasic" class="control-label"></label>
                 <input asp-for="EarnedBasic" class="form-control" />
                 <span asp-validation-for="EarnedBasic" class="text-danger"></span>
@@ -51,8 +51,8 @@
                 <label asp-for="SpecialAllowance" class="control-label"></label>
                 <input asp-for="SpecialAllowance" class="form-control" />
                 <span asp-validation-for="SpecialAllowance" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            </div> *@
+            @* <div class="form-group">
                 <label asp-for="PFEmployeeShare" class="control-label"></label>
                 <input asp-for="PFEmployeeShare" class="form-control" />
                 <span asp-validation-for="PFEmployeeShare" class="text-danger"></span>
@@ -61,8 +61,8 @@
                 <label asp-for="ProfessionalTax" class="control-label"></label>
                 <input asp-for="ProfessionalTax" class="form-control" />
                 <span asp-validation-for="ProfessionalTax" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            </div> *@
+            @* <div class="form-group">
                 <label asp-for="TDS" class="control-label"></label>
                 <input asp-for="TDS" class="form-control" />
                 <span asp-validation-for="TDS" class="text-danger"></span>
@@ -81,7 +81,52 @@
                 <label asp-for="NetPay" class="control-label"></label>
                 <input asp-for="NetPay" class="form-control" />
                 <span asp-validation-for="NetPay" class="text-danger"></span>
+            </div> *@
+            <div class="form-group">
+                <label asp-for="AnnualCTC" class="control-label"></label>
+                <input asp-for="AnnualCTC" class="form-control" />
+                <span asp-validation-for="AnnualCTC" class="text-danger"></span>
             </div>
+            @* <div class="form-group">
+                <label asp-for="CTCMonth" class="control-label"></label>
+                <input asp-for="CTCMonth" class="form-control" />
+                <span asp-validation-for="CTCMonth" class="text-danger"></span>
+            </div> *@
+            @* <div class="form-group">
+                <label asp-for="PFEmployerShare" class="control-label"></label>
+                <input asp-for="PFEmployerShare" class="form-control" />
+                <span asp-validation-for="PFEmployerShare" class="text-danger"></span>
+            </div> *@
+            @* <div class="form-group">
+                <label asp-for="PFEmployerShareAnnual" class="control-label"></label>
+                <input asp-for="PFEmployerShareAnnual" class="form-control" />
+                <span asp-validation-for="PFEmployerShareAnnual" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AnnualGrossPay" class="control-label"></label>
+                <input asp-for="AnnualGrossPay" class="form-control" />
+                <span asp-validation-for="AnnualGrossPay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MonthGrossPay" class="control-label"></label>
+                <input asp-for="MonthGrossPay" class="form-control" />
+                <span asp-validation-for="MonthGrossPay" class="text-danger"></span>
+            </div> *@
+            <div class="form-group">
+                <label asp-for="OtherAdditions" class="control-label"></label>
+                <input asp-for="OtherAdditions" class="form-control" />
+                <span asp-validation-for="OtherAdditions" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OtherDeductions" class="control-label"></label>
+                <input asp-for="OtherDeductions" class="form-control" />
+                <span asp-validation-for="OtherDeductions" class="text-danger"></span>
+            </div>
+            @* <div class="form-group">
+                <label asp-for="LossOfPay" class="control-label"></label>
+                <input asp-for="LossOfPay" class="form-control" />
+                <span asp-validation-for="LossOfPay" class="text-danger"></span>
+            </div> *@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
