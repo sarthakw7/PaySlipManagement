@@ -37,19 +37,25 @@ namespace PaySlipManagement.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                AccountDetails accountDetails = new AccountDetails();
-                accountDetails.Id = account.Id;
-                accountDetails.Emp_Code = account.Emp_Code;
-                accountDetails.BankName = account.BankName;
-                accountDetails.BankAccountNumber = account.BankAccountNumber;
-                accountDetails.UANNumber = account.UANNumber;
-                accountDetails.PFAccountNumber = account.PFAccountNumber;
-                var response = await _apiServices.PostAsync<AccountDetails>("api/AccountDetails/CreateAccountDetails", account);
-                if (response != null)
+                //AccountDetails accountDetails = new AccountDetails();
+                //accountDetails.Id = account.Id;
+                //accountDetails.Emp_Code = account.Emp_Code;
+                //accountDetails.BankName = account.BankName;
+                //accountDetails.BankAccountNumber = account.BankAccountNumber;
+                //accountDetails.UANNumber = account.UANNumber;
+                //accountDetails.PFAccountNumber = account.PFAccountNumber;
+                AccountDetailsViewModel a = new AccountDetailsViewModel();
+                a.Id = account.Id;
+                a.Emp_Code = account.Emp_Code;
+                a.BankName = account.BankName;
+                a.BankAccountNumber = account.BankAccountNumber;
+                a.UANNumber = account.UANNumber;
+                a.PFAccountNumber = account.PFAccountNumber; var response = await _apiServices.PostAsync<AccountDetails>("api/AccountDetails/CreateAccountDetails", account);
+                if (response != null&&response=="true")
                 {
                     return RedirectToAction("Index");
                 }
-                return View(account);
+                return View(a);
             }
             return View(account);
         }
