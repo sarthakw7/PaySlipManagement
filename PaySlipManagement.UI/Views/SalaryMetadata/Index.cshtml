@@ -54,6 +54,33 @@
             <th>
                 @Html.DisplayNameFor(model => model.NetPay)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AnnualCTC)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CTCMonth)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PFEmployerShare)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PFEmployerShareAnnual)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AnnualGrossPay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MonthGrossPay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OtherAdditions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OtherDeductions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LossOfPay)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -102,6 +129,33 @@
             <td>
                 @Html.DisplayFor(modelItem => item.NetPay)
             </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.AnnualCTC)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.CTCMonth)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.PFEmployerShare)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.PFEmployerShareAnnual)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.AnnualGrossPay)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.MonthGrossPay)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.OtherAdditions)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.OtherDeductions)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LossOfPay)
+                </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
                 @Html.ActionLink("Details", "Details", new { id=item.Id }) |

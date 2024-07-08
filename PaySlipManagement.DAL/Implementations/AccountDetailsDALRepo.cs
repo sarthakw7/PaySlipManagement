@@ -47,6 +47,11 @@ namespace PaySlipManagement.DAL.Implementations
 
                 if (_accountDetails != null)
                 {
+                    var employeeExists = await accountDetailsRepository.CheckEmployeeExistsAsync(_accountDetails.Emp_Code);
+                    if (!employeeExists)
+                    {
+                        return false; // Employee does not exist, creation cannot proceed
+                    }
                     await accountDetailsRepository.CreateAsync(_accountDetails);
                     return true;
                 }
@@ -63,6 +68,11 @@ namespace PaySlipManagement.DAL.Implementations
             {
                 if (_accountDetails != null)
                 {
+                    var employeeExists = await accountDetailsRepository.CheckEmployeeExistsAsync(_accountDetails.Emp_Code);
+                    if (!employeeExists)
+                    {
+                        return false; // Employee does not exist, creation cannot proceed
+                    }
                     await accountDetailsRepository.UpdateAsync(_accountDetails);
                     return true;
                 }

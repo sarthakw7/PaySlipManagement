@@ -53,6 +53,11 @@ namespace PaySlipManagement.DAL.Implementations
 
                 if (_salaryMetadata != null)
                 {
+                    var employeeExists = await salaryMetadataRepository.CheckEmployeeExistsAsync(_salaryMetadata.Emp_Code);
+                    if (!employeeExists)
+                    {
+                        return false; // Employee does not exist, creation cannot proceed
+                    }
                     await salaryMetadataRepository.CreateAsync(_salaryMetadata);
                     return true;
                 }
@@ -69,6 +74,11 @@ namespace PaySlipManagement.DAL.Implementations
             {
                 if (_salaryMetadata != null)
                 {
+                    var employeeExists = await salaryMetadataRepository.CheckEmployeeExistsAsync(_salaryMetadata.Emp_Code);
+                    if (!employeeExists)
+                    {
+                        return false; // Employee does not exist, creation cannot proceed
+                    }
                     await salaryMetadataRepository.UpdateAsync(_salaryMetadata);
                     return true;
                 }
