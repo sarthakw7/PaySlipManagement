@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Employee Details & PaySlips";
+}
+
+@model EmployeePayPeriodsViewModel
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-primary mb-4">Employee Dashboard - @Model.Employee.EmployeeName</h2>
+
+            <!-- Employee Details Card -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5>Employee Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Employee Code:</strong> @Model.Employee.Emp_Code</p>
+                            <p><strong>Department:</strong> @Model.Employee.DepartmentName</p>
+                            <p><strong>Designation:</strong> @Model.Employee.Designation</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Division:</strong> @Model.Employee.Division</p>
+                            <p><strong>Email:</strong> @Model.Employee.Email</p>
+                            <p><strong>PAN Number:</strong> @Model.Employee.PAN_Number</p>
+                            <p><strong>Joining Date:</strong> @Model.Employee.JoiningDate?.ToString("yyyy-MM-dd")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+@* 
+            <!-- Salary Details Card -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5>Salary Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Pay Slip for Month:</strong> @Model.Employee.PaySlipForMonth</p>
+                            <p><strong>Days Paid:</strong> @Model.Employee.DaysPaid</p>
+                            <p><strong>Absent Days:</strong> @Model.Employee.AbsentDays</p>
+                            <p><strong>Earned Basic:</strong> @Model.Employee.EarnedBasic.ToString("C")</p>
+                            <p><strong>HRA:</strong> @Model.Employee.HRA.ToString("C")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Special Allowance:</strong> @Model.Employee.SpecialAllowance.ToString("C")</p>
+                            <p><strong>PF Employee Share:</strong> @Model.Employee.PFEmployeeShare.ToString("C")</p>
+                            <p><strong>Professional Tax:</strong> @Model.Employee.ProfessionalTax.ToString("C")</p>
+                            <p><strong>TDS:</strong> @Model.Employee.TDS.ToString("C")</p>
+                            <p><strong>Earning Total:</strong> @Model.Employee.EarningTotal.ToString("C")</p>
+                            <p><strong>Total Deductions:</strong> @Model.Employee.TotalDeductions.ToString("C")</p>
+                            <p><strong>Net Pay:</strong> @Model.Employee.NetPay.ToString("C")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Details Card -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5>Account Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Bank Name:</strong> @Model.Employee.BankName</p>
+                            <p><strong>Bank Account Number:</strong> @Model.Employee.BankAccountNumber</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>UAN Number:</strong> @Model.Employee.UANNumber</p>
+                            <p><strong>PF Account Number:</strong> @Model.Employee.PFAccountNumber</p>
+                        </div>
+                    </div>
+                </div>
+            </div> *@
+
+            <!-- Pay Periods Section -->
+            <h3 class="text-secondary mb-3">Pay Periods</h3>
+            <div class="d-flex flex-wrap">
+                @foreach (var payPeriod in Model.PayPeriods)
+                {
+                    <div class="card m-2" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">@payPeriod</h5>
+                            <form asp-action="GenerateEmployeePdf" method="post" class="d-inline">
+                                <input type="hidden" name="empCode" value="@Model.Employee.Emp_Code" />
+                                <input type="hidden" name="payPeriod" value="@payPeriod" />
+                                <button type="submit" class="btn btn-primary mr-2">Download PDF</button>
+                            </form>
+                            <form asp-action="ViewEmployeePdf" method="post" class="d-inline">
+                                <input type="hidden" name="empCode" value="@Model.Employee.Emp_Code" />
+                                <input type="hidden" name="payPeriod" value="@payPeriod" />
+                                <button type="submit" class="btn btn-secondary">View PDF</button>
+                            </form>
+                        </div>
+                    </div>
+                   @*  <form asp-action="GenerateEmployeePdf" method="post" class="mr-2 mb-2 mx-2">
+                        <input type="hidden" name="empCode" value="@Model.Employee.Emp_Code" />
+                        <input type="hidden" name="payPeriod" value="@payPeriod" />
+                        <button type="submit" class="btn btn-outline-primary">@payPeriod</button>
+                    </form> *@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Styles -->
+<style>
+    .card {
+        border-radius: 10px;
+    }
+    .card-header {
+        font-size: 1.25rem;
+    }
+    .btn-outline-primary {
+        transition: transform 0.2s;
+    }
+    .btn-outline-primary:hover {
+        transform: scale(1.05);
+    }
+</style>
