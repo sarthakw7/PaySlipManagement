@@ -77,14 +77,15 @@ namespace PaySlipManagement.DAL.Implementations
              return false;
         }
 
-        public async Task<Users> GetByEmailAsync(string Email, string password)
+        public async Task<Users> GetByEmailAsync(string Emp_Code, string password)
         {
-            var user = await _userRepository.ValidateAsync(new Users() { Email = Email, Password = password });
+            var user = await _userRepository.ValidateAsync(new Users() { Emp_Code = Emp_Code, Password = password });
+            
             return user;
         }
         public async Task<Users> UserValidateUserCredentials(Users user)
         {
-            var data = await GetByEmailAsync(user.Email, user.Password);
+            var data = await GetByEmailAsync(user.Emp_Code, user.Password);
             return data;
         }
 
