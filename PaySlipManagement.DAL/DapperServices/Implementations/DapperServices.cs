@@ -25,7 +25,6 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
         {
             try
             {
-         
                     var sql = GetSelectStoredProcedureName(entity) + " @Id";
                     var parameters = new DynamicParameters();
                     foreach (var property in entity.GetType().GetProperties())
@@ -47,6 +46,46 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
             try
             {
                 var sql = GetSelectStoredProcedureName(entity) + " @Id";
+                var parameters = new DynamicParameters();
+                foreach (var property in entity.GetType().GetProperties())
+                {
+                    parameters.Add("@" + property.Name, property.GetValue(entity));
+                }
+                var result = await con.QueryFirstOrDefaultAsync<T>(sql, parameters);
+                con.Close();
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        public async Task<IEnumerable<T>> ReadGetByAllNullCodeAsync(T entity)
+        {
+            try
+            {
+                var sql = GetFullSelectStoredProcedureName(entity) + " @Emp_Code";
+                var parameters = new DynamicParameters();
+                foreach (var property in entity.GetType().GetProperties())
+                {
+                    parameters.Add("@" + property.Name, property.GetValue(entity));
+                };
+                var result = await con.QueryAsync<T>(sql, parameters);
+                con.Close();
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<T> ReadGetByCodeAsync(T entity)
+        {
+            try
+            {
+                var sql = GetFullSelectStoredProcedureName(entity) + " @Emp_Code";
                 var parameters = new DynamicParameters();
                 foreach (var property in entity.GetType().GetProperties())
                 {
@@ -207,6 +246,10 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
         private string GetSelectStoredProcedureName(T entity)
         {
             return $"EXEC spSelect{entity.GetType().Name}";
+        }
+        private string GetFullSelectStoredProcedureName(T entity)
+        {
+            return $"EXEC spSelect{entity.GetType().Name}FullDetails";
         }
 
         private string GetUpdateStoredProcedureName(T entity)

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PaySlipManagement.DAL.Implementations;
+using PayslipManagement.Common.Models;
 
 namespace PaySlipManagement.BAL.Implementations
 {
@@ -27,6 +28,14 @@ namespace PaySlipManagement.BAL.Implementations
         public async Task<Employee> GetEmployeeById(Employee _employee)
         {
             return await _employeeDALRepo.GetEmployeeById(_employee);
+        }
+        public async Task<IEnumerable<EmployeeDetails>> GetAllEmployeesDetailsAsync()
+        {
+            return await _employeeDALRepo.GetAllEmployeesDetailsAsync();
+        }
+        public async Task<EmployeeDetails> GetEmployeeByCodeAsync(string empcode)
+        {
+            return await _employeeDALRepo.GetEmployeeByCodeAsync(empcode);
         }
         public async Task<bool> AddEmployee(Employee _employee)
         {
