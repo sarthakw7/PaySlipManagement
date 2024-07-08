@@ -218,7 +218,7 @@ namespace PaySlipManagement.UI.Controllers
                                      .Replace("{{designation}}", employee.Designation)
                                      .Replace("{{department}}", employee.DepartmentName)
                                      .Replace("{{BnNo}}", employee.BankAccountNumber.ToString())
-                                     .Replace("{{jod}}", employee.JoiningDate.ToString())
+                                     .Replace("{{jod}}", employee.JoiningDate?.ToString("yyyy-MM-dd"))
                                      .Replace("{{bankName}}", employee.BankName)
                                      .Replace("{{panNo}}", employee.PAN_Number)
                                      .Replace("{{uanNo}}", employee.UANNumber.ToString())
@@ -235,7 +235,7 @@ namespace PaySlipManagement.UI.Controllers
                                      .Replace("{{eamounttotal}}", employee.EarningTotal.ToString("C"))
                                      .Replace("{{damounttotal}}", employee.TotalDeductions.ToString("C"))
                                      .Replace("{{netpay}}", employee.NetPay.ToString("C"))
-                                     .Replace("{{location}}", employee.Emp_Code)
+                                     .Replace("{{location}}", employee.Division)
                                      .Replace("{{netpayword}}", NumberToWordsConverter.ConvertToWords(employee.NetPay) + " Rupees")
                                      .Replace("{{address}}", employee.Emp_Code);
 
@@ -268,12 +268,13 @@ namespace PaySlipManagement.UI.Controllers
         private List<string> CalculatePayPeriods(DateTime? joiningDate, DateTime endDate)
         {
             var payPeriods = new List<string>();
-            var currentDate = endDate;
+            var currentDate = endDate.AddMonths(-1);
             var startDate = endDate.AddMonths(-6);
 
             while (currentDate >= startDate && (joiningDate == null || currentDate >= joiningDate))
             {
                 payPeriods.Add(currentDate.ToString("yyyy-MMMM"));
+                currentDate = currentDate.AddMonths(-1);
             }
             payPeriods.Reverse();
             return payPeriods;
