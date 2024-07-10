@@ -81,7 +81,7 @@ namespace PaySlipManagement.UI.Controllers
                         }
                         else if (role == "Employee")
                         {
-                            return RedirectToAction("Index", "Employee");
+                            return RedirectToAction("GeneratePdf", "Employee");
                         }
                     }
                     return RedirectToAction("Index", "Home");

@@ -165,8 +165,9 @@ namespace PaySlipManagement.UI.Controllers
             var empCode = Request.Cookies["empCode"];
 
             var employee = await _apiServices.GetAsync<EmployeeDetails>($"api/Employee/GetEmployeeByEmpCode/{empCode}");
+			
 
-            if (employee == null)
+			if (employee == null)
             {
                 return NotFound("Employee not found.");
             }
@@ -276,9 +277,11 @@ namespace PaySlipManagement.UI.Controllers
 
             while (currentDate >= startDate && (joiningDate == null || currentDate >= joiningDate))
             {
-                payPeriods.Add(currentDate.ToString("yyyy-MMMM"));
-            }
-            payPeriods.Reverse();
+                payPeriods.Add(currentDate.ToString("yyyy-MMMM"));			
+	        	currentDate = currentDate.AddMonths(-1);
+
+			}
+			payPeriods.Reverse();
             return payPeriods;
         }
     }
