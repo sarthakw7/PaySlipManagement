@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using PaySlipManagement.Common.Models;
 using PaySlipManagement.UI.Common;
 using PaySlipManagement.UI.Models;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace PaySlipManagement.UI.Controllers
 {
@@ -37,31 +38,27 @@ namespace PaySlipManagement.UI.Controllers
         // POST: Roles/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(RolesViewModel role)
+        public async Task<IActionResult> Create(RolesViewModel model)
         {
             if (ModelState.IsValid)
             {
-                Roles roles = new Roles();
-                roles.Id = role.Id;
-                roles.Role = role.Role;
-
-                var response = await _apiServices.PostAsync($"{_apiSettings.RolesEndpoint}/CreateRoles", role);
+                var response = await _apiServices.PostAsync($"{_apiSettings.RolesEndpoint}/CreateRoles", model);
                 if (!string.IsNullOrEmpty(response) && response == "Role Registered Successfully" || response == "true")
                 {
-                    TempData["Message"] = response;
-
-                    return RedirectToAction("Index");
+                    return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    //Handle the case where the API request fails or register is unsuccessful
-                    if (response != null)
-                    {
-                        ModelState.AddModelError(string.Empty, response);
-                    }
-                    ModelState.AddModelError(string.Empty, "API request failed or Create was unsuccessful");
+                      //Handle the case where the API request fails or register is unsuccessful
+                      if (response != null)
+                      {
+                          ModelState.AddModelError(string.Empty, response);
+                      }
+                      ModelState.AddModelError(string.Empty, "API request failed or Create was unsuccessful");
                 }
             }
+            //return View(model);
+            
             ModelState.AddModelError(string.Empty, "Invalid Create attempt");
             return View();
         }
@@ -69,9 +66,9 @@ namespace PaySlipManagement.UI.Controllers
        
         // GET: Roles/Edit/5
         [HttpGet]
-        public async Task<IActionResult> Update(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Roles>($"{_apiSettings.RolesEndpoint}/GetByIdAsyncRoles/{id}");
+            var data = await _apiServices.GetAsync<PaySlipManagement.UI.Models.RolesViewModel>($"{_apiSettings.RolesEndpoint}/GetByIdAsyncRoles/{id}");
             return View(data);
 
         }
@@ -79,69 +76,65 @@ namespace PaySlipManagement.UI.Controllers
         // POST: Roles/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(RolesViewModel role)
+        public async Task<IActionResult> Edit(int id,RolesViewModel model)
         {
+            //if (ModelState.IsValid)
+            //{
+            //    // Make a POST request to the Web API
+            //    var response = await _apiServices.PutAsync($"{_apiSettings.RolesEndpoint}/UpdateRoles", role);
+
+            //    if (!string.IsNullOrEmpty(response) && response == "Role is Updated Successfully" || response == "true")
+            //    {
+            //        TempData["message"] = response;
+            //        // Handle a successful Updated
+            //        return RedirectToAction("Index");
+
+            //    }
+            //    else
+            //    {
+            //        // Handle the case where the API request fails or register is unsuccessful
+            //        if (response != null)
+            //        {
+            //            ModelState.AddModelError(string.Empty, response);
+            //        }
+            //        ModelState.AddModelError(string.Empty, "API request failed or Update was unsuccessful");
+            //    }
+
+            //}
+            //   ModelState.AddModelError(string.Empty, "Invalid Update attempt");
+            //   return View("Update");
             if (ModelState.IsValid)
             {
-                // Make a POST request to the Web API
-                var response = await _apiServices.PutAsync($"{_apiSettings.RolesEndpoint}/UpdateRoles", role);
-
-                if (!string.IsNullOrEmpty(response) && response == "Role is Updated Successfully" || response == "true")
-                {
-                    TempData["message"] = response;
-                    // Handle a successful Updated
-                    return RedirectToAction("Index");
-
-                }
-                else
-                {
-                    // Handle the case where the API request fails or register is unsuccessful
-                    if (response != null)
-                    {
-                        ModelState.AddModelError(string.Empty, response);
-                    }
-                    ModelState.AddModelError(string.Empty, "API request failed or Update was unsuccessful");
-                }
-
+                await _apiServices.PutAsync($"{_apiSettings.RolesEndpoint}/UpdateRoles", model);
+                return RedirectToAction(nameof(Index));
             }
-               ModelState.AddModelError(string.Empty, "Invalid Update attempt");
-               return View("Update");
+            return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Roles>($"{_apiSettings.RolesEndpoint}/GetByIdAsyncRoles/{id}");
+            var data = await _apiServices.GetAsync<PaySlipManagement.UI.Models.RolesViewModel>($"{_apiSettings.RolesEndpoint}/GetByIdAsyncRoles/{id}");
             return View(data);
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Roles>($"{_apiSettings.RolesEndpoint}/GetByIdAsyncRoles/{id}");
+            var data = await _apiServices.GetAsync<PaySlipManagement.UI.Models.RolesViewModel>($"{_apiSettings.RolesEndpoint}/GetByIdAsyncRoles/{id}");
             return View(data);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Delete(RolesViewModel role)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var response = await _apiServices.PostAsync<PaySlipManagement.Common.Models.Roles>($"{_apiSettings.RolesEndpoint}/DeleteRoles", new Roles() { Id = role.Id});
-            if (!string.IsNullOrEmpty(response) && response == "true")
+            var response = await _apiServices.GetAsync<bool>($"{_apiSettings.RolesEndpoint}/DeleteRoles/{id}");
+            if (response == true)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                // Handle the case where the API request fails or register is unsuccessful
-                if (response != null)
-                {
-                    TempData["message"] = "Department Deleted Successfully";
-                    ModelState.AddModelError(string.Empty, response);
-                }
-                ModelState.AddModelError(string.Empty, "API request failed or register was unsuccessful");
-            }
-            ModelState.AddModelError(string.Empty, "Invalid register attempt");
-            return View("Index");
+            return View("Delete");
         }
     }
 }

@@ -54,7 +54,8 @@ namespace PaySlipManagement.UI.Controllers
                 a.BankName = account.BankName;
                 a.BankAccountNumber = account.BankAccountNumber;
                 a.UANNumber = account.UANNumber;
-                a.PFAccountNumber = account.PFAccountNumber; var response = await _apiServices.PostAsync<AccountDetails>($"{_apiSettings.AccountDetailsEndpoint}/CreateAccountDetails", account);
+                a.PFAccountNumber = account.PFAccountNumber; 
+                var response = await _apiServices.PostAsync<AccountDetails>($"{_apiSettings.AccountDetailsEndpoint}/CreateAccountDetails", account);
                 if (response != null&&response=="true")
                 {
                     return RedirectToAction("Index");
