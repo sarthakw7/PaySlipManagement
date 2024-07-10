@@ -17,5 +17,6 @@ namespace PaySlipManagement.DAL.DapperServices.Interfaces
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);
         Task<T> ValidateAsync(T entity);
+        Task<T> EmployeeByEmpCodeAsync(T entity);
     }
 }
