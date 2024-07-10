@@ -2,6 +2,7 @@
 using iText.Kernel.Exceptions;
 using iText.Kernel.Pdf;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using NPOI.SS.Formula.Functions;
 using PayslipManagement.Common.Models;
 using PaySlipManagement.Common.Models;
@@ -17,10 +18,10 @@ namespace PaySlipManagement.UI.Controllers
         private APIServices _apiServices;
         private readonly ApiSettings _apiSettings;
 
-        public EmployeeController(APIServices apiService, ApiSettings apiSettings)
+        public EmployeeController(APIServices apiService, IOptions<ApiSettings> apiSettings)
         {
             this._apiServices = apiService;
-            _apiSettings = apiSettings;
+            _apiSettings = apiSettings.Value;
         }
 
         //GET: EmployeeController
