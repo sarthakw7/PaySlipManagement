@@ -82,3 +82,29 @@ BEGIN
 END;
 
 EXEC spSelectUsersWithRole null;
+
+
+EXEC spSelectEmployeeDetails 'WHIZ2301';
+
+CREATE PROCEDURE spSelectEmployeeDetails
+    @Emp_Code VARCHAR(255)
+AS
+BEGIN
+	DECLARE @LastCompanyId INT;
+    SELECT TOP 1 @LastCompanyId = Id FROM CompanyDetails ORDER BY Id DESC;
+    SELECT 
+        e.Emp_Code,
+        e.EmployeeName,
+        d.DepartmentName,
+        e.Designation,
+        e.Division,
+        e.Email,
+        e.PAN_Number,
+        e.JoiningDate
+    FROM 
+        Employee e
+    LEFT JOIN 
+        Department d ON e.DepartmentId = d.Id
+    WHERE 
+        e.Emp_Code = @Emp_Code; 
+END

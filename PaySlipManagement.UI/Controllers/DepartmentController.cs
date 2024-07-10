@@ -8,23 +8,24 @@ namespace PaySlipManagement.UI.Controllers
     public class DepartmentController : Controller
     {
         private readonly APIServices _apiService;
-        private readonly string baseUrl = "api/Department";
-        public DepartmentController(APIServices apiService)
+        private readonly ApiSettings _apiSettings;
+        public DepartmentController(APIServices apiService, ApiSettings apiSettings)
         {
             _apiService = apiService;
+            _apiSettings = apiSettings;
         }
         // GET: DepartmentController
         public async Task<IActionResult> Index()
         {
             ViewData["ToastMessage"] = "Retrieved all Departments.";
-            var data = await _apiService.GetAllAsync<DepartmentViewModel>($"{baseUrl}/GetAllDepartments");
+            var data = await _apiService.GetAllAsync<DepartmentViewModel>($"{_apiSettings.DepartmentEndpoint}/GetAllDepartments");
             return View(data);
         }
 
         // GET: DepartmentController/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var data = await _apiService.GetAsync<DepartmentViewModel>($"{baseUrl}/GetDepartmentById/{id}");
+            var data = await _apiService.GetAsync<DepartmentViewModel>($"{_apiSettings.DepartmentEndpoint}/GetDepartmentById/{id}");
             if (data == null)
             {
                 return NotFound();
@@ -48,7 +49,7 @@ namespace PaySlipManagement.UI.Controllers
                 Department d = new Department();
                 d.Id=department.Id;
                 d.DepartmentName=department.DepartmentName;
-                var data = await _apiService.PostAsync<Department,bool>($"{baseUrl}/CreateDepartment",d);
+                var data = await _apiService.PostAsync<Department,bool>($"{_apiSettings.DepartmentEndpoint}/CreateDepartment",d);
                 if (data)
                 {
                     return RedirectToAction(nameof(Index));
@@ -60,7 +61,7 @@ namespace PaySlipManagement.UI.Controllers
         // GET: DepartmentController/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var department = await _apiService.GetAsync<DepartmentViewModel>($"{baseUrl}/GetDepartmentById/{id}");
+            var department = await _apiService.GetAsync<DepartmentViewModel>($"{_apiSettings.DepartmentEndpoint}/GetDepartmentById/{id}");
             if (department == null)
             {
                 return NotFound();
@@ -83,7 +84,7 @@ namespace PaySlipManagement.UI.Controllers
                 Department d = new Department();
                 d.Id = department.Id;
                 d.DepartmentName = department.DepartmentName;
-                var existingDepartment = await _apiService.PutAsync<Department>($"{baseUrl}/UpdateDepartment", d); 
+                var existingDepartment = await _apiService.PutAsync<Department>($"{_apiSettings.DepartmentEndpoint}/UpdateDepartment", d); 
                 if (existingDepartment == null)
                 {
                     return NotFound();
@@ -96,7 +97,7 @@ namespace PaySlipManagement.UI.Controllers
         // GET: DepartmentController/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var department = await _apiService.GetAsync<DepartmentViewModel>($"{baseUrl}/GetDepartmentById/{id}");
+            var department = await _apiService.GetAsync<DepartmentViewModel>($"{_apiSettings.DepartmentEndpoint}/GetDepartmentById/{id}");
             if (department == null)
             {
                 return NotFound();
@@ -109,7 +110,7 @@ namespace PaySlipManagement.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var department = await _apiService.GetAsync<bool>($"{baseUrl}/DeleteDepartment/{id}");
+            var department = await _apiService.GetAsync<bool>($"{_apiSettings.DepartmentEndpoint}/DeleteDepartment/{id}");
             if (department == null)
             {
                 return NotFound();
