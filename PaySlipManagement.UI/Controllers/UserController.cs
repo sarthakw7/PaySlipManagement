@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using NPOI.SS.Formula.Functions;
 using NuGet.Configuration;
 using PaySlipManagement.Common.Models;
@@ -12,10 +13,10 @@ namespace PaySlipManagement.UI.Controllers
     {
         private readonly APIServices _apiService;
         private readonly ApiSettings _apiSettings;
-        public UserController(APIServices apiService, ApiSettings apiSettings)
+        public UserController(APIServices apiService, IOptions<ApiSettings> apiSettings)
         {
             _apiService = apiService;
-            _apiSettings = apiSettings;
+            _apiSettings = apiSettings.Value;
         }
         // GET: UserController
         public async Task<IActionResult> Index()

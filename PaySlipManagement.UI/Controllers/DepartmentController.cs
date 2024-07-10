@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using PaySlipManagement.Common.Models;
 using PaySlipManagement.UI.Common;
 using PaySlipManagement.UI.Models;
@@ -9,10 +10,10 @@ namespace PaySlipManagement.UI.Controllers
     {
         private readonly APIServices _apiService;
         private readonly ApiSettings _apiSettings;
-        public DepartmentController(APIServices apiService, ApiSettings apiSettings)
+        public DepartmentController(APIServices apiService, IOptions<ApiSettings> apiSettings)
         {
             _apiService = apiService;
-            _apiSettings = apiSettings;
+            _apiSettings = apiSettings.Value;
         }
         // GET: DepartmentController
         public async Task<IActionResult> Index()
