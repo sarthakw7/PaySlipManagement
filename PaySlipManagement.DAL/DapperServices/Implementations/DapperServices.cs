@@ -14,7 +14,7 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
 {
     public class DapperServices<T>: IDapperServices<T>
     {
-        private string constring = "Server=RAVIKIRAN\\SQLEXPRESS01;database=PayslipManagement;TrustServerCertificate=True;Trusted_Connection=true;MultipleActiveResultSets=true";
+        private string constring = "Server=LAPTOP-46NPMGS0\\SQLEXPRESS;database=PayslipManagement;TrustServerCertificate=True;Trusted_Connection=true;MultipleActiveResultSets=true";
         private SqlConnection con;
         public DapperServices()
         {
@@ -85,7 +85,7 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
         {
             try
             {
-                var sql = GetFullSelectStoredProcedureName(entity) + " @Emp_Code";
+                var sql = GetFullSelectStoredProcedureName(entity) + " @Emp_Code,@PaySlipForMonth";
                 var parameters = new DynamicParameters();
                 foreach (var property in entity.GetType().GetProperties())
                 {
@@ -220,7 +220,26 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
                 throw ex;
             }
         }
+        public async Task<T> EmployeeByEmpCodeAsync(T entity)
+        {
+            try
+            {
+                var sql = GetSelectStoredProcedureName(entity) + " @Emp_Code";
+                var parameters = new DynamicParameters();
+                foreach (var property in entity.GetType().GetProperties())
+                {
+                    parameters.Add("@" + property.Name, property.GetValue(entity));
+                };
+                var result = await con.QueryFirstOrDefaultAsync<T>(sql, parameters);
+                con.Close();
+                return result;
+            }
+            catch (Exception ex)
+            {
 
+                throw ex;
+            }
+        }
         public async Task<bool> CheckEmployeeExistsAsync(string Emp_Code)
         {
             var parameters = new { Emp_Code = Emp_Code };

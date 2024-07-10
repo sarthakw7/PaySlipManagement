@@ -23,7 +23,7 @@ namespace PaySlipManagement.API.Controllers
         {
             return await _employeeBALRepo.GetAllEmployees();
         }
-        [HttpGet("GetEmployeeById/{id}")]
+        [HttpGet("GetEmployeeById/{empcode}")]
         public async Task<Employee> GetEmployeeByidAsync(int id)
         {
             Employee emp = new Employee();
@@ -36,9 +36,14 @@ namespace PaySlipManagement.API.Controllers
             return await _employeeBALRepo.GetAllEmployeesDetailsAsync();
         }
         [HttpGet("GetEmployeeByEmpCode/{empcode}")]
-        public async Task<EmployeeDetails> GetEmployeeByidAsync(string empcode)
+        public async Task<EmployeeDetails> GetEmployeeByCodeAsync(string empcode)
         {
             return await _employeeBALRepo.GetEmployeeByCodeAsync(empcode);
+        }
+        [HttpGet("GetEmployeeByEmpCode/{empcode}/{payperiod}")]
+        public async Task<EmployeeDetails> GetEmployeeByidAsync(string empcode, string payperiod)
+        {
+            return await _employeeBALRepo.GetEmployeeByCodeAsync(empcode, payperiod);
         }
         [HttpPost("CreateEmployee")]
         public async Task<bool> Create(Employee _employee)
