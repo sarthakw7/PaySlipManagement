@@ -48,7 +48,7 @@ namespace PaySlipManagement.UI.Controllers
                 user.Role = "";
 
                 // Make a POST request to the Web API
-                var response = await _apiServices.PostAsync($"{_apiSettings}/Login", user); 
+                var response = await _apiServices.PostAsync($"{_apiSettings.UserEndpoint}/Login", user); 
                 if (!string.IsNullOrEmpty(response))
                 {
                     // Handle a successful login
