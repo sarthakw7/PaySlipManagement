@@ -56,12 +56,13 @@ namespace PaySlipManagement.DAL.Implementations
                 throw ex;
             }
         }
-        public async Task<EmployeeDetails> GetEmployeeByCodeAsync(string empcode)
+        public async Task<EmployeeDetails> GetEmployeeByCodeAsync(string empcode, string payperiod)
         {
             try
             {
                 EmployeeDetails e = new EmployeeDetails();
                 e.Emp_Code = empcode;
+                e.PaySlipForMonth = payperiod;
                 DapperServices<EmployeeDetails> empdetails = new DapperServices<EmployeeDetails>();
                 return await empdetails.ReadGetByCodeAsync(e);
             }
@@ -70,6 +71,21 @@ namespace PaySlipManagement.DAL.Implementations
                 throw ex;
             }
         }
+        public async Task<EmployeeDetails> GetEmployeeByCodeAsync(string empcode)
+        {
+            try
+            {
+                EmployeeDetails e = new EmployeeDetails();
+                e.Emp_Code = empcode;
+                DapperServices<EmployeeDetails> empdetails = new DapperServices<EmployeeDetails>();
+                return await empdetails.EmployeeByEmpCodeAsync(e);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        
         public async Task<bool> AddEmployee(Employee _employee)
         {
             try

@@ -31,10 +31,10 @@ namespace PaySlipManagement.Common.Utilities
 
             var words = ConvertWholeNumberToWords(integerPart);
 
-            if (decimalPart > 0)
-            {
-                words += " Point " + ConvertWholeNumberToWords(decimalPart);
-            }
+            //if (decimalPart > 0)
+            //{
+            //    words += " Point " + ConvertWholeNumberToWords(decimalPart);
+            //}
 
             return words;
         }

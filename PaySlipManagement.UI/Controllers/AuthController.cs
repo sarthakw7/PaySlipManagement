@@ -14,15 +14,21 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Net.Http;
+using Newtonsoft.Json;
+using PaySlipManagement.UI.Models.DTO;
+using NuGet.Protocol;
+using Microsoft.Extensions.Options;
 
 namespace PaySlipManagement.UI.Controllers
 {
     public class AuthController : Controller
     {
         private APIServices _apiServices;
-        public AuthController(APIServices apiServices)
+        private readonly ApiSettings _apiSettings;
+        public AuthController(APIServices apiServices, IOptions<ApiSettings> apiSettings)
         {
             this._apiServices = apiServices;
+            _apiSettings = apiSettings.Value;
         }
 
         [HttpGet]
@@ -42,15 +48,17 @@ namespace PaySlipManagement.UI.Controllers
                 user.Role = "";
 
                 // Make a POST request to the Web API
-                var response = await _apiServices.PostAsync("/api/User/Login", user); 
+                var response = await _apiServices.PostAsync($"{_apiSettings}/Login", user); 
                 if (!string.IsNullOrEmpty(response))
                 {
                     // Handle a successful login
                     ViewBag.Emp_Code = model.Emp_Code.ToString();
 
                     // Deserialize the JSON response to extract the token
-                    var jsonResponse = JObject.Parse(response);
-                    var token = jsonResponse["token"].ToString();
+
+                    var jsonresponse = JsonConvert.DeserializeObject<ApiResponse>(response);
+
+                    var token = jsonresponse.Token;
 
                     // Store the token in a cookie
                     Response.Cookies.Append("AuthToken", token, new CookieOptions
@@ -61,7 +69,7 @@ namespace PaySlipManagement.UI.Controllers
                     });
 
                     // Store the token in a cookie
-                    Response.Cookies.Append("empCode", model.Emp_Code, new CookieOptions
+                    Response.Cookies.Append("empCode",jsonresponse.User.EmpCode , new CookieOptions
                     {
                         HttpOnly = true,
                         Secure = true,
