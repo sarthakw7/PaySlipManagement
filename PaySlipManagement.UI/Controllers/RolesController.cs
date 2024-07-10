@@ -8,19 +8,20 @@ namespace PaySlipManagement.UI.Controllers
     public class RolesController : Controller
     {
         private readonly APIServices _apiServices;
-
-        public RolesController(APIServices apiServices)
+        private readonly ApiSettings _apiSettings;
+        public RolesController(APIServices apiServices, ApiSettings apiSettings)
         {
             _apiServices = apiServices;
+            _apiSettings = apiSettings;
         }
 
 
-       // GET: Roles
+        // GET: Roles
         public async Task<IActionResult> Index()
         {
             TempData["message"] = "This is Role Index";
 
-            var roles = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.RolesViewModel>("/api/Roles/GetAllAsyncRoles");
+            var roles = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.RolesViewModel>($"{_apiSettings.RolesEndpoint}/GetAllAsyncRoles");
 
             return View(roles);
         }
@@ -43,7 +44,7 @@ namespace PaySlipManagement.UI.Controllers
                 roles.Id = role.Id;
                 roles.Role = role.Role;
 
-                var response = await _apiServices.PostAsync("/api/Roles/CreateRoles", role);
+                var response = await _apiServices.PostAsync($"{_apiSettings.RolesEndpoint}/CreateRoles", role);
                 if (!string.IsNullOrEmpty(response) && response == "Role Registered Successfully" || response == "true")
                 {
                     TempData["Message"] = response;
@@ -69,7 +70,7 @@ namespace PaySlipManagement.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Roles>("/api/Roles/GetByIdAsyncRoles/{id}");
+            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Roles>($"{_apiSettings.RolesEndpoint}/GetByIdAsyncRoles/{id}");
             return View(data);
 
         }
@@ -82,7 +83,7 @@ namespace PaySlipManagement.UI.Controllers
             if (ModelState.IsValid)
             {
                 // Make a POST request to the Web API
-                var response = await _apiServices.PutAsync("/api/Roles/UpdateRoles", role);
+                var response = await _apiServices.PutAsync($"{_apiSettings.RolesEndpoint}/UpdateRoles", role);
 
                 if (!string.IsNullOrEmpty(response) && response == "Role is Updated Successfully" || response == "true")
                 {
@@ -109,21 +110,21 @@ namespace PaySlipManagement.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Roles>("api/Roles/GetByIdAsyncRoles/{id}");
+            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Roles>($"{_apiSettings.RolesEndpoint}/GetByIdAsyncRoles/{id}");
             return View(data);
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Roles>("/api/Roles/GetByIdAsyncRoles/{id}");
+            var data = await _apiServices.GetAsync<PaySlipManagement.Common.Models.Roles>($"{_apiSettings.RolesEndpoint}/GetByIdAsyncRoles/{id}");
             return View(data);
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(RolesViewModel role)
         {
-            var response = await _apiServices.PostAsync<PaySlipManagement.Common.Models.Roles>("/api/Roles/DeleteRoles", new Roles() { Id = role.Id});
+            var response = await _apiServices.PostAsync<PaySlipManagement.Common.Models.Roles>($"{_apiSettings.RolesEndpoint}/DeleteRoles", new Roles() { Id = role.Id});
             if (!string.IsNullOrEmpty(response) && response == "true")
             {
                 return RedirectToAction("Index");

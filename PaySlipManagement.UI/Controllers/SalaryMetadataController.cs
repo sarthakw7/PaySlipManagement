@@ -8,21 +8,22 @@ namespace PaySlipManagement.UI.Controllers
     public class SalaryMetadataController : Controller
     {
         private readonly APIServices _apiService;
-        private readonly string baseUrl = "api/Salary";
-        public SalaryMetadataController(APIServices apiService)
+        private readonly ApiSettings _apiSettings;
+        public SalaryMetadataController(APIServices apiService, ApiSettings apiSettings)
         {
             _apiService = apiService;
+            _apiSettings = apiSettings;
         }
         // GET: SalaryMetadata
         public async Task<IActionResult> Index()
         {
-            var response = await _apiService.GetAllAsync<SalaryMetadata>($"{baseUrl}/GetAllSalaryMetadata");
+            var response = await _apiService.GetAllAsync<SalaryMetadata>($"{_apiSettings.SalaryEndpoint}/GetAllSalaryMetadata");
             return View(response);
         }
         // GET: SalaryMetadata/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var response = await _apiService.GetAsync<SalaryMetadataViewModel>($"{baseUrl}/GetSalaryMetadataById/{id}");
+            var response = await _apiService.GetAsync<SalaryMetadataViewModel>($"{_apiSettings.SalaryEndpoint}/GetSalaryMetadataById/{id}");
             return View(response);
         }
         // GET: SalaryMetadata/Create
@@ -38,7 +39,7 @@ namespace PaySlipManagement.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync($"{baseUrl}/CreateSalaryMetadata", model);
+                await _apiService.PostAsync($"{_apiSettings.SalaryEndpoint}/CreateSalaryMetadata", model);
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
@@ -46,7 +47,7 @@ namespace PaySlipManagement.UI.Controllers
         // GET: SalaryMetadata/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var response = await _apiService.GetAsync<SalaryMetadataViewModel>($"{baseUrl}/GetSalaryMetadataById/{id}");
+            var response = await _apiService.GetAsync<SalaryMetadataViewModel>($"{_apiSettings.SalaryEndpoint}/GetSalaryMetadataById/{id}");
             return View(response);
         }
 
@@ -57,7 +58,7 @@ namespace PaySlipManagement.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PutAsync($"{baseUrl}/UpdateSalaryMetadata", model);
+                await _apiService.PutAsync($"{_apiSettings.SalaryEndpoint}/UpdateSalaryMetadata", model);
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
@@ -66,7 +67,7 @@ namespace PaySlipManagement.UI.Controllers
         // GET: SalaryMetadata/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _apiService.GetAsync<SalaryMetadataViewModel>($"{baseUrl}/GetSalaryMetadataById/{id}");
+            var response = await _apiService.GetAsync<SalaryMetadataViewModel>($"{_apiSettings.SalaryEndpoint}/GetSalaryMetadataById/{id}");
             return View(response);
         }
 
@@ -75,7 +76,7 @@ namespace PaySlipManagement.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var data = await _apiService.GetAsync<bool>($"{baseUrl}/DeleteSalaryMetadata/{id}");
+            var data = await _apiService.GetAsync<bool>($"{_apiSettings.SalaryEndpoint}/DeleteSalaryMetadata/{id}");
             if (data==true)
             {
                 return RedirectToAction(nameof(Index));

@@ -8,20 +8,22 @@ namespace PaySlipManagement.UI.Controllers
     public class CompanyDetailsController : Controller
     {
         private APIServices _apiServices;
-        public CompanyDetailsController(APIServices apiServices)
+        private readonly ApiSettings _apiSettings;
+        public CompanyDetailsController(APIServices apiServices, ApiSettings apiSettings)
         {
             this._apiServices = apiServices;
+            _apiSettings = apiSettings;
         }
 
         public async Task<IActionResult> Index()
         {
-            var companyDetails = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.CompanyDetailsViewModel>("api/CompanyDetails/GetAllCompanyDetails");
+            var companyDetails = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.CompanyDetailsViewModel>($"{_apiSettings.CompanyDetailsEndpoint}/GetAllCompanyDetails");
             return View(companyDetails);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var response = await _apiServices.GetAsync<CompanyDetailsViewModel>($"api/CompanyDetails/GetCompanyDetailsById/{id}");
+            var response = await _apiServices.GetAsync<CompanyDetailsViewModel>($"{_apiSettings.CompanyDetailsEndpoint}/GetCompanyDetailsById/{id}");
             return View(response);
         }
 
@@ -42,7 +44,7 @@ namespace PaySlipManagement.UI.Controllers
                 companyDetails.CompanyAddress = details.CompanyAddress;
                 companyDetails.Division = details.Division;
 
-                var response = await _apiServices.PostAsync<CompanyDetails>("api/CompanyDetails/CreateCompanyDetails", details);
+                var response = await _apiServices.PostAsync<CompanyDetails>($"{_apiSettings.CompanyDetailsEndpoint}/CreateCompanyDetails", details);
                 if (response != null)
                 {
                     return RedirectToAction("Index");
@@ -54,7 +56,7 @@ namespace PaySlipManagement.UI.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var response = await _apiServices.GetAsync<CompanyDetailsViewModel>($"api/CompanyDetails/GetCompanyDetailsById/{id}");
+            var response = await _apiServices.GetAsync<CompanyDetailsViewModel>($"{_apiSettings.CompanyDetailsEndpoint}/GetCompanyDetailsById/{id}");
             return View(response);
         }
 
@@ -65,7 +67,7 @@ namespace PaySlipManagement.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _apiServices.PutAsync("api/CompanyDetails/UpdateCompanyDetails", details);
+                await _apiServices.PutAsync($"{_apiSettings.CompanyDetailsEndpoint}/UpdateCompanyDetails", details);
                 return RedirectToAction(nameof(Index));
             }
             return View(details);
@@ -73,7 +75,7 @@ namespace PaySlipManagement.UI.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var data = await _apiServices.GetAsync<CompanyDetailsViewModel>($"api/CompanyDetails/GetCompanyDetailsById/{id}");
+            var data = await _apiServices.GetAsync<CompanyDetailsViewModel>($"{_apiSettings.CompanyDetailsEndpoint}/GetCompanyDetailsById/{id}");
             return View(data);
         }
 
@@ -82,7 +84,7 @@ namespace PaySlipManagement.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var data = await _apiServices.GetAsync<bool>($"api/CompanyDetails/DeleteCompanyDetails/{id}");
+            var data = await _apiServices.GetAsync<bool>($"{_apiSettings.CompanyDetailsEndpoint}/DeleteCompanyDetails/{id}");
             if (data == true)
             {
                 return RedirectToAction(nameof(Index));
