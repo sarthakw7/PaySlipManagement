@@ -1,18 +1,22 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PaySlipManagement.BAL.Implementations;
 using PaySlipManagement.BAL.Interfaces;
 using PaySlipManagement.UI.Common;
+using PaySlipManagement.UI.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
 builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient<APIServices>(client =>
+builder.Services.AddHttpClient<APIServices>((serviceProvider, client) =>
 {
-    client.BaseAddress = new Uri("https://localhost:7181");
-    // Add any additional client configuration here (e.g., headers, timeouts, etc.).
+    var apiSettings = serviceProvider.GetRequiredService<IOptions<ApiSettings>>().Value;
+    client.BaseAddress = new Uri(apiSettings.BaseUrl);
 });
 builder.Services.AddScoped<IDepartmentBALRepo, DepartmentBALRepo>();
 builder.Services.AddScoped<IEmployeeBALRepo, EmployeeBALRepo>();
