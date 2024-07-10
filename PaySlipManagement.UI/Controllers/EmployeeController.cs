@@ -15,9 +15,12 @@ namespace PaySlipManagement.UI.Controllers
     {
 
         private APIServices _apiServices;
-        public EmployeeController(APIServices apiService)
+        private readonly ApiSettings _apiSettings;
+
+        public EmployeeController(APIServices apiService, ApiSettings apiSettings)
         {
             this._apiServices = apiService;
+            _apiSettings = apiSettings;
         }
 
         //GET: EmployeeController
@@ -25,8 +28,8 @@ namespace PaySlipManagement.UI.Controllers
         public async Task<IActionResult> Index()
         {
 
-            var emp = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.EmployeeViewModel>("api/Employee/GetAllEmployees");
-            var departments = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.DepartmentViewModel>("api/Department/GetAllDepartments");
+            var emp = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"{_apiSettings.EmployeeEndpoint}/GetAllEmployees");
+            var departments = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.DepartmentViewModel>($"{_apiSettings.DepartmentEndpoint}/GetAllDepartments");
             var employeeWithDepartmentList = emp.Select(e => new EmployeeViewModel
             {
                 Id = e.Id,
@@ -40,8 +43,6 @@ namespace PaySlipManagement.UI.Controllers
                 JoiningDate = e.JoiningDate,
                 DepartmentName = departments.FirstOrDefault(d => d.Id == e.DepartmentId)?.DepartmentName
             }).ToList();
-
-            Response.Cookies.Append("empCode", "WHIZ2301");
 
             return View(employeeWithDepartmentList);
 
@@ -72,7 +73,7 @@ namespace PaySlipManagement.UI.Controllers
                 employee.JoiningDate = model.JoiningDate;
 
                 // Make a POST request to the Web API
-                var response = await _apiServices.PostAsync("api/Employee/CreateEmployee", model);
+                var response = await _apiServices.PostAsync($"{_apiSettings.EmployeeEndpoint}/CreateEmployee", model);
 
                 if (!string.IsNullOrEmpty(response) && response == "Employee Registered Successfully" || response == "true")
                 {
@@ -99,7 +100,7 @@ namespace PaySlipManagement.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"api/Employee/GetEmployeeById/{id}");
+            var data = await _apiServices.GetAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeById/{id}");
             return View(data);
         }
         [HttpPost]
@@ -109,7 +110,7 @@ namespace PaySlipManagement.UI.Controllers
             if (ModelState.IsValid)
             {
                 // Make a POST request to the Web API
-                var response = await _apiServices.PutAsync<EmployeeViewModel>("/api/Employee/UpdateEmployee", model);
+                var response = await _apiServices.PutAsync<EmployeeViewModel>($"{_apiSettings.EmployeeEndpoint}/UpdateEmployee", model);
 
                 if (!string.IsNullOrEmpty(response) && response == "Employee Updated Successfully" || response == "true")
                 {
@@ -135,16 +136,16 @@ namespace PaySlipManagement.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var data = await _apiServices.GetAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"api/Employee/GetEmployeeById/{id}");
-            var departments = await _apiServices.GetAsync<PaySlipManagement.UI.Models.DepartmentViewModel>($"api/Department/GetDepartmentById/{data.DepartmentId}");
+            var data = await _apiServices.GetAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeById/{id}");
+            var departments = await _apiServices.GetAsync<PaySlipManagement.UI.Models.DepartmentViewModel>($"{_apiSettings.DepartmentEndpoint}/GetDepartmentById/{data.DepartmentId}");
             data.DepartmentName = departments.DepartmentName;
             return View(data);
         }
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var data = await _apiServices.GetAsync<EmployeeViewModel>($"api/Employee/GetEmployeeById/{id}");
-            var departments = await _apiServices.GetAsync<PaySlipManagement.UI.Models.DepartmentViewModel>($"api/Department/GetDepartmentById/{data.DepartmentId}");
+            var data = await _apiServices.GetAsync<EmployeeViewModel>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeById/{id}");
+            var departments = await _apiServices.GetAsync<PaySlipManagement.UI.Models.DepartmentViewModel>($"{_apiSettings.DepartmentEndpoint}/GetDepartmentById/{data.DepartmentId}");
             data.DepartmentName = departments.DepartmentName;
             return View(data);
         }
@@ -152,7 +153,7 @@ namespace PaySlipManagement.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirm(int id)
         {
-            var response = await _apiServices.GetAsync<bool>($"api/Employee/DeleteEmployee/{id}");
+            var response = await _apiServices.GetAsync<bool>($"{_apiSettings.EmployeeEndpoint}/DeleteEmployee/{id}");
             if (response == true)
             {
                 return RedirectToAction(nameof(Index));
@@ -164,8 +165,12 @@ namespace PaySlipManagement.UI.Controllers
         {
             var empCode = Request.Cookies["empCode"];
 
+
             var employee = await _apiServices.GetAsync<EmployeeDetails>($"api/Employee/GetEmployeeByEmpCode/{empCode}");
 			
+
+            var employee = await _apiServices.GetAsync<EmployeeDetails>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeByEmpCode/{empCode}");
+
 
 			if (employee == null)
             {
@@ -188,7 +193,7 @@ namespace PaySlipManagement.UI.Controllers
             try
             {
                 // Fetch employee details from API
-                var employee = await _apiServices.GetAsync<EmployeeDetails>($"api/Employee/GetEmployeeByEmpCode/{empCode}");
+                var employee = await _apiServices.GetAsync<EmployeeDetails>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeByEmpCode/{empCode}/{payPeriod}");
 
                 if (employee == null)
                 {
@@ -213,6 +218,42 @@ namespace PaySlipManagement.UI.Controllers
                 return View("Error");
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> ViewEmployeePdf(string empCode, string payPeriod)
+        {
+            try
+            {
+                // Fetch employee details from API
+                var employee = await _apiServices.GetAsync<EmployeeDetails>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeByEmpCode/{empCode}/{payPeriod}");
+
+                if (employee == null)
+                {
+                    return NotFound("Employee not found.");
+                }
+
+                // Create a unique directory to store generated PDFs
+                string directory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+                Directory.CreateDirectory(directory);
+
+                // Generate the PDF
+                string filePath = Path.Combine(directory, $"{employee.Emp_Code}_{employee.PaySlipForMonth}_PaySlip.pdf");
+                GenerateEmployeePdf(employee, filePath);
+
+                // Provide PDF for viewing in browser
+                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+                Response.Headers.Add("Content-Disposition", $"inline; filename={employee.Emp_Code}_{employee.PaySlipForMonth}_PaySlip.pdf");
+
+                // Clean up the temporary file after serving it
+                Task.Run(() => System.IO.File.Delete(filePath));
+
+                return File(fileBytes, "application/pdf");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"An error occurred: {ex.Message}");
+                return View("Error");
+            }
+        }
         private void GenerateEmployeePdf(EmployeeDetails employee, string filePath)
         {
             string htmlContent = System.IO.File.ReadAllText("wwwroot/Payslip.html");
@@ -222,7 +263,7 @@ namespace PaySlipManagement.UI.Controllers
                                      .Replace("{{designation}}", employee.Designation)
                                      .Replace("{{department}}", employee.DepartmentName)
                                      .Replace("{{BnNo}}", employee.BankAccountNumber.ToString())
-                                     .Replace("{{jod}}", employee.JoiningDate.ToString())
+                                     .Replace("{{jod}}", employee.JoiningDate?.ToString("yyyy-MM-dd"))
                                      .Replace("{{bankName}}", employee.BankName)
                                      .Replace("{{panNo}}", employee.PAN_Number)
                                      .Replace("{{uanNo}}", employee.UANNumber.ToString())
@@ -239,7 +280,7 @@ namespace PaySlipManagement.UI.Controllers
                                      .Replace("{{eamounttotal}}", employee.EarningTotal.ToString("C"))
                                      .Replace("{{damounttotal}}", employee.TotalDeductions.ToString("C"))
                                      .Replace("{{netpay}}", employee.NetPay.ToString("C"))
-                                     .Replace("{{location}}", employee.Emp_Code)
+                                     .Replace("{{location}}", employee.Division)
                                      .Replace("{{netpayword}}", NumberToWordsConverter.ConvertToWords(employee.NetPay) + " Rupees")
                                      .Replace("{{address}}", employee.Emp_Code);
 
@@ -272,16 +313,23 @@ namespace PaySlipManagement.UI.Controllers
         private List<string> CalculatePayPeriods(DateTime? joiningDate, DateTime endDate)
         {
             var payPeriods = new List<string>();
-            var currentDate = endDate;
+            var currentDate = endDate.AddMonths(-1);
             var startDate = endDate.AddMonths(-6);
 
             while (currentDate >= startDate && (joiningDate == null || currentDate >= joiningDate))
             {
+
                 payPeriods.Add(currentDate.ToString("yyyy-MMMM"));			
 	        	currentDate = currentDate.AddMonths(-1);
 
 			}
 			payPeriods.Reverse();
+
+                payPeriods.Add(currentDate.ToString("MMMM-yyyy"));
+                currentDate = currentDate.AddMonths(-1);
+            }
+             //payPeriods.Reverse();
+
             return payPeriods;
         }
     }
