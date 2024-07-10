@@ -18,17 +18,10 @@ namespace PaySlipManagement.UI.Controllers
         private APIServices _apiServices;
         private readonly ApiSettings _apiSettings;
 
-<<<<<<< HEAD
-        public EmployeeController(APIServices apiService, ApiSettings apiSettings)
-        {
-            this._apiServices = apiService;
-            _apiSettings = apiSettings;
-=======
         public EmployeeController(APIServices apiService, IOptions<ApiSettings> apiSettings)
         {
             this._apiServices = apiService;
             _apiSettings = apiSettings.Value;
->>>>>>> c75eedb3f775ea3f18dcfd04bc5c0f6e1ccfe9a2
         }
 
         //GET: EmployeeController
@@ -172,19 +165,8 @@ namespace PaySlipManagement.UI.Controllers
         public async Task<IActionResult> GeneratePdf()
         {
             var empCode = Request.Cookies["empCode"];
-
-<<<<<<< HEAD
-=======
             var employee = await _apiServices.GetAsync<EmployeeDetails>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeByEmpCode/{empCode}");
->>>>>>> c75eedb3f775ea3f18dcfd04bc5c0f6e1ccfe9a2
-
-            var employee = await _apiServices.GetAsync<EmployeeDetails>($"api/Employee/GetEmployeeByEmpCode/{empCode}");
-			
-
-            var employee = await _apiServices.GetAsync<EmployeeDetails>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeByEmpCode/{empCode}");
-
-
-			if (employee == null)
+	    if (employee == null)
             {
                 return NotFound("Employee not found.");
             }
@@ -330,21 +312,11 @@ namespace PaySlipManagement.UI.Controllers
 
             while (currentDate >= startDate && (joiningDate == null || currentDate >= joiningDate))
             {
-<<<<<<< HEAD
-
                 payPeriods.Add(currentDate.ToString("yyyy-MMMM"));			
-	        	currentDate = currentDate.AddMonths(-1);
+	        currentDate = currentDate.AddMonths(-1);
 
-			}
-			payPeriods.Reverse();
-
-=======
->>>>>>> c75eedb3f775ea3f18dcfd04bc5c0f6e1ccfe9a2
-                payPeriods.Add(currentDate.ToString("MMMM-yyyy"));
-                currentDate = currentDate.AddMonths(-1);
-            }
-             //payPeriods.Reverse();
-
+	    }
+	    payPeriods.Reverse();
             return payPeriods;
         }
     }
