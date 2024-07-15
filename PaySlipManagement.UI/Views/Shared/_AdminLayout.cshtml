@@ -68,51 +68,53 @@
 </head>
 <body>
     <div class="container-fluid d-flex">
+        @{
+            bool isAdminRole = Convert.ToBoolean(ViewContext.HttpContext.Items["IsAdminRole"]);
+            bool isEmployeeRole = Convert.ToBoolean(ViewContext.HttpContext.Items["IsEmployeeRole"]);
+        }
         <!-- Sidebar -->
-        <div class="sidebar p-3">
-            <h2>Whiztek</h2>
-            <hr>
-            <nav class="nav flex-column">
-                @{
-                    bool isAdminRole = Convert.ToBoolean(ViewContext.HttpContext.Items["IsAdminRole"]);
-                    bool isEmployeeRole = Convert.ToBoolean(ViewContext.HttpContext.Items["IsEmployeeRole"]);
-                }
-                @if (isAdminRole)
-                {
-                    <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="Index">Employee</a>
-                    <a class="nav-link" asp-area="" asp-controller="AccountDetails" asp-action="Index">Account</a>
-                    <a class="nav-link" asp-area="" asp-controller="Department" asp-action="Index">Department</a>
-                    <a class="nav-link" asp-area="" asp-controller="CompanyDetails" asp-action="Index">Company</a>
-                    <a class="nav-link" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
-                    <a class="nav-link" asp-area="" asp-controller="SalaryMetadata" asp-action="Index">Salary</a>
-                    <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">User</a>
-                }
-                @if (isEmployeeRole)
-                {
-                    <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="GeneratePdf">Employee Details</a>
-                }
-                @if (!isAdminRole && !isEmployeeRole)
-                {
-                    <a class="nav-link" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
-                }
-            </nav>
-        </div>
+        @if (isAdminRole || isEmployeeRole)
+        {
+            <div class="sidebar p-3">
+                <h2>Whiztek</h2>
+                <hr>
+                <nav class="nav flex-column">
+                    @if (isAdminRole)
+                    {
+                        <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="Index">Employee</a>
+                        <a class="nav-link" asp-area="" asp-controller="AccountDetails" asp-action="Index">Account</a>
+                        <a class="nav-link" asp-area="" asp-controller="Department" asp-action="Index">Department</a>
+                        <a class="nav-link" asp-area="" asp-controller="CompanyDetails" asp-action="Index">Company</a>
+                        <a class="nav-link" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+                        <a class="nav-link" asp-area="" asp-controller="SalaryMetadata" asp-action="Index">Salary</a>
+                        <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">User</a>
+                    }
+                    @if (isEmployeeRole)
+                    {
+                        <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="GeneratePdf">Employee Details</a>
+                    }
+                </nav>
+            </div>
+        }
         <!-- Content -->
         <div class="content">
-            <!-- Navbar -->
-            <nav class="navbar d-flex justify-content-end">
-                @if (Context.Session.GetString("empCode") != null)
-                {
-                    <a class="nav-link text-black">Hello, @Context.Session.GetString("empCode")</a>
-                    <form asp-controller="Auth" asp-action="Logout" method="post" class="form-inline">
-                        <button type="submit" class="btn btn-link nav-link">Logout</button>
-                    </form>
-                }
-                else
-                {
-                    <a class="nav-link" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
-                }
-            </nav>
+            @if (isAdminRole || isEmployeeRole)
+            {
+                <!-- Navbar -->
+                <nav class="navbar d-flex justify-content-end">
+                    @if (Context.Session.GetString("empCode") != null)
+                    {
+                        <a class="nav-link text-black">Hello, @Context.Session.GetString("empCode")</a>
+                        <form asp-controller="Auth" asp-action="Logout" method="post" class="form-inline">
+                            <button type="submit" class="btn btn-link nav-link">Logout</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="nav-link" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
+                    }
+                </nav>
+            }
             <!-- Main Content -->
             <div class="container">
                 <main role="main">
@@ -128,7 +130,7 @@
             &copy; @DateTime.Now.Year - Whiztek Private Limited - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>a
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
