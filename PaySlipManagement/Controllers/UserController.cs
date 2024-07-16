@@ -108,11 +108,11 @@ namespace PaySlipManagement.API.Controllers
             }
         }
         [HttpPost("Login")]
-        public async Task<IActionResult> LoginUser(Users _user)
+        public async Task<IActionResult> LoginUser(User _user)
         {
             if (_user != null)
             {
-                Users u = new Users();
+                User u = new User();
                 u.Emp_Code = _user.Emp_Code;
                 u.Password = _user.Password;
                 var data = await _userBALRepo.UserValidateUserCredentials(u);

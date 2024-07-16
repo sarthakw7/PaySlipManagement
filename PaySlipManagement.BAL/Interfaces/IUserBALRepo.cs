@@ -11,6 +11,6 @@ namespace PaySlipManagement.BAL.Interfaces
         Task<bool> Update(Users _user);
         Task<bool> Delete(Users _user);
         //bool ValidateUserCredentials(string username, string password);
-        Task<Users> UserValidateUserCredentials(Users user);
+        Task<User> UserValidateUserCredentials(User user);
     }
 }

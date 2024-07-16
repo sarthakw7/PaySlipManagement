@@ -12,7 +12,7 @@ namespace PaySlipManagement.UI.Models
         public String Email { get; set; }
         public string PAN_Number { get; set; }
         public string JoiningDate { get; set; }
-        public string DepartmentName { get; set; }
+        public string? DepartmentName { get; set; }
     }
     public class EmployeePayPeriodsViewModel
     {

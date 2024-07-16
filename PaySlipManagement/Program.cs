@@ -3,10 +3,17 @@ using PaySlipManagement.BAL.Interfaces;
 using PaySlipManagement.DAL.Implementations;
 using NPOI.SS.Formula.Functions;
 using PaySlipManagement.DAL.Interfaces;
+using PaySlipManagement.API.Data;
+using System.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContextFactory<LoggingDbContext>(options =>
+        options.UseSqlServer("Server=LAPTOP-46NPMGS0\\SQLEXPRESS;database=PayslipManagementDB;TrustServerCertificate=True;Trusted_Connection=true;MultipleActiveResultSets=true"));
+builder.Services.AddTransient<IExceptionLoggerService, ExceptionLoggerService>();
+
 
 builder.Services.AddScoped<IDepartmentBALRepo, DepartmentBALRepo>();
 builder.Services.AddScoped<IEmployeeBALRepo,EmployeeBALRepo>();
@@ -30,6 +37,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
