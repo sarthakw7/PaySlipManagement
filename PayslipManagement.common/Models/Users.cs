@@ -12,7 +12,13 @@ namespace PaySlipManagement.Common.Models
         public string? Emp_Code { get; set; }
         public string? Email { get; set; }
         public string? Password { get; set; }
-        public string Role { get; set; }
+    }
+    public class User
+    {
+        public string? Emp_Code { get; set; }
+        public string? Email { get; set; }
+        public string? Password { get; set; }
+        public string? Role { get; set; }
 
     }
 }

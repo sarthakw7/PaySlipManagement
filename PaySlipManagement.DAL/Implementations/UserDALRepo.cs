@@ -77,13 +77,13 @@ namespace PaySlipManagement.DAL.Implementations
              return false;
         }
 
-        public async Task<Users> GetByEmailAsync(string Emp_Code, string password)
+        public async Task<User> GetByEmailAsync(string Emp_Code, string password)
         {
-            var user = await _userRepository.ValidateAsync(new Users() { Emp_Code = Emp_Code, Password = password });
-            
+            DapperServices<User> _userRepo= new DapperServices<User>();
+            var user = await _userRepo.ValidateAsync(new User() { Emp_Code = Emp_Code, Password = password });
             return user;
         }
-        public async Task<Users> UserValidateUserCredentials(Users user)
+        public async Task<User> UserValidateUserCredentials(User user)
         {
             var data = await GetByEmailAsync(user.Emp_Code, user.Password);
             return data;

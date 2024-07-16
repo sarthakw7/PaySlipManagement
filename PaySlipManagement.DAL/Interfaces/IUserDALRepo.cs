@@ -10,6 +10,6 @@
         Task<bool> Create(Users user);
         Task<bool> Update(Users user);
         Task<bool> Delete(Users user);
-        Task<Users> UserValidateUserCredentials(Users user);
+        Task<User> UserValidateUserCredentials(User user);
     }
 }
