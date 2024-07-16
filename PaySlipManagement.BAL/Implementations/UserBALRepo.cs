@@ -39,10 +39,9 @@ namespace PaySlipManagement.BAL.Implementations
             return await _userDALRepo.Update(_user);
         }
 
-        public async Task<Users> UserValidateUserCredentials(Users user)
+        public async Task<User> UserValidateUserCredentials(User user)
         {
             return await _userDALRepo.UserValidateUserCredentials(user);    
         }
-
     }
 }
