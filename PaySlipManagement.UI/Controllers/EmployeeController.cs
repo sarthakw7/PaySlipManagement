@@ -2,6 +2,7 @@
 using iText.Kernel.Exceptions;
 using iText.Kernel.Pdf;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using NPOI.SS.Formula.Functions;
 using PayslipManagement.Common.Models;
@@ -26,9 +27,8 @@ namespace PaySlipManagement.UI.Controllers
 
         //GET: EmployeeController
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? departmentId)
         {
-
             var emp = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"{_apiSettings.EmployeeEndpoint}/GetAllEmployees");
             var departments = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.DepartmentViewModel>($"{_apiSettings.DepartmentEndpoint}/GetAllDepartments");
             var employeeWithDepartmentList = emp.Select(e => new EmployeeViewModel
@@ -45,10 +45,17 @@ namespace PaySlipManagement.UI.Controllers
                 DepartmentName = departments.FirstOrDefault(d => d.Id == e.DepartmentId)?.DepartmentName
             }).ToList();
 
+            // Filter employees if departmentId is provided
+            if (departmentId.HasValue)
+            {
+                employeeWithDepartmentList = employeeWithDepartmentList.Where(e => e.DepartmentId == departmentId.Value).ToList();
+            }
+
+            ViewBag.Departments = new SelectList(departments, "Id", "DepartmentName");
+            ViewBag.SelectedDepartmentId = departmentId;
+
             return View(employeeWithDepartmentList);
-
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Create()

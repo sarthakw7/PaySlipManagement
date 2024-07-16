@@ -4,6 +4,36 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+<style>
+    .custom-select {
+        width: 250px;
+    }
+
+    .bg-secondary {
+        background-color: #6c757d !important;
+    }
+
+    .rounded {
+        border-radius: 10px;
+    }
+
+    .shadow-sm {
+        box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+    }
+
+    .text-white {
+        color: #fff !important;
+    }
+
+    .form-inline .form-group {
+        display: flex;
+        align-items: center;
+    }
+
+        .form-inline .form-group label {
+            margin-right: 10px;
+        }
+</style>
 <div class="mt-2">
     <div class="d-flex justify-content-between align-items-center">
         <div>
@@ -15,73 +45,50 @@
         </div>
     </div>
 </div>
+<div class="mt-2 mb-1 bg-secondary p-3 rounded shadow-sm">
+    <form method="get" asp-action="Index" class="form-inline">
+        <div class="form-group mx-2">
+            <label for="departmentId" class="mr-2 text-white">Filter by Department:</label>
+            <select id="departmentId" name="departmentId" class="form-control custom-select" onchange="this.form.submit()">
+                <option value="">All</option>
+                @foreach (var department in (SelectList)ViewBag.Departments)
+                {
+                    <option value="@department.Value">@department.Text</option>
+                }
+            </select>
+        </div>
+    </form>
+</div>
+
 
 <table class="table table-striped table-bordered">
     <thead class="thead-light">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Emp_Code)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmployeeName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DepartmentName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Designation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Division)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PAN_Number)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JoiningDate)
-            </th>
-            <th>
-                Actions
-            </th>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.Emp_Code)</th>
+            <th>@Html.DisplayNameFor(model => model.EmployeeName)</th>
+            <th>@Html.DisplayNameFor(model => model.DepartmentName)</th>
+            <th>@Html.DisplayNameFor(model => model.Designation)</th>
+            <th>@Html.DisplayNameFor(model => model.Division)</th>
+            <th>@Html.DisplayNameFor(model => model.Email)</th>
+            <th>@Html.DisplayNameFor(model => model.PAN_Number)</th>
+            <th>@Html.DisplayNameFor(model => model.JoiningDate)</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Emp_Code)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EmployeeName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DepartmentName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Designation)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Division)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PAN_Number)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.JoiningDate)
-                </td>
+                <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.Emp_Code)</td>
+                <td>@Html.DisplayFor(modelItem => item.EmployeeName)</td>
+                <td>@Html.DisplayFor(modelItem => item.DepartmentName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Designation)</td>
+                <td>@Html.DisplayFor(modelItem => item.Division)</td>
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>@Html.DisplayFor(modelItem => item.PAN_Number)</td>
+                <td>@Html.DisplayFor(modelItem => item.JoiningDate)</td>
                 <td class="d-flex justify-content-evenly">
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

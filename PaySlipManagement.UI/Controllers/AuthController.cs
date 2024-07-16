@@ -34,14 +34,13 @@ namespace PaySlipManagement.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new Users
+                var user = new PaySlipManagement.Common.Models.User
                 {
                     Emp_Code = model.Emp_Code,
-                    Password = model.Password,
-                    Role = ""
+                    Password = model.Password
                 };
 
-                var response = await _apiServices.PostAsync($"{_apiSettings.UserEndpoint}/Login", user);
+                var response = await _apiServices.PostAsync($"{_apiSettings.UserEndpoint}/Login",user);
                 if (!string.IsNullOrEmpty(response))
                 {
                     var jsonresponse = JsonConvert.DeserializeObject<ApiResponse>(response);
