@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using PayslipManagement.Common.Models;
 using PaySlipManagement.BAL.Implementations;
 using PaySlipManagement.Common.Models;
 using System.IdentityModel.Tokens.Jwt;
@@ -56,6 +57,11 @@ namespace PaySlipManagement.API.Controllers
             {
                 return false;
             }
+        }
+        [HttpPut("UpdatePasswordByEmail")]
+        public async Task<bool> UpdatePasswordByEmailAsync(ResetPassword response)
+        {
+            return await _userBALRepo.UpdatePasswordByEmailAsync(response);
         }
         [HttpPut("UpdateUser")]
         public async Task<bool> UpdateUser(Users _user)
