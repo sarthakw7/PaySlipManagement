@@ -10,6 +10,7 @@ using PaySlipManagement.Common.Models;
 using PaySlipManagement.Common.Utilities;
 using PaySlipManagement.UI.Common;
 using PaySlipManagement.UI.Models;
+using System.Globalization;
 
 namespace PaySlipManagement.UI.Controllers
 {
@@ -41,9 +42,12 @@ namespace PaySlipManagement.UI.Controllers
                 Division = e.Division,
                 Email = e.Email,
                 PAN_Number = e.PAN_Number,
-                JoiningDate = e.JoiningDate,
+                JoiningDate = DateTime.TryParseExact(e.JoiningDate, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime joiningDateTime)
+                                ? joiningDateTime.ToString("MM/dd/yyyy")
+                                : string.Empty,
                 DepartmentName = departments.FirstOrDefault(d => d.Id == e.DepartmentId)?.DepartmentName
             }).ToList();
+
 
             // Filter employees if departmentId is provided
             if (departmentId.HasValue)
@@ -173,7 +177,7 @@ namespace PaySlipManagement.UI.Controllers
         {
             var empCode = Request.Cookies["empCode"];
             var employee = await _apiServices.GetAsync<EmployeeDetails>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeByEmpCode/{empCode}");
-	    if (employee == null)
+	        if (employee == null)
             {
                 return NotFound("Employee not found.");
             }
@@ -413,7 +417,7 @@ namespace PaySlipManagement.UI.Controllers
 
             while (currentDate >= startDate && (joiningDate == null || currentDate >= joiningDate))
             {
-                payPeriods.Add(currentDate.ToString("yyyy-MMMM"));			
+                payPeriods.Add(currentDate.ToString("MMMM-yyyy"));			
 	              currentDate = currentDate.AddMonths(-1);
 	        }
 	          payPeriods.Reverse();

@@ -14,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient<APIServices>((serviceProvider, client) =>
 {
     var apiSettings = serviceProvider.GetRequiredService<IOptions<ApiSettings>>().Value;
