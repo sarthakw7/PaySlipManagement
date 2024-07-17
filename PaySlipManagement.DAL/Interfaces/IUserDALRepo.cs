@@ -9,6 +9,7 @@
         Task<Users> GetByIdAsync(Users user);
         Task<bool> Create(Users user);
         Task<bool> Update(Users user);
+        Task<bool> UpdatePasswordByEmailAsync(ResetPassword response);
         Task<bool> Delete(Users user);
         Task<User> UserValidateUserCredentials(User user);
     }
