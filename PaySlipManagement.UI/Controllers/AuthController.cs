@@ -9,6 +9,7 @@ using System.Text;
 using Newtonsoft.Json;
 using PaySlipManagement.UI.Models.DTO;
 using Microsoft.Extensions.Options;
+using NPOI.POIFS.Crypt.Dsig;
 
 namespace PaySlipManagement.UI.Controllers
 {
@@ -115,6 +116,37 @@ namespace PaySlipManagement.UI.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword( ResetPassword model)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = await _apiServices.PutAsync<ResetPassword>($"{_apiSettings.UserEndpoint}/UpdatePasswordByEmail", model);
+
+                if (!string.IsNullOrEmpty(response) && response == "password Updated Successfully" || response == "true")
+                {
+                    TempData["message"] = response;
+                    // Handle a successful Updated
+                    return RedirectToAction("Login");
+                }
+                else
+                {
+                    // Handle the case where the API request fails or register is unsuccessful
+                    if (response != null)
+                    {
+                        ModelState.AddModelError(string.Empty, response);
+                    }
+                    ModelState.AddModelError(string.Empty, "API request failed or Update was unsuccessful");
+                }
+            }
+            ModelState.AddModelError(string.Empty, "Invalid Update attempt");
+            return View(model);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -59,6 +59,19 @@ namespace PaySlipManagement.DAL.Implementations
             }
             return false;
         }
+        public async Task<bool> UpdatePasswordByEmailAsync(ResetPassword response)
+        {
+           if (response != null)
+           {
+                ResetPassword rp = new ResetPassword();
+                rp.Email = response.Email;
+                rp.Password = response.Password;
+                DapperServices<ResetPassword> _resetPassword=new DapperServices<ResetPassword>();
+                await _resetPassword.UpdateAsync(rp);
+                return true;
+           }
+                return false;
+        }
 
         public async Task<bool> Update(Users user)
         {

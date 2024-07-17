@@ -33,6 +33,10 @@ namespace PaySlipManagement.BAL.Implementations
         {
             return await _userDALRepo.Delete(_user);
         }
+        public async Task<bool> UpdatePasswordByEmailAsync(ResetPassword response)
+        {
+            return await _userDALRepo.UpdatePasswordByEmailAsync(response);
+        }
 
         public async Task<bool> Update(Users _user)
         {
