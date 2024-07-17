@@ -1,4 +1,5 @@
 ﻿using PayslipManagement.Common.Models;
+using PaySlipManagement.UI.Utilities;
 namespace PaySlipManagement.UI.Models
 {
     public class EmployeeViewModel
@@ -11,6 +12,8 @@ namespace PaySlipManagement.UI.Models
         public String Division { get; set; }
         public String Email { get; set; }
         public string PAN_Number { get; set; }
+        public string MaskedPanNumber => StringHelpers.MaskPanNumber(PAN_Number);
+
         public string JoiningDate { get; set; }
         public string? DepartmentName { get; set; }
     }
