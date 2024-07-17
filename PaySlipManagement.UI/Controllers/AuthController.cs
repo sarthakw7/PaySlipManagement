@@ -26,6 +26,10 @@ namespace PaySlipManagement.UI.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            HttpContext.Session.Clear();
+            Response.Cookies.Delete("AuthToken");
+            Response.Cookies.Delete("UserRole");
+            Response.Cookies.Delete("empCode");
             return View();
         }
 

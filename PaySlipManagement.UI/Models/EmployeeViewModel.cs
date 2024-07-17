@@ -1,5 +1,7 @@
 ﻿using PayslipManagement.Common.Models;
+using System.ComponentModel.DataAnnotations;
 using PaySlipManagement.UI.Utilities;
+
 namespace PaySlipManagement.UI.Models
 {
     public class EmployeeViewModel
