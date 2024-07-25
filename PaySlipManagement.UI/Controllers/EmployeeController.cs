@@ -28,7 +28,7 @@ namespace PaySlipManagement.UI.Controllers
 
         //GET: EmployeeController
 
-        public async Task<IActionResult> Index(int? departmentId)
+        public async Task<IActionResult> Index(int? departmentId, int page = 1, int pageSize = 8)
         {
             var emp = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"{_apiSettings.EmployeeEndpoint}/GetAllEmployees");
             var departments = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.DepartmentViewModel>($"{_apiSettings.DepartmentEndpoint}/GetAllDepartments");
@@ -55,10 +55,20 @@ namespace PaySlipManagement.UI.Controllers
                 employeeWithDepartmentList = employeeWithDepartmentList.Where(e => e.DepartmentId == departmentId.Value).ToList();
             }
 
+            // Implement paging
+            int totalItems = employeeWithDepartmentList.Count;
+            int totalPages = (int)Math.Ceiling((decimal)totalItems / pageSize);
+            int currentPage = page > totalPages ? totalPages : page;
+            int skipItems = (currentPage - 1) * pageSize;
+
+            var pagedEmployeeList = employeeWithDepartmentList.Skip(skipItems).Take(pageSize).ToList();
+
             ViewBag.Departments = new SelectList(departments, "Id", "DepartmentName");
             ViewBag.SelectedDepartmentId = departmentId;
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.TotalPages = totalPages;
 
-            return View(employeeWithDepartmentList);
+            return View(pagedEmployeeList);
         }
 
         [HttpGet]
@@ -177,17 +187,26 @@ namespace PaySlipManagement.UI.Controllers
         {
             var empCode = Request.Cookies["empCode"];
             var employee = await _apiServices.GetAsync<EmployeeDetails>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeByEmpCode/{empCode}");
-	        if (employee == null)
+            var holidayImage = await _apiServices.GetAsync<HolidayImageViewModel>($"{_apiSettings.HolidayEndpoint}/GetHolidayImageByIdAsync");
+            var holidayPdf = await _apiServices.GetAsync<HolidayPdfViewModel>($"{_apiSettings.HolidayEndpoint}/GetHolidayPdfByIdAsync");
+
+            if (employee == null)
             {
                 return NotFound("Employee not found.");
             }
 
             var payPeriods = CalculatePayPeriods(employee.JoiningDate, DateTime.Now);
 
+            var holiday = new HolidayImagePDFViewModel()
+            {
+                HolidayImage = holidayImage,
+                HolidayPdf = holidayPdf,
+            };
             var model = new EmployeePayPeriodsViewModel
             {
                 Employee = employee,
-                PayPeriods = payPeriods
+                PayPeriods = payPeriods,
+                Holiday = holiday
             };
 
             return View(model);

@@ -16,6 +16,9 @@
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="ctc-breakdown-tab" data-bs-toggle="tab" href="#ctc-breakdown" role="tab" aria-controls="ctc-breakdown" aria-selected="false">CTC BreakDown</a>
         </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="holiday-calendar-tab" data-bs-toggle="tab" href="#holiday-calendar" role="tab" aria-controls="holiday-calendar" aria-selected="false">Holiday Calendar</a>
+        </li>
     </ul>
     <div class="tab-content mt-4" id="employeeTabsContent">
         <!-- Employee Details Tab -->
@@ -85,7 +88,29 @@
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
+        <!-- Holiday Calendar Tab -->
+        <div class="tab-pane fade" id="holiday-calendar" role="tabpanel" aria-labelledby="holiday-calendar-tab">
+            @if (Model.Holiday.HolidayPdf != null)
+            {
+                <div class="d-flex justify-content-between">
+                    <h6 class="text-primary mb-4">Latest Holiday Details</h6>
+                    <a href="data:application/pdf;base64,@Convert.ToBase64String(Model.Holiday.HolidayPdf.Data)" class="btn btn-primary" download="@Model.Holiday.HolidayPdf.FileName">@Model.Holiday.HolidayPdf.FileName</a>
+                </div>
+            }
+            else
+            {
+                <p>No holiday PDF available.</p>
+            }
+            @if (Model.Holiday.HolidayImage != null)
+            {
+                <img src="data:@Model.Holiday.HolidayImage.ContentType;base64,@Convert.ToBase64String(Model.Holiday.HolidayImage.ImageData)" alt="Holiday Image" class="holiday-image">
+            }
+            else
+            {
+                <p>No holiday image available.</p>
+            }
+        </div>
     </div>
 </div>
 
@@ -103,11 +128,18 @@
         transition: transform 0.2s;
     }
 
-        .btn-outline-primary:hover {
-            transform: scale(1.05);
-        }
+    .btn-outline-primary:hover {
+        transform: scale(1.05);
+    }
 
     .card .btn {
         margin: 0;
+    }
+
+    .holiday-image {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto 10px;
     }
 </style>

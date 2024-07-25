@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Upload Holiday Files";
+}
+
+<h2>Upload Holiday Files</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" enctype="multipart/form-data" method="post" class="d-flex align-items-center mb-3">
+            <label for="fileImage" class="mr-2">Upload Image</label>
+            <div class="form-group mb-0 mr-2">
+                <input type="file" name="fileImage" id="fileImage" class="form-control-file" />
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+   @*  <div class="col-md-6">
+        <form asp-action="Upload" enctype="multipart/form-data" method="post" class="d-flex align-items-center mb-3">
+            <label for="filePdf" class="mr-2">Upload PDF</label>
+            <div class="form-group mb-0 mr-2">
+                <input type="file" name="filePdf" id="filePdf" class="form-control-file" />
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div> *@
+</div>
+
+<style>
+    .form-control-file {
+        display: inline-block;
+        width: auto;
+    }
+    .mr-2 {
+        margin-right: .5rem !important;
+    }
+</style>
