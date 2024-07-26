@@ -1,0 +1,44 @@
+﻿@model LeaveRequestsViewModel
+
+<h1>Delete Request</h1>
+
+<h3>Are you sure you want to delete this Request?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Id</dt>
+        <dd class="col-sm-10">@Model.Id</dd>
+
+        <dt class="col-sm-2">Employee Code</dt>
+        <dd class="col-sm-10">@Model.Emp_Code</dd>
+
+        <dt class="col-sm-2">Leave Type</dt>
+        <dd class="col-sm-10">@Model.LeaveType</dd>
+
+        <dt class="col-sm-2">Reason</dt>
+        <dd class="col-sm-10">@Model.Reason</dd>
+
+        <dt class="col-sm-2">From Date</dt>
+        <dd class="col-sm-10">@Model.FromDate</dd>
+
+        <dt class="col-sm-2">To Date</dt>
+        <dd class="col-sm-10">@Model.ToDate</dd>
+
+        <dt class="col-sm-2">Leaves Count</dt>
+        <dd class="col-sm-10">@Model.LeavesCount</dd>
+
+        <dt class="col-sm-2">Approval Person</dt>
+        <dd class="col-sm-10">@Model.ApprovalPerson</dd>
+
+        <dt class="col-sm-2">Status</dt>
+        <dd class="col-sm-10">@Model.Status</dd>
+
+        <dt class="col-sm-2">Leave Balance</dt>
+        <dd class="col-sm-10">@Model.LeaveBalance</dd>
+    </dl>
+</div>
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button> |
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
