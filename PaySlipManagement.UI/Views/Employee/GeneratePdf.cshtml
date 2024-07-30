@@ -91,7 +91,7 @@
         </div>
         <!-- Holiday Calendar Tab -->
         <div class="tab-pane fade" id="holiday-calendar" role="tabpanel" aria-labelledby="holiday-calendar-tab">
-            @if (Model.Holiday.HolidayPdf != null)
+            @* @if (Model.Holiday.HolidayPdf != null)
             {
                 <div class="d-flex justify-content-between">
                     <h6 class="text-primary mb-4">Latest Holiday Details</h6>
@@ -101,7 +101,7 @@
             else
             {
                 <p>No holiday PDF available.</p>
-            }
+            } *@
             @if (Model.Holiday.HolidayImage != null)
             {
                 <img src="data:@Model.Holiday.HolidayImage.ContentType;base64,@Convert.ToBase64String(Model.Holiday.HolidayImage.ImageData)" alt="Holiday Image" class="holiday-image">
