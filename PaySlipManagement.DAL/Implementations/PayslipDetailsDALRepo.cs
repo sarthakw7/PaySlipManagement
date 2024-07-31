@@ -1,5 +1,6 @@
 ﻿using PaySlipManagement.Common.Models;
 using PaySlipManagement.DAL.DapperServices.Implementations;
+using PaySlipManagement.DAL.DapperServices.Interfaces;
 using PaySlipManagement.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,36 @@ namespace PaySlipManagement.DAL.Implementations
             if (payslipDetails != null)
             {
                 await _payslipDALRepo.CreateAsync(payslipDetails);
+                return true;
+            }
+            return false;
+        }
+
+
+        public async Task<bool> Delete(int? id)
+        {
+            var payslipDetails = new PayslipDetails { Id = id };
+            await _payslipDALRepo.DeleteAsync(payslipDetails);
+            return true;
+        }
+
+        public async Task<List<PayslipDetails>> GetAll()
+        {
+            var payslipDetails = await _payslipDALRepo.ReadAllAsync(new PayslipDetails() { Id = null});
+            return payslipDetails as List<PayslipDetails>;
+        }
+
+        public async Task<PayslipDetails> GetById(int? id)
+        {
+            var payslipDetails = await _payslipDALRepo.ReadGetByIdAsync(new PayslipDetails { Id = id });
+            return payslipDetails;
+        }
+
+        public async Task<bool> Update(PayslipDetails payslipDetails)
+        {
+            if (payslipDetails != null)
+            {
+                await _payslipDALRepo.UpdateAsync(payslipDetails);
                 return true;
             }
             return false;

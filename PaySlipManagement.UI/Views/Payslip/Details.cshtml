@@ -1,0 +1,100 @@
+﻿@model PaySlipManagement.UI.Models.PayslipDetailsViewModel
+
+@{
+    ViewData["Title"] = "Payslip Details";
+}
+
+<h2>Payslip Details</h2>
+
+<div>
+    <h4>PayslipDetails</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Id
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Id
+        </dd>
+        <dt class="col-sm-2">
+            Employee Code
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Emp_Code
+        </dd>
+        <dt class="col-sm-2">
+            Pay Slip For Month
+        </dt>
+        <dd class="col-sm-10">
+            @Model.PaySlipForMonth
+        </dd>
+        <dt class="col-sm-2">
+            Days Paid
+        </dt>
+        <dd class="col-sm-10">
+            @Model.DaysPaid
+        </dd>
+        <dt class="col-sm-2">
+            Absent Days
+        </dt>
+        <dd class="col-sm-10">
+            @Model.AbsentDays
+        </dd>
+        <dt class="col-sm-2">
+            Earned Basic
+        </dt>
+        <dd class="col-sm-10">
+            @Model.EarnedBasic
+        </dd>
+        <dt class="col-sm-2">
+            HRA
+        </dt>
+        <dd class="col-sm-10">
+            @Model.HRA
+        </dd>
+        <dt class="col-sm-2">
+            Special Allowance
+        </dt>
+        <dd class="col-sm-10">
+            @Model.SpecialAllowance
+        </dd>
+        <dt class="col-sm-2">
+            PF Employee Share
+        </dt>
+        <dd class="col-sm-10">
+            @Model.PFEmployeeShare
+        </dd>
+        <dt class="col-sm-2">
+            Professional Tax
+        </dt>
+        <dd class="col-sm-10">
+            @Model.ProfessionalTax
+        </dd>
+        <dt class="col-sm-2">
+            TDS
+        </dt>
+        <dd class="col-sm-10">
+            @Model.TDS
+        </dd>
+        <dt class="col-sm-2">
+            Earning Total
+        </dt>
+        <dd class="col-sm-10">
+            @Model.EarningTotal
+        </dd>
+        <dt class="col-sm-2">
+            Total Deductions
+        </dt>
+        <dd class="col-sm-10">
+            @Model.TotalDeductions
+        </dd>
+        <dt class="col-sm-2">
+            Net Pay
+        </dt>
+        <dd class="col-sm-10">
+            @Model.NetPay
+        </dd>
+    </dl>
+</div>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a> |
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

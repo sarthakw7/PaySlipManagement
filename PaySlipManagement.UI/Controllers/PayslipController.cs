@@ -18,12 +18,20 @@ namespace PaySlipManagement.UI.Controllers
             this._apiServices = apiService;
             _apiSettings = apiSettings.Value;
         }
+        // GET: Payslip
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var payslips = await _apiServices.GetAsync<List<PayslipDetailsViewModel>>($"{_apiSettings.PayslipDetailsEndpoint}/GetAllPayslipDetails");
+            return View(payslips);
+        }
+
+        // GET: Payslip/Upload
         [HttpGet]
         public IActionResult UploadPayslip()
         {
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> UploadPayslip(IFormFile file)
         {
@@ -54,7 +62,7 @@ namespace PaySlipManagement.UI.Controllers
                         PayslipDetailsViewModel rowData = new PayslipDetailsViewModel
                         {
                             Emp_Code = worksheet.Cells[row, 3].Value?.ToString(),
-                            PaySlipForMonth = DateTime.Now.ToString("yyyy-MMMM"),
+                            PaySlipForMonth = DateTime.Now.ToString("MMMM-yyyy"),
                             DaysPaid = daysPaid,
                             AbsentDays = absentDays,
                             EarnedBasic = earnedBasic,
@@ -77,7 +85,7 @@ namespace PaySlipManagement.UI.Controllers
 
             if (!string.IsNullOrEmpty(response) && response == "Imported Successfully" || response == "true")
             {
-                return RedirectToAction("UploadPayslip");
+                return RedirectToAction("Index");
             }
             else
             {
@@ -88,6 +96,80 @@ namespace PaySlipManagement.UI.Controllers
                 ModelState.AddModelError(string.Empty, "API request failed or Create was unsuccessful");
             }
             return View("UploadPayslip");
+        }
+        // GET: Payslip/Details/5
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            var payslip = await _apiServices.GetAsync<PayslipDetailsViewModel>($"{_apiSettings.PayslipDetailsEndpoint}/GetPayslipDetails/{id}");
+            if (payslip == null)
+            {
+                return NotFound();
+            }
+            return View(payslip);
+        }
+
+        // GET: Payslip/Edit/5
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var payslip = await _apiServices.GetAsync<PayslipDetailsViewModel>($"{_apiSettings.PayslipDetailsEndpoint}/GetPayslipDetails/{id}");
+            if (payslip == null)
+            {
+                return NotFound();
+            }
+            return View(payslip);
+        }
+
+        // POST: Payslip/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, PayslipDetailsViewModel model)
+        {   
+            if (ModelState.IsValid)
+            {
+                var response = await _apiServices.PutAsync($"{_apiSettings.PayslipDetailsEndpoint}/UpdatePayslipDetails", model);
+
+                if (!string.IsNullOrEmpty(response) && response == "Updated Successfully")
+                {
+                    TempData["SuccessMessage"] = "Payslip updated successfully!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    if (response != null)
+                    {
+                        ModelState.AddModelError(string.Empty, response);
+                    }
+                    ModelState.AddModelError(string.Empty, "API request failed or Update was unsuccessful");
+                }
+            }
+            return View(model);
+        }
+
+        // GET: Payslip/Delete/5
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var payslip = await _apiServices.GetAsync<PayslipDetailsViewModel>($"{_apiSettings.PayslipDetailsEndpoint}/GetPayslipDetails/{id}");
+            if (payslip == null)
+            {
+                return NotFound();
+            }
+            return View(payslip);
+        }
+
+        // POST: Payslip/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var response = await _apiServices.GetAsync<bool>($"{_apiSettings.PayslipDetailsEndpoint}/DeletePayslipDetails/{id}");
+            if (response == true)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View("Delete");
         }
     }
 }

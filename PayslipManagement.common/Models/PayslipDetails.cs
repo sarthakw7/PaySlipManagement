@@ -8,7 +8,7 @@ namespace PaySlipManagement.Common.Models
 {
     public class PayslipDetails
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Emp_Code { get; set; }
         public string PaySlipForMonth { get; set; }
         public int DaysPaid { get; set; }
