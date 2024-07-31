@@ -12,5 +12,7 @@ namespace PaySlipManagement.UI.Models
         public string SalaryEndpoint { get; set; }
         public string UserEndpoint { get; set; }
         public string UserRoleEndpoint { get; set; }
+        public string CTCDetailsEndpoint {  get; set; }
+
     }
 }
