@@ -1,0 +1,41 @@
+﻿@model LeaveRequestsViewModel
+
+<h1>Leave Requests</h1>
+
+<div>
+    <h4>Information</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Id</dt>
+        <dd class="col-sm-10">@Model.Id</dd>
+
+        <dt class="col-sm-2">Employee Code</dt>
+        <dd class="col-sm-10">@Model.Emp_Code</dd>
+
+        <dt class="col-sm-2">Leave Type</dt>
+        <dd class="col-sm-10">@Model.LeaveType</dd>
+
+        <dt class="col-sm-2">Reason</dt>
+        <dd class="col-sm-10">@Model.Reason</dd>
+
+        <dt class="col-sm-2">From Date</dt>
+        <dd class="col-sm-10">@Model.FromDate</dd>
+
+        <dt class="col-sm-2">To Date</dt>
+        <dd class="col-sm-10">@Model.ToDate</dd>
+
+        <dt class="col-sm-2">Leaves Count</dt>
+        <dd class="col-sm-10">@Model.LeavesCount</dd>
+
+        <dt class="col-sm-2">Approval Person</dt>
+        <dd class="col-sm-10">@Model.ApprovalPerson</dd>
+
+        <dt class="col-sm-2">Status</dt>
+        <dd class="col-sm-10">@Model.Status</dd>
+
+        <dt class="col-sm-2">Leave Balance</dt>
+        <dd class="col-sm-10">@Model.LeaveBalance</dd>
+    </dl>
+</div>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a> |
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
