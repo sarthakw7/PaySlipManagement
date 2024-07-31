@@ -1,0 +1,80 @@
+﻿@model CTCDetailsViewModel
+@{
+
+}
+<h1>Insert CTC Details</h1>
+
+<div>
+    <form asp-action="Create">
+        <div class="form-group">
+            <label asp-for="Emp_Code"></label>
+            <input asp-for="Emp_Code" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="EarnedBasic"></label>
+            <input asp-for="EarnedBasic" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="HRA"></label>
+            <input asp-for="HRA " class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="SpecialAllowance"></label>
+            <input asp-for="SpecialAllowance" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="PFEmployeeShare"></label>
+            <input asp-for="PFEmployeeShare" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="ProfessionalTax"></label>
+            <input asp-for="ProfessionalTax" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="TDS"></label>
+            <input asp-for="TDS" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="AnnualCTC"></label>
+            <input asp-for="AnnualCTC " class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="CTCMonth"></label>
+            <input asp-for="CTCMonth" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="PFEmployerShare"></label>
+            <input asp-for="PFEmployerShare" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="PFEmployerShareAnnual"></label>
+            <input asp-for="PFEmployerShareAnnual" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="AnnualGrossPay"></label>
+            <input asp-for="AnnualGrossPay" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="MonthGrossPay"></label>
+            <input asp-for="MonthGrossPay" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="OtherAdditions"></label>
+            <input asp-for="OtherAdditions" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="OtherDeductions"></label>
+            <input asp-for="OtherDeductions " class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="TotalDeductions"></label>
+            <input asp-for="TotalDeductions" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="NetPay"></label>
+            <input asp-for="NetPay" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Insert</button>
+    </form>
+</div>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

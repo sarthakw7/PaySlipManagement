@@ -24,6 +24,7 @@ builder.Services.AddScoped<ICompanyDetailsBALRepo, CompanyDetailsBALRepo>();
 builder.Services.AddScoped<ISalaryBALRepo, SalaryBALRepo>();
 builder.Services.AddScoped<IUserRoleBALRepo, UserRoleBALRepo>();
 builder.Services.AddScoped<IRoleBALRepo, RoleBALRepo>();
+builder.Services.AddScoped<ICTCDetailsBALRepo, CTCDetailsBALRepo>();
 
 
 builder.Services.AddControllers();
