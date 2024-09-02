@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using NPOI.SS.Formula.Functions;
 using PaySlipManagement.Common.Models;
 using PaySlipManagement.UI.Common;
 using PaySlipManagement.UI.Models;
+using System.Threading.Tasks;
 
 namespace PaySlipManagement.UI.Controllers
 {
@@ -12,7 +14,7 @@ namespace PaySlipManagement.UI.Controllers
         private readonly ApiSettings _apiSettings;
         public LeaveRequestsController(APIServices apiServices, IOptions<ApiSettings> apiSettings)
         {
-            this._apiServices = apiServices;
+            _apiServices = apiServices;
             _apiSettings = apiSettings.Value;
         }
         public async Task<IActionResult> Index()
@@ -38,30 +40,12 @@ namespace PaySlipManagement.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                //AccountDetails accountDetails = new AccountDetails();
-                //accountDetails.Id = account.Id;
-                //accountDetails.Emp_Code = account.Emp_Code;
-                //accountDetails.BankName = account.BankName;
-                //accountDetails.BankAccountNumber = account.BankAccountNumber;
-                //accountDetails.UANNumber = account.UANNumber;
-                //accountDetails.PFAccountNumber = account.PFAccountNumber;
-                LeaveRequestsViewModel lr = new LeaveRequestsViewModel();
-                lr.Id = leaveRequests.Id;
-                lr.Emp_Code = leaveRequests.Emp_Code;
-                lr.LeaveType = leaveRequests.LeaveType;
-                lr.Reason = leaveRequests.Reason;
-                lr.FromDate = leaveRequests.FromDate;
-                lr.ToDate = leaveRequests.ToDate;
-                lr.LeavesCount = leaveRequests.LeavesCount;
-                lr.ApprovalPerson = leaveRequests.ApprovalPerson;
-                lr.Status = leaveRequests.Status;
-                lr.LeaveBalance = leaveRequests.LeaveBalance;
                 var response = await _apiServices.PostAsync<LeaveRequests>($"{_apiSettings.LeaveRequestsEndpoint}/CreateLeaveRequests", leaveRequests);
                 if (response != null && response == "true")
                 {
                     return RedirectToAction("Index");
                 }
-                return View(lr);
+                return View(leaveRequests);
             }
             return View(leaveRequests);
         }
@@ -102,6 +86,49 @@ namespace PaySlipManagement.UI.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View("Delete");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApproveRequest(int id)
+        {
+            var response = await _apiServices.GetAsync<LeaveRequestsViewModel>($"{_apiSettings.LeaveRequestsEndpoint}/GetLeaveRequestsByid/{id}");
+            if (response != null)
+            {
+                var model = response;
+                if (model.Status == "Pending")
+                {
+                    model.Status = "Approved";
+                    var count = 0;
+                    if (model.FromDate != null && model.ToDate != null)
+                    {
+                        count = (model.ToDate - model.FromDate).Value.Days + 1;
+                    }
+                    model.LeavesCount += count;
+                    model.LeaveBalance -= count;
+                    await _apiServices.PutAsync($"{_apiSettings.LeaveRequestsEndpoint}/UpdateLeaveRequests", model);
+                    return Json(new { success = true, message = "Request approved successfully!" });
+                }
+            }
+            return Json(new { success = false, message = "An error occurred while approving the request." });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelRequest(int id)
+        {
+            var response = await _apiServices.GetAsync<LeaveRequestsViewModel>($"{_apiSettings.LeaveRequestsEndpoint}/GetLeaveRequestsByid/{id}");
+            if (response != null)
+            {
+                var model = response;
+                if (model.Status == "Pending")
+                {
+                    model.Status = "Declined";
+                    await _apiServices.PutAsync($"{_apiSettings.LeaveRequestsEndpoint}/UpdateLeaveRequests", model);
+                    return Json(new { success = true, message = "Request canceled successfully!" });
+                }
+            }
+            return Json(new { success = false, message = "An error occurred while canceling the request." });
         }
     }
 }
