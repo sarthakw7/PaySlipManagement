@@ -1,4 +1,5 @@
-﻿using PaySlipManagement.Common.Models;
+﻿using PayslipManagement.Common.Models;
+using PaySlipManagement.Common.Models;
 using PaySlipManagement.DAL.DapperServices.Implementations;
 using PaySlipManagement.DAL.Interfaces;
 using System;
@@ -43,6 +44,20 @@ namespace PaySlipManagement.DAL.Implementations
                 throw ex;
             }
 
+        }
+        public async Task<Leaves> GetLeavesByCodeAsync(string Emp_Code)
+        {
+            try
+            {
+                Leaves l = new Leaves();
+                l.Emp_Code = Emp_Code;
+                DapperServices<Leaves> _leavesRepo = new DapperServices<Leaves>();
+                return await _leavesRepo.ReadGetByAllCodeAsync(l);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         public async Task<bool> CreateLeaves(Leaves _leaves)
         {

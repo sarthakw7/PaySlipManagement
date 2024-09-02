@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PayslipManagement.Common.Models;
 using PaySlipManagement.BAL.Interfaces;
 using PaySlipManagement.Common.Models;
 
@@ -24,6 +25,11 @@ namespace PaySlipManagement.API.Controllers
             Leaves _leaves = new Leaves();
             _leaves.Id = id;
             return await _leavesBALRepo.GetLeavesByidAsync(_leaves);
+        }
+        [HttpGet("GetLeavesByEmpCode/{Emp_Code}")]
+        public async Task<Leaves> GetLeavesByCodeAsync(string Emp_Code)
+        {
+            return await _leavesBALRepo.GetLeavesByCodeAsync(Emp_Code);
         }
         [HttpPost("CreateLeaves")]
         public async Task<bool> CreateLeaves(Leaves _leaves)
