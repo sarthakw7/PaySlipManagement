@@ -11,6 +11,7 @@ namespace PaySlipManagement.BAL.Interfaces
     {
         Task<IEnumerable<Leaves>> GetAllLeavesAsync();
         Task<Leaves> GetLeavesByidAsync(Leaves _leaves);
+        Task<Leaves> GetLeavesByCodeAsync(string Emp_Code);
         Task<bool> CreateLeaves(Leaves _leaves);
         Task<bool> UpdateLeaves(Leaves _leaves);
         Task<bool> DeleteLeaves(Leaves leaves);
