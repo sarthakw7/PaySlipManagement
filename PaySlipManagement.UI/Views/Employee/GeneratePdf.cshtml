@@ -16,6 +16,9 @@
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="ctc-breakdown-tab" data-bs-toggle="tab" href="#ctc-breakdown" role="tab" aria-controls="ctc-breakdown" aria-selected="false">CTC BreakDown</a>
         </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="leave-request-tab" data-bs-toggle="tab" href="#leave-request" role="tab" aria-controls="leave-request" aria-selected="false">Leave Raise</a>
+        </li>
     </ul>
     <div class="tab-content mt-4" id="employeeTabsContent">
         <!-- Employee Details Tab -->
@@ -86,6 +89,82 @@
                 </div>
             </div>
         </div> 
+
+        <!-- Leave Request Raising -->
+        <div class="tab-pane fade show active" id="leave-request" role="tabpanel" aria-labelledby="leave-request-tab">
+        
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5>New Leave Request</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            @using (Html.BeginForm("SubmitLeaveRequest", "Leaves", FormMethod.Post, new { @class = "form-horizontal", @role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-group">
+                                    <p>Employee Code: @Model.Employee.Emp_Code</p>
+                                    @Html.HiddenFor(Model => Model.Employee.Emp_Code)
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(Model => Model.LeaveRequests.LeaveType)
+                                    @Html.DropDownListFor(Model => Model.LeaveRequests.LeaveType, new SelectList(
+                                             new[]
+                                             {
+                                new { Value = "1", Text = "Sick Leave" },
+                                new { Value = "2", Text = "Vacation Leave" },
+                                new { Value = "3", Text = "Personal Leave" }
+                                },
+                                             "Value",
+                                             "Text"),
+                                             "Select Leave Type",
+                                             new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(Model => Model.LeaveRequests.LeaveType)
+                                </div>
+
+
+                                <div class="form-group">
+                                    @Html.LabelFor(Model => Model.Leaves.LeavesAvailable, "Leave Balance", new { @class = "control-label" })
+                                    @Html.TextBoxFor(Model => Model.Leaves.LeavesAvailable, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(Model => Model.Leaves.LeavesAvailable, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(Model => Model.LeaveRequests.FromDate, "Start Date")
+                                    @Html.TextBoxFor(Model => Model.LeaveRequests.FromDate, new { @class = "form-control", type = "date" })
+                                    @Html.ValidationMessageFor(Model => Model.LeaveRequests.FromDate, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(Model => Model.LeaveRequests.ToDate, "End Date")
+                                    @Html.TextBoxFor(Model => Model.LeaveRequests.ToDate, new { @class = "form-control", type = "date" })
+                                    @Html.ValidationMessageFor(Model => Model.LeaveRequests.ToDate, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(Model => Model.LeaveRequests.Reason, "Reason for Leave")
+                                    @Html.TextAreaFor(Model => Model.LeaveRequests.Reason, new { @class = "form-control", placeholder = "Enter the reason for leave" })
+                                    @Html.LabelFor(Model => Model.LeaveRequests.Reason, "", new { @class = "text-danger" })
+                                </div>
+
+                                <button type="submit" class="btn btn-primary"> Submit </button>
+
+
+                            }
+
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
     </div>
 </div>
 

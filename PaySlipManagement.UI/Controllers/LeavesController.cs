@@ -99,5 +99,78 @@ namespace PaySlipManagement.UI.Controllers
             }
             return View("Delete");
         }
+
+
+        // fetches the leave balance and initializes it into the model before returning it to the view
+
+        [HttpGet]
+        public async Task<IActionResult> LeaveRequestForm(string empCode)
+        {
+            var leaveRequestModel = new LeaveRequestsViewModel
+            {
+                Emp_Code = empCode
+            };
+
+
+            var response = await _apiServices.GetAsync<LeavesViewModel>($"{_apiSettings.LeavesEndpoint}/GetLeaveBalance/{empCode}");
+            if (response != null)
+            {
+                leaveRequestModel.LeaveBalance = response.LeavesAvailable;
+            }
+
+            // Pass the model to the view
+            return View(leaveRequestModel);
+        }
+
+
+        [HttpPost, ActionName("Submit")]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> SubmitLeaveRequest(LeaveRequestsViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // fetch current leave balance for the employee
+                var response = await _apiServices.GetAsync<LeavesViewModel>($"{_apiSettings.LeavesEndpoint}/GetLeaveBalance/{model.Emp_Code}/{model.LeaveType}");
+                if (response != null)
+                {
+                    var availableLeaveBalance = response.LeavesAvailable;
+                    //Calculate total number of days requested
+                    var totalLeaveDays = 0;
+                    if (model.FromDate != null && model.ToDate != null)
+                    {
+                        totalLeaveDays = (model.ToDate - model.FromDate).Value.Days + 1;
+                    }
+
+                    if (totalLeaveDays > availableLeaveBalance)
+                    {
+                        model.LeaveBalance = availableLeaveBalance;
+                        return Json(new { success = false, message = "Insufficient leave balance." });
+                    }
+
+
+
+                    model.Status = "Pending";
+                    model.LeavesCount = totalLeaveDays;
+                    model.LeaveBalance = availableLeaveBalance - totalLeaveDays;
+
+                    var submitResponse = await _apiServices.PostAsync($"{_apiSettings.LeaveRequestsEndpoint}/SubmitLeaveRequest", model);
+                    if (!string.IsNullOrEmpty(submitResponse))
+                    {
+                        return Json(new { success = true, message = "Leave request submitted successfully!" });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "An error occurred while submitting the leave request." });
+                    }
+                }
+            }
+            return Json(new { success = false, message = "An error occurred while submitting the leave request." });
+        }
+
+        
+
+
+
     }
 }
