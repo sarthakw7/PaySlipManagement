@@ -23,6 +23,13 @@ namespace PaySlipManagement.UI.Controllers
             return View(leaveRequests);
         }
 
+        public async Task<IActionResult> Index1(string Emp_Code)
+        {
+            var empCode = Request.Cookies["empCode"];
+            Emp_Code = empCode;
+            var leaveRequests = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.LeaveRequestsViewModel>($"{_apiSettings.LeaveRequestsEndpoint}/GetLeaveRequestsByEmpCode/{Emp_Code}");
+            return View(leaveRequests);
+        }
         public async Task<IActionResult> Details(int id)
         {
             var response = await _apiServices.GetAsync<LeaveRequestsViewModel>($"{_apiSettings.LeaveRequestsEndpoint}/GetLeaveRequestsByid/{id}");
@@ -105,7 +112,7 @@ namespace PaySlipManagement.UI.Controllers
                         count = (model.ToDate - model.FromDate).Value.Days + 1;
                     }
                     model.LeavesCount += count;
-                    model.LeaveBalance -= count;
+                    //model.LeaveBalance -= count;
                     await _apiServices.PutAsync($"{_apiSettings.LeaveRequestsEndpoint}/UpdateLeaveRequests", model);
                     return Json(new { success = true, message = "Request approved successfully!" });
                 }
@@ -130,5 +137,23 @@ namespace PaySlipManagement.UI.Controllers
             }
             return Json(new { success = false, message = "An error occurred while canceling the request." });
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApplyLeave(LeaveRequests leaveRequests)
+        {
+            var empCode = Request.Cookies["empCode"];
+            leaveRequests.Emp_Code = empCode;
+            leaveRequests.ApprovalPerson = "Admin";
+            leaveRequests.Status = "Pending";
+            var count = 0;
+            if (leaveRequests.FromDate != null && leaveRequests.ToDate != null)
+            {
+                count = (leaveRequests.ToDate - leaveRequests.FromDate).Value.Days + 1;
+            }
+            leaveRequests.LeavesCount = count;
+            var response = await _apiServices.PostAsync<LeaveRequests>($"{_apiSettings.LeaveRequestsEndpoint}/CreateLeaveRequests", leaveRequests);
+            return RedirectToAction("Index1");
+        }
+
     }
 }

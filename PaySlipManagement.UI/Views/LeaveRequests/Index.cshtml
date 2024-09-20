@@ -9,7 +9,7 @@
             <p>List of Leave Requests</p>
         </div>
         @* <div>
-            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        <a asp-action="Create" class="btn btn-primary">Create New</a>
         </div> *@
     </div>
 </div>
@@ -25,7 +25,6 @@
             <th>Leaves Count</th>
             <th>Approval Person</th>
             <th>Status</th>
-            <th>Leave Balance</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -42,24 +41,23 @@
                 <td>@request.LeavesCount</td>
                 <td>@request.ApprovalPerson</td>
                 <td>@request.Status</td>
-                <td>@request.LeaveBalance</td>
                 <td>
                     @* <div class="d-flex justify-content-md-evenly">
-                        <a asp-action="Edit" asp-route-id="@request.Id" class="btn btn-primary btn-sm mr-2">
-                            <i class="bi bi-pencil-square"></i>
-                        </a> |
-                        <a asp-action="Details" asp-route-id="@request.Id" class="btn btn-info btn-sm mr-2">
-                            <i class="bi bi-info-circle"></i>
-                        </a> |
-                        <a asp-action="Delete" asp-route-id="@request.Id" class="btn btn-danger btn-sm mr-2">
-                            <i class="bi bi-trash"></i>
-                        </a>
-                    </div> *@
+                <a asp-action="Edit" asp-route-id="@request.Id" class="btn btn-primary btn-sm mr-2">
+                <i class="bi bi-pencil-square"></i>
+                </a> |
+                <a asp-action="Details" asp-route-id="@request.Id" class="btn btn-info btn-sm mr-2">
+                <i class="bi bi-info-circle"></i>
+                </a> |
+                <a asp-action="Delete" asp-route-id="@request.Id" class="btn btn-danger btn-sm mr-2">
+                <i class="bi bi-trash"></i>
+                </a>
+                </div> *@
                     <!-- Buttons for Approve/Cancel -->
                     @* <div class="mt-3"> *@
-                        <button class="btn btn-success" onclick="approveRequest(@request.Id)"><i class="bi bi-check"></i></button>
-                        <button class="btn btn-danger" onclick="cancelRequest(@request.Id)"><i class="bi bi-x"></i> </button>
-                   @*  </div> *@
+                    <button class="btn btn-success" onclick="approveRequest(@request.Id)"><i class="bi bi-check"></i></button>
+                    <button class="btn btn-danger" onclick="cancelRequest(@request.Id)"><i class="bi bi-x"></i> </button>
+                    @*  </div> *@
                 </td>
             </tr>
             <script>
