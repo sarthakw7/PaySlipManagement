@@ -20,6 +20,5 @@ namespace PaySlipManagement.Common.Models
         public decimal LeavesCount { get; set; }
         public string ApprovalPerson { get; set; }
         public string Status { get; set; }
-        public decimal LeaveBalance { get; set; }
     }
 }

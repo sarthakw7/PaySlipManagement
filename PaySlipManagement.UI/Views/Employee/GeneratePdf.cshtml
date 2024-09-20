@@ -16,6 +16,12 @@
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="ctc-breakdown-tab" data-bs-toggle="tab" href="#ctc-breakdown" role="tab" aria-controls="ctc-breakdown" aria-selected="false">CTC BreakDown</a>
         </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="leaves-details-tab" data-bs-toggle="tab" href="#leaves-details" role="tab" aria-controls="leaves-details" aria-selected="false">Leaves</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="apply-leave-tab" data-bs-toggle="tab" href="#apply-leave" role="tab" aria-controls="apply-leave" aria-selected="false">Leaves Request</a>
+        </li>
     </ul>
     <div class="tab-content mt-4" id="employeeTabsContent">
         <!-- Employee Details Tab -->
@@ -86,6 +92,104 @@
                 </div>
             </div>
         </div> 
+        <!-- Leaves Details Tab -->
+        <div class="tab-pane fade" id="leaves-details" role="tabpanel" aria-labelledby="leaves-details-tab">
+@*             <h2 class="text-secondary mb-2">Leave Info - @Model.Employee.Emp_Code</h2>*@         
+               <div class="card shadow-sm mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5>Leave Information</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                        <!-- Total Leaves -->
+                        <div class="col-md-4">
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-secondary text-white">
+                                    <h5>Total Leaves</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>@Model.Leaves.TotalLeaves</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Leave Balance -->
+                        <div class="col-md-4">
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-secondary text-white">
+                                    <h5>Leave Balance</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>@Model.Leaves.LeavesAvailable</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Leaves Used -->
+                        <div class="col-md-4">
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-secondary text-white">
+                                    <h5>Leaves Used</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>@Model.Leaves.LeavesUsed</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- End row -->
+                </div> <!-- End card-body -->
+            </div> <!-- End card -->
+        </div>
+        <!-- Apply Leave Tab-->
+        <div class="tab-pane fade" id="apply-leave" role="tabpanel" aria-labelledby="apply-leave-tab">
+            <h4 class="text-secondary mb-2">Apply Leave</h4>
+            <form asp-action="ApplyLeave" asp-controller="LeaveRequests" method="post">
+                <div class="form-group">
+                    <p><strong>Employee:</strong> @Model.Employee.Emp_Code</p>
+                </div>
+                <div class="form-group">
+                    <label for="leaveType">Leave Type:</label>
+                    <select id="leaveType" name="LeaveType" class="form-control">
+                        <option value=" ">Select Leave Type</option>
+                        <option value="Casual">Casual</option>
+                        <option value="Sick">Sick</option>
+                        <option value="Paternity">Paternity</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fromDate">From:</label>
+                    <input type="date" id="fromDate" name="FromDate" class="form-control" onchange="calculateTotalDays()" />
+                </div>
+                <div class="form-group">
+                    <label for="toDate">To:</label>
+                    <input type="date" id="toDate" name="ToDate" class="form-control" onchange="calculateTotalDays()" />
+                </div>
+                <div class="form-group">
+                    <label for="totalDays">Total Days:</label>
+                    <input type="text" id="totalDays" name="TotalDays" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="reason">Reason:</label>
+                    <textarea id="reason" name="Reason" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn-btn-primary">Submit Request</button>
+                </div>
+            </form>
+        </div>
+
+        <script>
+            function calculateTotalDays() {
+                var fromDate = document.getElementById("fromDate").value;
+                var toDate = document.getElementById("toDate").value;
+                var fromDateParts = fromDate.split("-");
+                var toDateParts = toDate.split("-");
+                var fromDateDate = new Date(fromDateParts[0], fromDateParts[1] - 1, fromDateParts[2]);
+                var toDateDate = new Date(toDateParts[0], toDateParts[1] - 1, toDateParts[2]);
+                var totalDays = Math.round((toDateDate - fromDateDate) / (1000 * 3600 * 24)) + 1;
+                document.getElementById("totalDays").value = totalDays;
+            }
+        </script>
     </div>
 </div>
 
@@ -110,4 +214,18 @@
     .card .btn {
         margin: 0;
     }
+    /* Style the submit button with a gradient background */
+    .btn-btn-primary {
+        background-image: linear-gradient(to bottom, #4CAF50, #3e8e41);
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        /* Style the submit button on hover with a gradient background */
+        .btn-btn-primary:hover {
+            background-image: linear-gradient(to bottom, #3e8e41, #4CAF50);
+        }
 </style>
