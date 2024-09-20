@@ -1,0 +1,46 @@
+﻿@model LeaveRequestsViewModel
+
+<h1>Edit Leave Requests</h1>
+
+<div>
+    <form asp-action="Edit">
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="Emp_Code"></label>
+            <input asp-for="Emp_Code" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="LeaveType"></label>
+            <input asp-for="LeaveType" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Reason"></label>
+            <input asp-for="Reason" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="FromDate"></label>
+                <input asp-for="FromDate" class="form-control" type="date" />
+        </div>
+        <div class="form-group">
+            <label asp-for="ToDate"></label>
+                <input asp-for="ToDate" class="form-control" type="date" />
+        </div>
+        <div class="form-group">
+            <label asp-for="LeavesCount"></label>
+            <input asp-for="LeavesCount" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="ApprovalPerson"></label>
+            <input asp-for="ApprovalPerson" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Status"></label>
+            <input asp-for="Status" class="form-control" />
+        </div>
+        <hr />
+        <button type="submit" class="btn btn-primary">Save</button> |
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </form>
+</div>
+@* <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+ *@
