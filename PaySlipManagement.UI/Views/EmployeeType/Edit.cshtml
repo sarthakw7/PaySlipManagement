@@ -1,0 +1,15 @@
+﻿@model EmployeeTypeViewModel
+
+<h1>Edit Employee Type</h1>
+
+<div>
+    <form asp-action="Edit">
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="EmpType"></label>
+            <input asp-for="EmpType" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

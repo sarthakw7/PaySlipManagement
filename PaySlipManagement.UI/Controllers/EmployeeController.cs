@@ -189,10 +189,15 @@ namespace PaySlipManagement.UI.Controllers
             var employee = await _apiServices.GetAsync<EmployeeDetails>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeByEmpCode/{empCode}");
             var holidayImage = await _apiServices.GetAsync<HolidayImageViewModel>($"{_apiSettings.HolidayEndpoint}/GetHolidayImageByIdAsync");
             var holidayPdf = await _apiServices.GetAsync<HolidayPdfViewModel>($"{_apiSettings.HolidayEndpoint}/GetHolidayPdfByIdAsync");
+            var leaves = await _apiServices.GetAsync<LeavesViewModel>($"{_apiSettings.LeavesEndpoint}/GetLeavesByEmpCode/{empCode}");
 
             if (employee == null)
             {
                 return NotFound("Employee not found.");
+            }
+            if (leaves == null)
+            {
+                return NotFound("Leaves not found.");
             }
 
             var payPeriods = CalculatePayPeriods(employee.JoiningDate, DateTime.Now);
@@ -207,6 +212,7 @@ namespace PaySlipManagement.UI.Controllers
                 Employee = employee,
                 PayPeriods = payPeriods,
                 Holiday = holiday
+                Leaves = leaves
             };
 
             return View(model);

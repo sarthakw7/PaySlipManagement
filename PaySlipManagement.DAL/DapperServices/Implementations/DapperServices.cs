@@ -31,7 +31,13 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
                     {
                         parameters.Add("@" + property.Name, property.GetValue(entity));
                     };
-                    var result = await con.QueryAsync<T>(sql, parameters);
+                    // Log the parameters
+                    foreach (var paramName in parameters.ParameterNames)
+                    {
+                        Console.WriteLine($"{paramName}: {parameters.Get<object>(paramName)}");
+                    }
+
+                var result = await con.QueryAsync<T>(sql, parameters);
                     con.Close();
                     return result;
                 
@@ -101,6 +107,7 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
                 throw ex;
             }
         }
+
         public async Task<T> ReadGetByCodeAsync(T entity)
         {
             try
@@ -293,6 +300,10 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
         private string GetSelectDetailsStoredProcedureName(T entity)
         {
             return $"EXEC spSelect{entity.GetType().Name}CTCDetails";
+        }
+        private string GetSelectCodeStoredProcedureName(T entity)
+        {
+            return $"EXEC spSelect{entity.GetType().Name}Details";
         }
         private string GetUpdateStoredProcedureName(T entity)
         {

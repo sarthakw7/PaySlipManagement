@@ -1,6 +1,7 @@
 ﻿using PayslipManagement.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using PaySlipManagement.UI.Utilities;
+using PaySlipManagement.Common.Models;
 
 namespace PaySlipManagement.UI.Models
 {
@@ -24,5 +25,6 @@ namespace PaySlipManagement.UI.Models
         public EmployeeDetails Employee { get; set; }
         public List<string> PayPeriods { get; set; }
         public HolidayImagePDFViewModel Holiday {  get; set; }
+        public LeavesViewModel Leaves { get; set; } = new LeavesViewModel();
     }
 }
