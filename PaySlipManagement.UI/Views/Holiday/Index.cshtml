@@ -1,0 +1,47 @@
+﻿@model PaySlipManagement.UI.Models.HolidayImagePDFViewModel
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+
+<div class="container mt-5">
+    <div class="mt-2">
+        <div class="d-flex justify-content-between align-items-center">
+            @* <div>
+                @if (Model.HolidayPdf != null)
+                {
+                    <h6 class="text-primary mb-4">Latest Holiday Details</h6>
+                    <a href="data:application/pdf;base64,@Convert.ToBase64String(Model.HolidayPdf.Data)" class="btn btn-primary" download="@Model.HolidayPdf.FileName">@Model.HolidayPdf.FileName</a>
+                }
+                else
+                {
+                    <p>No holiday PDF available.</p>
+                }
+            </div> *@
+            <div>
+                <a asp-action="Create" class="btn btn-primary">Create New</a>
+            </div>
+        </div>
+    </div>
+    @if (Model.HolidayImage != null)
+    {
+        <div class="day holiday">
+            <img src="data:@Model.HolidayImage.ContentType;base64,@Convert.ToBase64String(Model.HolidayImage.ImageData)" alt="Holiday Image" class="holiday-image">
+        </div>
+    }
+    else
+    {
+        <p>No holiday image available.</p>
+    }
+</div>
+
+<!-- Custom Styles -->
+<style>
+    .holiday-image {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto 10px;
+    }
+</style>
