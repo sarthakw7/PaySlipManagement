@@ -1,0 +1,31 @@
+﻿@model LeavesViewModel
+
+<h1>Edit </h1>
+
+<div>
+    <form asp-action="Edit">
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="Emp_Code"></label>
+            <input asp-for="Emp_Code" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="TypeId"></label>
+            <input asp-for="TypeId" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="TotalLeaves"></label>
+            <input asp-for="TotalLeaves" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="LeavesAvailable"></label>
+            <input asp-for="LeavesAvailable" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="LeavesUsed"></label>
+            <input asp-for="LeavesUsed" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

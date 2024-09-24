@@ -1,0 +1,69 @@
+﻿@model CTCDetailsViewModel
+
+<h1>Delete Account Details</h1>
+
+<h3>Are you sure you want to delete this account?</h3>
+<div>
+    <h4>Account Details</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Id</dt>
+        <dd class="col-sm-10">@Model.Id</dd>
+
+        <dt class="col-sm-2">Employee Code</dt>
+        <dd class="col-sm-10">@Model.Emp_Code</dd>
+
+        <dt class="col-sm-2">Earned Basic</dt>
+        <dd class="col-sm-10">@Model.EarnedBasic</dd>
+
+        <dt class="col-sm-2">HRA</dt>
+        <dd class="col-sm-10">@Model.HRA</dd>
+
+        <dt class="col-sm-2">Special Allowance</dt>
+        <dd class="col-sm-10">@Model.SpecialAllowance</dd>
+
+        <dt class="col-sm-2">PF Employee Share</dt>
+        <dd class="col-sm-10">@Model.PFEmployeeShare</dd>
+
+        <dt class="col-sm-2">ProfessionalTax</dt>
+        <dd class="col-sm-10">@Model.ProfessionalTax</dd>
+
+        <dt class="col-sm-2">TDS</dt>
+        <dd class="col-sm-10">@Model.TDS</dd>
+
+        <dt class="col-sm-2">Annual CTC</dt>
+        <dd class="col-sm-10">@Model.AnnualCTC</dd>
+
+        <dt class="col-sm-2">CTC Month</dt>
+        <dd class="col-sm-10">@Model.CTCMonth</dd>
+
+        <dt class="col-sm-2">PF Employer Share</dt>
+        <dd class="col-sm-10">@Model.PFEmployerShare</dd>
+
+        <dt class="col-sm-2">PF Employer Share Annual</dt>
+        <dd class="col-sm-10">@Model.PFEmployerShareAnnual</dd>
+
+        <dt class="col-sm-2">Annual Gross Pay</dt>
+        <dd class="col-sm-10">@Model.AnnualGrossPay</dd>
+
+        <dt class="col-sm-2">Month Gross Pay</dt>
+        <dd class="col-sm-10">@Model.MonthGrossPay</dd>
+
+        <dt class="col-sm-2">Other Additions</dt>
+        <dd class="col-sm-10">@Model.OtherAdditions</dd>
+
+        <dt class="col-sm-2">Other Deductions</dt>
+        <dd class="col-sm-10">@Model.OtherDeductions</dd>
+
+        <dt class="col-sm-2">Total Deductions</dt>
+        <dd class="col-sm-10">@Model.TotalDeductions</dd>
+
+        <dt class="col-sm-2">Net Pay</dt>
+        <dd class="col-sm-10">@Model.NetPay</dd>
+    </dl>
+</div>
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button> |
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
