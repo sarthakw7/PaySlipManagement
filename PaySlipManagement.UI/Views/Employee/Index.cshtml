@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Employee Details";
+    var currentPage = (int)ViewBag.CurrentPage;
+    var totalPages = (int)ViewBag.TotalPages;
 }
 <style>
     .custom-select {
@@ -37,7 +39,7 @@
     <form method="get" asp-action="Index" class="form-inline">
         <div class="form-group">
             <select id="departmentId" name="departmentId" class="form-control custom-select" onchange="this.form.submit()">
-                <option value="">All</option>
+                <option value="null">All</option>
                 @foreach (var department in (SelectList)ViewBag.Departments)
                 {
                     <option value="@department.Value">@department.Text</option>
@@ -84,10 +86,66 @@
                         </a> |
                         <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm mr-2">
                             <i class="bi bi-trash"></i>
-                        </a>
+                        </a> |
+                        <span id="toggleButton-@item.Id" class="btn btn-danger btn-sm" onclick="toggleDetails(@item.Id)">
+                            <i class="bi bi-plus"></i>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            <tr id="detailsSection-@item.Id" style="display: none;">
+                <td colspan="10">
+                    <div class="bg-secondary bg-opacity-25">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-6 p-2">
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        <h6 class="mx-1">Payslip</h6>
+                                        <div class="mx-1 w-50">
+                                            <select class="form-control" id="payslipMonth">
+                                                <option>--Select Month--</option>
+                                                <option>June-2024</option>
+                                                <option>July-2024</option>
+                                            </select>
+                                        </div>
+                                        <button type="button" class="btn btn-primary">Download</button>
+                                    </div>
+                                </div>
+                                <div class="col-6 text-right p-2">
+                                    @* <div class="d-flex align-items-center justify-content-end">
+                                        <h6 class="mx-1">CTC</h6>
+                                        <button type="button" class="btn btn-primary">Download</button>
+                                    </div> *@
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<div class="d-flex justify-content-center mt-3">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-departmentId="@ViewBag.SelectedDepartmentId" asp-route-page="@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+<script>
+    function toggleDetails(itemId) {
+        var detailsSection = document.getElementById('detailsSection-' + itemId);
+        if (detailsSection.style.display === 'none') {
+            detailsSection.style.display = 'table-row';
+        } else {
+            detailsSection.style.display = 'none';
+        }
+    }
+</script>

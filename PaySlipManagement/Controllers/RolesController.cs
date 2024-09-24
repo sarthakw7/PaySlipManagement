@@ -48,7 +48,5 @@ namespace PaySlipManagement.API.Controllers
             roles1.Id = id;
             return await _roleBALRepo.Delete(roles1);
         }
-
-
     }
 }
