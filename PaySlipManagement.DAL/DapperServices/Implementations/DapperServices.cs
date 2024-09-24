@@ -31,7 +31,13 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
                     {
                         parameters.Add("@" + property.Name, property.GetValue(entity));
                     };
-                    var result = await con.QueryAsync<T>(sql, parameters);
+                    // Log the parameters
+                    foreach (var paramName in parameters.ParameterNames)
+                    {
+                        Console.WriteLine($"{paramName}: {parameters.Get<object>(paramName)}");
+                    }
+
+                var result = await con.QueryAsync<T>(sql, parameters);
                     con.Close();
                     return result;
                 
