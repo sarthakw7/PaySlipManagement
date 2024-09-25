@@ -211,7 +211,7 @@ namespace PaySlipManagement.UI.Controllers
             {
                 Employee = employee,
                 PayPeriods = payPeriods,
-                Holiday = holiday
+                Holiday = holiday,
                 Leaves = leaves
             };
 
