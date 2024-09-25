@@ -1,0 +1,2074 @@
+﻿USE [master]
+GO
+/****** Object:  Database [PayslipManagement]    Script Date: 25-09-2024 17:15:22 ******/
+CREATE DATABASE [PayslipManagement]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'PayslipManagement', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS01\MSSQL\DATA\PayslipManagement.mdf' , SIZE = 73728KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'PayslipManagement_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS01\MSSQL\DATA\PayslipManagement_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [PayslipManagement] SET COMPATIBILITY_LEVEL = 160
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [PayslipManagement].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [PayslipManagement] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET AUTO_CLOSE ON 
+GO
+ALTER DATABASE [PayslipManagement] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [PayslipManagement] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [PayslipManagement] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [PayslipManagement] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [PayslipManagement] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [PayslipManagement] SET  MULTI_USER 
+GO
+ALTER DATABASE [PayslipManagement] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [PayslipManagement] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [PayslipManagement] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [PayslipManagement] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [PayslipManagement] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [PayslipManagement] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [PayslipManagement] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [PayslipManagement] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [PayslipManagement]
+GO
+/****** Object:  Table [dbo].[AccountDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[AccountDetails](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Emp_Code] [varchar](255) NULL,
+	[BankName] [varchar](250) NULL,
+	[BankAccountNumber] [bigint] NULL,
+	[UANNumber] [bigint] NULL,
+	[PFAccountNumber] [varchar](250) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[CompanyDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CompanyDetails](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[CompanyName] [varchar](255) NULL,
+	[CompanyAddress] [varchar](255) NULL,
+	[Division] [varchar](255) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[CTCDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CTCDetails](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Emp_Code] [varchar](255) NULL,
+	[EarnedBasic] [decimal](18, 2) NULL,
+	[HRA] [decimal](18, 2) NULL,
+	[SpecialAllowance] [decimal](18, 2) NULL,
+	[PFEmployeeShare] [decimal](18, 2) NULL,
+	[ProfessionalTax] [decimal](18, 2) NULL,
+	[TDS] [decimal](18, 2) NULL,
+	[AnnualCTC] [decimal](18, 2) NULL,
+	[CTCMonth] [decimal](18, 2) NULL,
+	[PFEmployerShare] [decimal](18, 2) NULL,
+	[PFEmployerShareAnnual] [decimal](18, 2) NULL,
+	[AnnualGrossPay] [decimal](18, 2) NULL,
+	[MonthGrossPay] [decimal](18, 2) NULL,
+	[OtherAdditions] [decimal](18, 2) NULL,
+	[OtherDeductions] [decimal](18, 2) NULL,
+	[TotalDeductions] [decimal](18, 2) NULL,
+	[NetPay] [decimal](18, 2) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Department]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Department](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[DepartmentName] [varchar](255) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Employee]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Employee](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Emp_Code] [varchar](255) NOT NULL,
+	[EmployeeName] [varchar](255) NULL,
+	[DepartmentId] [int] NULL,
+	[Designation] [varchar](255) NULL,
+	[Division] [varchar](200) NULL,
+	[Email] [varchar](255) NULL,
+	[PAN_Number] [varchar](255) NULL,
+	[JoiningDate] [date] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Emp_Code] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[EmployeeType]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[EmployeeType](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[EmpType] [varchar](255) NULL,
+	[LeaveAllocation] [decimal](3, 1) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ExceptionLogs]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ExceptionLogs](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[ExceptionType] [nvarchar](100) NOT NULL,
+	[ExceptionMessage] [nvarchar](max) NOT NULL,
+	[StackTrace] [nvarchar](max) NOT NULL,
+	[LoggedAt] [datetime] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[HolidayImage]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[HolidayImage](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[ImageName] [nvarchar](255) NOT NULL,
+	[ImageData] [varbinary](max) NOT NULL,
+	[ContentType] [nvarchar](100) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[HolidayPdf]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[HolidayPdf](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[FileName] [nvarchar](255) NOT NULL,
+	[Data] [varbinary](max) NOT NULL,
+	[ContentType] [nvarchar](100) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LeaveRequests]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LeaveRequests](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Emp_Code] [varchar](255) NULL,
+	[LeaveType] [varchar](255) NULL,
+	[Reason] [varchar](255) NULL,
+	[FromDate] [datetime] NULL,
+	[ToDate] [datetime] NULL,
+	[LeavesCount] [decimal](3, 1) NULL,
+	[ApprovalPerson] [varchar](255) NULL,
+	[Status] [varchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Leaves]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Leaves](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Emp_Code] [varchar](255) NULL,
+	[TypeId] [int] NULL,
+	[TotalLeaves] [decimal](3, 1) NULL,
+	[LeavesAvailable] [decimal](3, 1) NULL,
+	[LeavesUsed] [decimal](3, 1) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Roles]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Roles](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Role] [varchar](255) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SalaryMetadata]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SalaryMetadata](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Emp_Code] [varchar](255) NULL,
+	[PaySlipForMonth] [varchar](250) NULL,
+	[DaysPaid] [decimal](18, 2) NULL,
+	[AbsentDays] [decimal](18, 2) NULL,
+	[EarnedBasic] [decimal](18, 2) NULL,
+	[HRA] [decimal](18, 2) NULL,
+	[SpecialAllowance] [decimal](18, 2) NULL,
+	[PFEmployeeShare] [decimal](18, 2) NULL,
+	[ProfessionalTax] [decimal](18, 2) NULL,
+	[TDS] [decimal](18, 2) NULL,
+	[EarningTotal] [decimal](18, 2) NULL,
+	[TotalDeductions] [decimal](18, 2) NULL,
+	[NetPay] [decimal](18, 2) NULL,
+	[AnnualCTC] [decimal](18, 2) NULL,
+	[CTCMonth] [decimal](18, 2) NULL,
+	[PFEmployerShare] [decimal](18, 2) NULL,
+	[PFEmployerShareAnnual] [decimal](18, 2) NULL,
+	[AnnualGrossPay] [decimal](18, 2) NULL,
+	[MonthGrossPay] [decimal](18, 2) NULL,
+	[OtherAdditions] [decimal](18, 2) NULL,
+	[OtherDeductions] [decimal](18, 2) NULL,
+	[LossOfPay] [decimal](18, 2) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[UserRoles]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[UserRoles](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Emp_Code] [varchar](255) NULL,
+	[RoleId] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Users]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Users](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Emp_Code] [varchar](255) NULL,
+	[Email] [varchar](255) NULL,
+	[Password] [varchar](255) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[LeaveRequests] ADD  DEFAULT ('Pending') FOR [Status]
+GO
+ALTER TABLE [dbo].[AccountDetails]  WITH CHECK ADD FOREIGN KEY([Emp_Code])
+REFERENCES [dbo].[Employee] ([Emp_Code])
+GO
+ALTER TABLE [dbo].[CTCDetails]  WITH CHECK ADD FOREIGN KEY([Emp_Code])
+REFERENCES [dbo].[Employee] ([Emp_Code])
+GO
+ALTER TABLE [dbo].[Employee]  WITH CHECK ADD FOREIGN KEY([DepartmentId])
+REFERENCES [dbo].[Department] ([Id])
+GO
+ALTER TABLE [dbo].[LeaveRequests]  WITH CHECK ADD FOREIGN KEY([Emp_Code])
+REFERENCES [dbo].[Employee] ([Emp_Code])
+GO
+ALTER TABLE [dbo].[Leaves]  WITH CHECK ADD FOREIGN KEY([Emp_Code])
+REFERENCES [dbo].[Employee] ([Emp_Code])
+GO
+ALTER TABLE [dbo].[Leaves]  WITH CHECK ADD FOREIGN KEY([TypeId])
+REFERENCES [dbo].[EmployeeType] ([Id])
+GO
+ALTER TABLE [dbo].[SalaryMetadata]  WITH CHECK ADD FOREIGN KEY([Emp_Code])
+REFERENCES [dbo].[Employee] ([Emp_Code])
+GO
+ALTER TABLE [dbo].[UserRoles]  WITH CHECK ADD FOREIGN KEY([Emp_Code])
+REFERENCES [dbo].[Employee] ([Emp_Code])
+GO
+ALTER TABLE [dbo].[UserRoles]  WITH CHECK ADD FOREIGN KEY([RoleId])
+REFERENCES [dbo].[Roles] ([Id])
+GO
+ALTER TABLE [dbo].[Users]  WITH CHECK ADD FOREIGN KEY([Emp_Code])
+REFERENCES [dbo].[Employee] ([Emp_Code])
+GO
+/****** Object:  StoredProcedure [dbo].[sp_CheckEmailExists]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[sp_CheckEmailExists]
+    @Email varchar(255)
+AS
+BEGIN
+    SELECT COUNT(1) FROM Users WHERE Email = @Email
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[sp_CheckEmployeeExists]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[sp_CheckEmployeeExists]
+    @Emp_Code VARCHAR(50)
+AS
+BEGIN
+   SELECT COUNT(1) FROM Employee WHERE Emp_Code = @Emp_Code
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[sp_CheckRoleExists]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[sp_CheckRoleExists]
+    @RoleId INT
+AS
+BEGIN
+    SELECT COUNT(1) FROM Roles WHERE Id = @RoleId
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[spDeleteAccountDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spDeleteAccountDetails]
+@Id int
+as  begin
+	 Begin Try
+		Delete from AccountDetails where Id=@Id
+	 End Try 
+   BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spDeleteCompanyDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spDeleteCompanyDetails]
+@Id int
+as  begin
+	 Begin Try
+		Delete from CompanyDetails where Id=@Id
+	 End Try 
+   BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spDeleteCTCDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spDeleteCTCDetails]
+@Id int
+as  begin
+	 Begin Try
+		Delete from CTCDetails where Id=@Id
+	 End Try 
+   BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spDeleteDepartment]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spDeleteDepartment]
+  @Id int 
+  As 
+  Begin
+	  Begin Try
+	   Delete From Department where Id =@Id
+	   End Try 
+      BEGIN CATCH
+         DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+         PRINT 'An error occurred: ' + @ErrorMessage;
+     END CATCH;
+  End
+GO
+/****** Object:  StoredProcedure [dbo].[spDeleteEmployee]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spDeleteEmployee]
+@Id int
+as  begin
+	 Begin Try
+		Delete from Employee where Id=@Id
+	 End Try 
+   BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spDeleteEmployeeType]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spDeleteEmployeeType]
+@Id int
+as  begin
+	 Begin Try
+		Delete from EmployeeType where Id=@Id
+	 End Try 
+   BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spDeleteLeaveRequests]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spDeleteLeaveRequests]
+@Id int
+as  begin
+	 Begin Try
+		Delete from LeaveRequests where Id=@Id
+	 End Try 
+   BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spDeleteLeaves]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spDeleteLeaves]
+@Id int
+as  begin
+	 Begin Try
+		Delete from Leaves where Id=@Id
+	 End Try 
+   BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spDeleteRoles]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spDeleteRoles]
+@Id int
+as  begin
+	 Begin Try
+		Delete from Roles where Id=@Id
+	 End Try 
+   BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spDeleteSalaryMetadata]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spDeleteSalaryMetadata]
+@Id int
+as  begin
+	 Begin Try
+		Delete from SalaryMetadata where Id=@Id
+	 End Try 
+   BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spDeleteUserRoles]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spDeleteUserRoles]
+@Id int
+as  begin
+	 Begin Try
+		Delete from UserRoles where Id=@Id
+	 End Try 
+   BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spDeleteUsers]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spDeleteUsers]
+@Id int
+as  begin
+	 Begin Try
+		Delete from Users where Id=@Id
+	 End Try 
+   BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spInsertAccountDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spInsertAccountDetails]
+@Emp_Code varchar(255),
+@BankName varchar(250),
+@BankAccountNumber bigint,
+@UANNumber bigint,
+@PFAccountNumber varchar(250)
+
+as begin  
+	 BEGIN TRY
+		insert into AccountDetails(Emp_Code,BankName,BankAccountNumber,UANNumber,PFAccountNumber) values
+
+		(@Emp_Code,@BankName,@BankAccountNumber,@UANNumber,@PFAccountNumber)
+	 END TRY
+	 BEGIN CATCH
+			DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spInsertCompanyDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spInsertCompanyDetails]
+@CompanyName varchar(255),
+@CompanyAddress varchar(255),
+@Division varchar(255) 
+as begin  
+	 BEGIN TRY
+		insert into CompanyDetails(CompanyName,CompanyAddress,Division) values
+		(@CompanyName,@CompanyAddress,@Division)
+	 END TRY
+	 BEGIN CATCH
+			DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spInsertCTCDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spInsertCTCDetails]
+@Emp_Code varchar(255),
+@EarnedBasic decimal(18,2),
+@HRA decimal(18,2),
+@SpecialAllowance decimal(18,2),
+@PFEmployeeShare decimal(18,2),
+@ProfessionalTax decimal(18,2),
+@TDS decimal(18,2),
+@AnnualCTC decimal(18,2),
+@CTCMonth decimal(18,2),
+@PFEmployerShare decimal(18,2),
+@PFEmployerShareAnnual decimal(18,2),
+@AnnualGrossPay decimal(18,2),
+@MonthGrossPay decimal(18,2),
+@OtherAdditions decimal(18,2),
+@OtherDeductions decimal(18,2),
+@TotalDeductions decimal(18,2),
+@NetPay decimal(18,2)
+
+as begin  
+	 BEGIN TRY
+		insert into CTCDetails(Emp_Code,EarnedBasic,HRA,SpecialAllowance,PFEmployeeShare,ProfessionalTax,TDS,AnnualCTC,CTCMonth,PFEmployerShare,PFEmployerShareAnnual,AnnualGrossPay,MonthGrossPay,OtherAdditions,OtherDeductions,TotalDeductions,NetPay) values
+ 
+		(@Emp_Code,@EarnedBasic,@HRA,@SpecialAllowance,@PFEmployeeShare,@ProfessionalTax,@TDS,@AnnualCTC,@CTCMonth,@PFEmployerShare,@PFEmployerShareAnnual,@AnnualGrossPay,@MonthGrossPay,@OtherAdditions,@OtherDeductions,@TotalDeductions,@NetPay)
+	 END TRY
+	 BEGIN CATCH
+			DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spInsertDepartment]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spInsertDepartment] 
+ @DepartmentName varchar (255)
+As
+Begin
+	  Begin Try 
+	   Insert into Department (DepartmentName)
+	   values( @DepartmentName)
+	 End Try
+    BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' +@ErrorMessage;
+    END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spInsertEmployee]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spInsertEmployee]
+@Emp_code varchar(255),
+@EmployeeName varchar(255),
+@DepartmentId int,
+@Designation varchar(255),
+@Division varchar(255),
+@Email varchar(255),
+@PAN_Number Varchar(255),
+@Joiningdate date
+
+as begin  
+	 BEGIN TRY
+		insert into Employee(Emp_code,EmployeeName,DepartmentId,Designation,Division,Email,PAN_Number,Joiningdate) values
+
+		(@Emp_code,@EmployeeName,@DepartmentId,@Designation,@Division,@Email,@PAN_Number,@Joiningdate)
+	 END TRY
+	 BEGIN CATCH
+			DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spInsertEmployeeType]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spInsertEmployeeType]
+@EmpType varchar(255),
+@LeaveAllocation decimal(3,1)
+as begin  
+	 BEGIN TRY
+		insert into EmployeeType(EmpType,LeaveAllocation) values
+
+		(@EmpType,@LeaveAllocation)
+	 END TRY
+	 BEGIN CATCH
+			DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spInsertHolidayImage]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[spInsertHolidayImage]
+    @ImageName NVARCHAR(255),
+    @ImageData VARBINARY(MAX),
+    @ContentType NVARCHAR(100)
+AS
+BEGIN
+    BEGIN TRY
+        -- Insert data into the HolidayImage table
+        INSERT INTO HolidayImage (ImageName, ImageData, ContentType)
+        VALUES (@ImageName, @ImageData, @ContentType);
+        
+        -- Optionally, return the identity (Id) of the newly inserted row
+        SELECT SCOPE_IDENTITY() AS InsertedId;
+    END TRY
+    BEGIN CATCH
+        -- Handle errors
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+
+        -- Raise the error message
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[spInsertHolidayPdf]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[spInsertHolidayPdf]
+    @FileName NVARCHAR(255),
+    @Data VARBINARY(MAX),
+    @ContentType NVARCHAR(100)
+AS
+BEGIN
+    BEGIN TRY
+        -- Insert data into the HolidayPdf table
+        INSERT INTO HolidayPdf (FileName, Data, ContentType)
+        VALUES (@FileName, @Data, @ContentType);
+        
+        -- Optionally, return the identity (Id) of the newly inserted row
+        SELECT SCOPE_IDENTITY() AS InsertedId;
+    END TRY
+    BEGIN CATCH
+        -- Handle errors
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+
+        -- Raise the error message
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[spInsertLeaveRequests]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spInsertLeaveRequests]
+@Emp_code varchar(255),
+@LeaveType varchar(255),
+@Reason varchar(255),
+@FromDate datetime,
+@ToDate datetime,
+@LeavesCount decimal(3,1),
+@ApprovalPerson varchar(255),
+@Status VARCHAR(50)
+
+as begin  
+	 BEGIN TRY
+		insert into LeaveRequests(Emp_code,LeaveType,Reason,FromDate,ToDate,LeavesCount,ApprovalPerson,Status) values
+
+		(@Emp_code,@LeaveType,@Reason,@FromDate,@ToDate,@LeavesCount,@ApprovalPerson,@Status)
+	 END TRY
+	 BEGIN CATCH
+			DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spInsertLeaves]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spInsertLeaves]
+@Emp_code varchar(255),
+@TypeId int,
+@TotalLeaves decimal(3,1),
+@LeavesAvailable decimal(3,1),
+@LeavesUsed decimal(3,1)
+
+as begin  
+	 BEGIN TRY
+		insert into Leaves(Emp_code,TypeId,TotalLeaves,LeavesAvailable,LeavesUsed) values
+
+		(@Emp_code,@TypeId,@TotalLeaves,@LeavesAvailable,@LeavesUsed)
+	 END TRY
+	 BEGIN CATCH
+			DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spInsertRoles]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spInsertRoles]
+@Role varchar(255)
+
+as begin  
+	 BEGIN TRY
+		insert into Roles(Role) values(@Role)
+	 END TRY
+	 BEGIN CATCH
+			DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spInsertSalaryMetadata]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spInsertSalaryMetadata]
+@Emp_Code varchar(255),
+@PaySlipForMonth varchar(250),
+@DaysPaid decimal(18,2),
+@AbsentDays decimal(18,2),
+@EarnedBasic decimal(18,2),
+@HRA decimal(18,2),
+@SpecialAllowance decimal(18,2),
+@PFEmployeeShare decimal(18,2),
+@ProfessionalTax decimal(18,2),
+@TDS decimal(18,2),
+@EarningTotal decimal(18,2),
+@TotalDeductions decimal(18,2),
+@NetPay decimal(18,2),
+@AnnualCTC decimal(18,2),
+@CTCMonth decimal(18,2),
+@PFEmployerShare decimal(18,2),
+@PFEmployerShareAnnual decimal(18,2),
+@AnnualGrossPay decimal(18,2),
+@MonthGrossPay decimal(18,2),
+@OtherAdditions decimal(18,2),
+@OtherDeductions decimal(18,2),
+@LossOfPay decimal(18,2)
+as begin  
+	 BEGIN TRY
+		insert into SalaryMetadata(Emp_Code,PaySlipForMonth,DaysPaid,AbsentDays,EarnedBasic,HRA,SpecialAllowance,PFEmployeeShare,ProfessionalTax,TDS,EarningTotal,TotalDeductions,NetPay,AnnualCTC,CTCMonth,PFEmployerShare,PFEmployerShareAnnual,AnnualGrossPay,MonthGrossPay,OtherAdditions,OtherDeductions,LossOfPay) values
+ 
+		(@Emp_Code,@PaySlipForMonth,@DaysPaid,@AbsentDays,@EarnedBasic,@HRA,@SpecialAllowance,@PFEmployeeShare,@ProfessionalTax,@TDS,@EarningTotal,@TotalDeductions,@NetPay,@AnnualCTC,@CTCMonth,@PFEmployerShare,@PFEmployerShareAnnual,@AnnualGrossPay,@MonthGrossPay,@OtherAdditions,@OtherDeductions,@LossOfPay)
+	 END TRY
+	 BEGIN CATCH
+			DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spInsertUserRoles]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spInsertUserRoles]
+@Emp_Code varchar(255),
+@RoleId int 
+as begin  
+	 BEGIN TRY
+		insert into UserRoles(Emp_Code,RoleId) values
+		(@Emp_Code,@RoleId)
+	 END TRY
+	 BEGIN CATCH
+			DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spInsertUsers]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spInsertUsers]
+@Emp_Code varchar(255),
+@Email varchar(255),
+@Password varchar(255) 
+as begin  
+	 BEGIN TRY
+		insert into Users(Emp_Code,Email,Password) values
+		(@Emp_Code,@Email,@Password)
+	 END TRY
+	 BEGIN CATCH
+			DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectAccountDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spSelectAccountDetails]
+  (@Id int)
+As 
+begin
+	 Begin Try 
+	   IF @Id IS NOT NULL 
+		  Begin
+			Select Id,Emp_Code,BankName,BankAccountNumber,UANNumber,PFAccountNumber from AccountDetails where Id=@Id
+		  End
+	   Else
+		  Begin 
+			Select Id,Emp_Code,BankName,BankAccountNumber,UANNumber,PFAccountNumber from AccountDetails
+		  END
+     End Try 
+	 BEGIN CATCH
+		 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+         PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectCompanyDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spSelectCompanyDetails]
+  (@Id int)
+As 
+begin
+	 Begin Try 
+	   IF @Id IS NOT NULL 
+		  Begin
+			Select Id,CompanyName,CompanyAddress,Division from CompanyDetails where Id=@Id
+		  End
+	   Else
+		  Begin 
+		  Select Id,CompanyName,CompanyAddress,Division from CompanyDetails 
+		  END
+     End Try 
+	 BEGIN CATCH
+		 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+         PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectCTCDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spSelectCTCDetails]
+  (@Id int)
+As 
+begin
+	 Begin Try 
+	   IF @Id IS NOT NULL 
+		  Begin
+			Select Id,Emp_Code,EarnedBasic,HRA,SpecialAllowance,PFEmployeeShare,ProfessionalTax,TDS,AnnualCTC,CTCMonth,PFEmployerShare,PFEmployerShareAnnual,AnnualGrossPay,MonthGrossPay,OtherAdditions,OtherDeductions,TotalDeductions,NetPay from CTCDetails where Id=@Id
+		  End
+	   Else
+		  Begin 
+			Select Id,Emp_Code,EarnedBasic,HRA,SpecialAllowance,PFEmployeeShare,ProfessionalTax,TDS,AnnualCTC,CTCMonth,PFEmployerShare,PFEmployerShareAnnual,AnnualGrossPay,MonthGrossPay,OtherAdditions,OtherDeductions,TotalDeductions,NetPay from CTCDetails
+		  END
+     End Try 
+	 BEGIN CATCH
+		 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+         PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectDepartment]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spSelectDepartment]  
+(@Id int)
+As 
+begin
+	Begin Try
+	   IF @Id IS NOT NULL 
+	  Begin
+		Select Id,DepartmentName from Department where Id = @Id
+	   End
+	   Else
+	  Begin 
+	   Select Id,DepartmentName from Department
+	   End
+    End Try 
+    BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectEmployee]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spSelectEmployee] 
+  (@Id int)
+As 
+begin
+	 Begin Try 
+	   IF @Id IS NOT NULL 
+		  Begin
+			Select Id, Emp_code, EmployeeName, DepartmentId, Designation, Division, Email, PAN_Number, JoiningDate from Employee where Id=@Id
+		  End
+	   Else
+		  Begin 
+		  Select Id, Emp_code, EmployeeName, DepartmentId, Designation, Division, Email, PAN_Number, JoiningDate from Employee 
+		  END
+     End Try 
+	 BEGIN CATCH
+		 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+         PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectEmployeeDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spSelectEmployeeDetails]
+    @Emp_Code VARCHAR(255)
+AS
+BEGIN
+	--DECLARE @LastCompanyId INT;
+ --   SELECT TOP 1 @LastCompanyId = Id FROM CompanyDetails ORDER BY Id DESC;
+    SELECT 
+        e.Emp_Code,
+        e.EmployeeName,
+        d.DepartmentName,
+        e.Designation,
+        e.Division,
+        e.Email,
+        e.PAN_Number,
+        e.JoiningDate
+    FROM 
+        Employee e
+    LEFT JOIN 
+        Department d ON e.DepartmentId = d.Id
+    WHERE 
+        e.Emp_Code = @Emp_Code; 
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectEmployeeDetailsCTCDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spSelectEmployeeDetailsCTCDetails]
+    @Emp_Code VARCHAR(255)
+AS
+BEGIN
+    SELECT 
+        e.Emp_Code,
+        e.EmployeeName,
+        d.DepartmentName,
+        e.Designation,
+        e.Division,
+		sm.CTCMonth ,
+		sm.AnnualCTC ,
+		sm.PFEmployerShare ,
+		sm.PFEmployerShareAnnual ,
+		sm.MonthGrossPay ,
+		sm.AnnualGrossPay ,
+        sm.EarnedBasic,
+		sm.TDS,
+        sm.HRA,
+        sm.ProfessionalTax,
+        sm.SpecialAllowance,
+        sm.PFEmployeeShare,
+		sm.OtherAdditions ,
+		sm.OtherDeductions,
+		sm.TotalDeductions,
+        sm.NetPay
+    FROM 
+        Employee e
+    LEFT JOIN 
+        Department d ON e.DepartmentId = d.Id
+    LEFT JOIN 
+        SalaryMetadata sm ON e.Emp_Code = sm.Emp_Code
+    WHERE 
+        e.Emp_Code = @Emp_Code; 
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectEmployeeDetailsFullDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spSelectEmployeeDetailsFullDetails]
+    @Emp_Code VARCHAR(255),
+	@PayPeriod VARCHAR(255)
+AS
+BEGIN
+	DECLARE @LastCompanyId INT;
+    SELECT TOP 1 @LastCompanyId = Id FROM CompanyDetails ORDER BY Id DESC;
+    SELECT 
+        e.Emp_Code,
+        e.EmployeeName,
+        d.DepartmentName,
+        e.Designation,
+        e.Division,
+        e.Email,
+        e.PAN_Number,
+        e.JoiningDate,
+        sm.PaySlipForMonth,
+        sm.DaysPaid,
+        sm.AbsentDays,
+        sm.EarnedBasic,
+        sm.HRA,
+        sm.SpecialAllowance,
+        sm.PFEmployeeShare,
+        sm.ProfessionalTax,
+        sm.TDS,
+        sm.EarningTotal,
+        sm.TotalDeductions,
+        sm.NetPay,
+		sm.AnnualCTC ,
+		sm.CTCMonth ,
+		sm.PFEmployerShare ,
+		sm.PFEmployerShareAnnual ,
+		sm.AnnualGrossPay ,
+		sm.MonthGrossPay ,
+		sm.OtherAdditions ,
+		sm.OtherDeductions,
+        ad.BankName,
+        ad.BankAccountNumber,
+        ad.UANNumber,
+        ad.PFAccountNumber,
+		cd.CompanyName,
+		cd.CompanyAddress,
+		cd.Division
+    FROM 
+        Employee e
+    LEFT JOIN 
+        Department d ON e.DepartmentId = d.Id
+    LEFT JOIN 
+        SalaryMetadata sm ON e.Emp_Code = sm.Emp_Code
+    LEFT JOIN 
+        AccountDetails ad ON e.Emp_Code = ad.Emp_Code
+    LEFT JOIN 
+        UserRoles ur ON e.Emp_Code = ur.Emp_Code
+    LEFT JOIN 
+        CompanyDetails cd ON cd.Id = @LastCompanyId
+    WHERE 
+        e.Emp_Code = @Emp_Code and sm.PaySlipForMonth = @PayPeriod; 
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectEmployeeFullDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spSelectEmployeeFullDetails]
+    @Emp_Code VARCHAR(255)
+AS
+BEGIN
+	DECLARE @LastCompanyId INT;
+    SELECT TOP 1 @LastCompanyId = Id FROM CompanyDetails ORDER BY Id DESC;
+    SELECT 
+        e.Emp_Code,
+        e.EmployeeName,
+        d.DepartmentName,
+        e.Designation,
+        e.Division,
+        e.Email,
+        e.PAN_Number,
+        e.JoiningDate,
+        sm.PaySlipForMonth,
+        sm.DaysPaid,
+        sm.AbsentDays,
+        sm.EarnedBasic,
+        sm.HRA,
+        sm.SpecialAllowance,
+        sm.PFEmployeeShare,
+        sm.ProfessionalTax,
+        sm.TDS,
+        sm.EarningTotal,
+        sm.TotalDeductions,
+        sm.NetPay,
+		sm.AnnualCTC ,
+		sm.CTCMonth ,
+		sm.PFEmployerShare ,
+		sm.PFEmployerShareAnnual ,
+		sm.AnnualGrossPay ,
+		sm.MonthGrossPay ,
+		sm.OtherAdditions ,
+		sm.OtherDeductions,
+        ad.BankName,
+        ad.BankAccountNumber,
+        ad.UANNumber,
+        ad.PFAccountNumber,
+		cd.CompanyName,
+		cd.CompanyAddress,
+		cd.Division
+    FROM 
+        Employee e
+    LEFT JOIN 
+        Department d ON e.DepartmentId = d.Id
+    LEFT JOIN 
+        SalaryMetadata sm ON e.Emp_Code = sm.Emp_Code
+    LEFT JOIN 
+        AccountDetails ad ON e.Emp_Code = ad.Emp_Code
+    LEFT JOIN 
+        UserRoles ur ON e.Emp_Code = ur.Emp_Code
+    LEFT JOIN 
+        CompanyDetails cd ON cd.Id = @LastCompanyId
+    WHERE 
+        e.Emp_Code = @Emp_Code; 
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectEmployeeType]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spSelectEmployeeType] 
+  (@Id int)
+As 
+begin
+	 Begin Try 
+	   IF @Id IS NOT NULL 
+		  Begin
+			Select Id, EmpType,LeaveAllocation from EmployeeType where Id=@Id
+		  End
+	   Else
+		  Begin 
+		  Select Id, EmpType,LeaveAllocation from EmployeeType 
+		  END
+     End Try 
+	 BEGIN CATCH
+		 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+         PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectHolidayImage]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spSelectHolidayImage]
+@Id INT
+AS
+BEGIN
+    -- Fetch the most recent record from HolidayImage
+    SELECT TOP 1 Id, ImageName, ImageData, ContentType
+    FROM HolidayImage
+    ORDER BY Id DESC;  -- Orders by Id in descending order to get the latest record
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectHolidayImageById]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spSelectHolidayImageById]
+    @Id INT
+AS
+BEGIN
+    SELECT Id, ImageName, ImageData, ContentType
+    FROM HolidayImage
+    WHERE Id = @Id;
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectHolidayPdf]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spSelectHolidayPdf]
+@Id INT
+AS
+BEGIN
+    -- Fetch the most recent record from HolidayPdf
+    SELECT TOP 1 Id, FileName, Data, ContentType
+    FROM HolidayPdf
+    ORDER BY Id DESC;  -- Orders by Id in descending order to get the latest record
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectHolidayPdfById]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[spSelectHolidayPdfById]
+    @Id INT
+AS
+BEGIN
+    SELECT Id, FileName, Data, ContentType
+    FROM HolidayPdf
+    WHERE Id = @Id;
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectLeaveRequests]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spSelectLeaveRequests]
+  (@Id int)
+As 
+begin
+	 Begin Try 
+	   IF @Id IS NOT NULL 
+		  Begin
+			Select Id, Emp_code, LeaveType, Reason, FromDate, ToDate, LeavesCount, ApprovalPerson, Status from LeaveRequests where Id=@Id
+		  End
+	   Else
+		  Begin 
+		  Select Id, Emp_code, LeaveType, Reason, FromDate, ToDate, LeavesCount, ApprovalPerson, Status from LeaveRequests 
+		  END
+     End Try 
+	 BEGIN CATCH
+		 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+         PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectLeaveRequestsFullDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spSelectLeaveRequestsFullDetails]
+    @Emp_Code VARCHAR(255)
+AS
+BEGIN
+    BEGIN TRY
+        -- Select the details of leaves for the specified employee code
+					Select Id, Emp_code, LeaveType, Reason, FromDate, ToDate, LeavesCount, ApprovalPerson, Status 
+					from LeaveRequests 
+					where Emp_Code = @Emp_Code; 
+    END TRY
+    BEGIN CATCH
+        -- Handle the error
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        
+        -- Get the details of the error
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+
+        -- Raise the error with its original details
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectLeaves]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spSelectLeaves] 
+  (@Id int)
+As 
+begin
+	 Begin Try 
+	   IF @Id IS NOT NULL 
+		  Begin
+			Select Id, Emp_code, TypeId, TotalLeaves, LeavesAvailable, LeavesUsed from Leaves where Id=@Id
+		  End
+	   Else
+		  Begin 
+		  Select Id, Emp_code, TypeId, TotalLeaves, LeavesAvailable, LeavesUsed from Leaves
+		  END
+     End Try 
+	 BEGIN CATCH
+		 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+         PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectLeavesCTCDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spSelectLeavesCTCDetails]
+    @Emp_Code VARCHAR(255)
+AS
+BEGIN
+    BEGIN TRY
+        -- Select the details of leaves for the specified employee code
+        SELECT 
+		    Id, 
+		    Emp_code, 
+		    TypeId,
+			TotalLeaves,
+            LeavesAvailable,
+            LeavesUsed
+        FROM 
+            Leaves
+        WHERE 
+            Emp_Code = @Emp_Code; 
+    END TRY
+    BEGIN CATCH
+        -- Handle the error
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        
+        -- Get the details of the error
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+
+        -- Raise the error with its original details
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectRoles]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spSelectRoles]
+  (@Id int)
+As 
+begin
+	 Begin Try 
+	   IF @Id IS NOT NULL 
+		  Begin
+			Select Id,Role from Roles where Id=@Id
+		  End
+	   Else
+		  Begin 
+			Select Id,Role from Roles
+		  END
+     End Try 
+	 BEGIN CATCH
+		 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+         PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectSalaryMetadata]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spSelectSalaryMetadata]
+  (@Id int)
+As 
+begin
+	 Begin Try 
+	   IF @Id IS NOT NULL 
+		  Begin
+			Select Id,Emp_Code,PaySlipForMonth,DaysPaid,AbsentDays,EarnedBasic,HRA,SpecialAllowance,PFEmployeeShare,ProfessionalTax,TDS,EarningTotal,TotalDeductions,NetPay,AnnualCTC,CTCMonth,PFEmployerShare,PFEmployerShareAnnual,AnnualGrossPay,MonthGrossPay,OtherAdditions,OtherDeductions,LossOfPay from SalaryMetadata where Id=@Id
+		  End
+	   Else
+		  Begin 
+			Select Id,Emp_Code,PaySlipForMonth,DaysPaid,AbsentDays,EarnedBasic,HRA,SpecialAllowance,PFEmployeeShare,ProfessionalTax,TDS,EarningTotal,TotalDeductions,NetPay,AnnualCTC,CTCMonth,PFEmployerShare,PFEmployerShareAnnual,AnnualGrossPay,MonthGrossPay,OtherAdditions,OtherDeductions,LossOfPay from SalaryMetadata
+		  END
+     End Try 
+	 BEGIN CATCH
+		 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+         PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectUserRoles]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spSelectUserRoles]
+  (@Id int)
+As 
+begin
+	 Begin Try 
+	   IF @Id IS NOT NULL 
+		  Begin
+			Select Id,Emp_Code,RoleId from UserRoles where Id=@Id
+		  End
+	   Else
+		  Begin 
+		  Select Id,Emp_Code,RoleId from UserRoles 
+		  END
+     End Try 
+	 BEGIN CATCH
+		 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+         PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectUsers]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spSelectUsers]
+  (@Id int)
+As 
+begin
+	 Begin Try 
+	   IF @Id IS NOT NULL 
+		  Begin
+			Select Id,Emp_Code,Email,Password from Users where Id=@Id
+		  End
+	   Else
+		  Begin 
+		  Select Id,Emp_Code,Email,Password from Users 
+		  END
+     End Try 
+	 BEGIN CATCH
+		 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+         PRINT 'An error occurred: ' + @ErrorMessage;
+	 END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spSelectUsersValidate]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spSelectUsersValidate]
+    @Emp_Code varchar(255),
+    @Password varchar(255)
+AS
+BEGIN TRY
+    IF @Emp_Code IS NOT NULL AND @Password IS NOT NULL
+    SELECT U.Emp_Code, R.Role, U.Email FROM Users U
+    INNER JOIN UserRoles UR ON UR.Emp_Code = U.Emp_Code
+    INNER JOIN Roles R ON R.Id = UR.RoleId
+    WHERE U.Emp_Code = @Emp_Code
+      AND U.Password = @Password;
+END TRY
+BEGIN CATCH
+    PRINT 'Error occurred: ' + ERROR_MESSAGE();
+END CATCH
+GO
+/****** Object:  StoredProcedure [dbo].[spUpdateAccountDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spUpdateAccountDetails]
+@Id int,
+@Emp_Code varchar(255),
+@BankName varchar(250),
+@BankAccountNumber bigint,
+@UANNumber bigint,
+@PFAccountNumber varchar(250)
+as
+begin 
+   Begin Try
+		update AccountDetails set 
+			Emp_Code =@Emp_Code,
+			BankName=@BankName,
+			BankAccountNumber=@BankAccountNumber,
+			UANNumber=@UANNumber,
+			PFAccountNumber=@PFAccountNumber        where Id=@Id		
+	End Try 
+    BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spUpdateCompanyDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spUpdateCompanyDetails]
+@Id int,
+@CompanyName varchar(255),
+@CompanyAddress varchar(255),
+@Division varchar(255)
+as
+begin 
+   Begin Try
+		update CompanyDetails set 
+			CompanyName =@CompanyName,
+			CompanyAddress=@CompanyAddress,
+			Division=@Division   where Id=@Id		
+	End Try 
+    BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spUpdateCTCDetails]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spUpdateCTCDetails]
+@Id int,
+@Emp_Code varchar(255),
+@EarnedBasic decimal(18,2),
+@HRA decimal(18,2),
+@SpecialAllowance decimal(18,2),
+@PFEmployeeShare decimal(18,2),
+@ProfessionalTax decimal(18,2),
+@TDS decimal(18,2),
+@AnnualCTC decimal(18,2),
+@CTCMonth decimal(18,2),
+@PFEmployerShare decimal(18,2),
+@PFEmployerShareAnnual decimal(18,2),
+@AnnualGrossPay decimal(18,2),
+@MonthGrossPay decimal(18,2),
+@OtherAdditions decimal(18,2),
+@OtherDeductions decimal(18,2),
+@TotalDeductions decimal(18,2),
+@NetPay decimal(18,2)
+as
+begin 
+   Begin Try
+		update CTCDetails set 
+			Emp_Code =@Emp_Code,
+			EarnedBasic=@EarnedBasic,
+			HRA=@HRA,
+			SpecialAllowance=@SpecialAllowance,
+			PFEmployeeShare=@PFEmployeeShare,
+			ProfessionalTax=@ProfessionalTax,	
+			TDS=@TDS,
+			AnnualCTC=@AnnualCTC,
+			CTCMonth=@CTCMonth,
+			PFEmployerShare=@PFEmployerShare,
+			PFEmployerShareAnnual=@PFEmployerShareAnnual,
+			AnnualGrossPay=@AnnualGrossPay,
+			MonthGrossPay=@MonthGrossPay,
+			OtherAdditions=@OtherAdditions,
+			OtherDeductions=@OtherDeductions,
+			TotalDeductions=@TotalDeductions,
+			NetPay=@NetPay    where Id=@Id		
+	End Try 
+    BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spUpdateDepartment]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create Procedure [dbo].[spUpdateDepartment] 
+@Id int ,
+@DepartmentName varchar(255)
+As 
+begin 
+	 Begin Try
+	  Update Department set
+	  DepartmentName = @DepartmentName
+	 
+	  where Id = @Id
+	  End Try
+    BEGIN CATCH
+		DECLARE @ErrorMessage VARCHAR(255) = ERROR_MESSAGE();
+         PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+End
+GO
+/****** Object:  StoredProcedure [dbo].[spUpdateEmployee]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spUpdateEmployee]
+@Id int,
+@Emp_code varchar(255),
+@EmployeeName varchar(255),
+@DepartmentId int,
+@Designation varchar(255),
+@Division varchar(255),
+@Email varchar(255),
+@PAN_Number Varchar(255),
+@Joiningdate date
+
+
+as
+begin 
+   Begin Try
+		update Employee set 
+			Emp_code =@Emp_code,
+			EmployeeName=@EmployeeName,
+			DepartmentId=@DepartmentId,
+		    Designation=@Designation,
+			Division=@Division,
+			Email=@Email,
+			PAN_Number=@PAN_Number,
+			Joiningdate=@Joiningdate
+			where Id =@Id
+			
+   End Try 
+    BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spUpdateEmployeeType]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spUpdateEmployeeType]
+@Id int,
+@EmpType varchar(255),
+@LeaveAllocation decimal(3,1)
+as
+begin 
+   Begin Try
+		update EmployeeType set 
+			EmpType =@EmpType,
+			LeaveAllocation=@LeaveAllocation  where Id =@Id
+   End Try 
+    BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spUpdateLeaveRequests]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spUpdateLeaveRequests]
+@Id int,
+@Emp_code varchar(255),
+@LeaveType varchar(255),
+@Reason varchar(255),
+@FromDate datetime,
+@ToDate datetime,
+@LeavesCount decimal(3,1),
+@ApprovalPerson varchar(255),
+@Status VARCHAR(50)
+
+
+as
+begin 
+   Begin Try
+		update LeaveRequests set 
+			Emp_code =@Emp_code,
+			LeaveType=@LeaveType,
+			Reason=@Reason,
+		    FromDate=@FromDate,
+			ToDate=@ToDate,
+			LeavesCount=@LeavesCount,
+			ApprovalPerson=@ApprovalPerson,
+			Status=@Status
+			where Id =@Id
+			
+   End Try 
+    BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spUpdateLeaves]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+--SP for updating employee details
+create procedure [dbo].[spUpdateLeaves]
+@Id int,
+@Emp_code varchar(255),
+@TypeId int,
+@TotalLeaves decimal(3,1),
+@LeavesAvailable decimal(3,1),
+@LeavesUsed decimal(3,1)
+
+
+as
+begin 
+   Begin Try
+		update Leaves set 
+			Emp_code =@Emp_code,
+			TypeId=@TypeId,
+			TotalLeaves=@TotalLeaves,
+		    LeavesAvailable=@LeavesAvailable,
+			LeavesUsed=@LeavesUsed
+			where Id =@Id
+			
+   End Try 
+    BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spUpdateResetPassword]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spUpdateResetPassword]
+    @Email varchar(255),
+    @Password varchar(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Ensure the email exists in the database
+    IF EXISTS (SELECT 1 FROM Users WHERE Email = @Email)
+    BEGIN
+        -- Update the password for the specified email
+        UPDATE Users
+        SET Password = @Password
+        WHERE Email = @Email;
+
+    END
+    ELSE
+    BEGIN
+        -- Handle case where email does not exist
+        RAISERROR('Email not found.', 16, 1);
+    END
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[spUpdateRoles]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spUpdateRoles]
+@Id int,
+@Role varchar(255)
+as
+begin 
+   Begin Try
+		update Roles set 
+			Role =@Role      where Id=@Id		
+	End Try 
+    BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spUpdateSalaryMetadata]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spUpdateSalaryMetadata]
+@Id int,
+@Emp_Code varchar(255),
+@PaySlipForMonth varchar(250),
+@DaysPaid decimal(18,2),
+@AbsentDays decimal(18,2),
+@EarnedBasic decimal(18,2),
+@HRA decimal(18,2),
+@SpecialAllowance decimal(18,2),
+@PFEmployeeShare decimal(18,2),
+@ProfessionalTax decimal(18,2),
+@TDS decimal(18,2),
+@EarningTotal decimal(18,2),
+@TotalDeductions decimal(18,2),
+@NetPay decimal(18,2),
+@AnnualCTC decimal(18,2),
+@CTCMonth decimal(18,2),
+@PFEmployerShare decimal(18,2),
+@PFEmployerShareAnnual decimal(18,2),
+@AnnualGrossPay decimal(18,2),
+@MonthGrossPay decimal(18,2),
+@OtherAdditions decimal(18,2),
+@OtherDeductions decimal(18,2),
+@LossOfPay decimal(18,2)
+as
+begin 
+   Begin Try
+		update SalaryMetadata set 
+			Emp_Code =@Emp_Code,
+			PaySlipForMonth=@PaySlipForMonth,
+			DaysPaid=@DaysPaid,
+			AbsentDays=@AbsentDays,
+			EarnedBasic=@EarnedBasic,
+			HRA=@HRA,
+			SpecialAllowance=@SpecialAllowance,
+			PFEmployeeShare=@PFEmployeeShare,
+			ProfessionalTax=@ProfessionalTax,	
+			TDS=@TDS,
+			EarningTotal=@EarningTotal,
+			TotalDeductions=@TotalDeductions,
+			NetPay=@NetPay,
+			AnnualCTC=@AnnualCTC,
+			CTCMonth=@CTCMonth,
+			PFEmployerShare=@PFEmployerShare,
+			PFEmployerShareAnnual=@PFEmployerShareAnnual,
+			AnnualGrossPay=@AnnualGrossPay,
+			MonthGrossPay=@MonthGrossPay,
+			OtherAdditions=@OtherAdditions,
+			OtherDeductions=@OtherDeductions,
+			LossOfPay=@LossOfPay     where Id=@Id		
+	End Try 
+    BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spUpdateUserRoles]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spUpdateUserRoles]
+@Id int,
+@Emp_Code varchar(255),
+@RoleId int
+as
+begin 
+   Begin Try
+		update UserRoles set 
+			Emp_Code =@Emp_Code,
+			RoleId=@RoleId
+			    where Id=@Id		
+	End Try 
+    BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+/****** Object:  StoredProcedure [dbo].[spUpdateUsers]    Script Date: 25-09-2024 17:15:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[spUpdateUsers]
+@Id int,
+@Emp_Code varchar(255),
+@Email varchar(255),
+@Password varchar(255)
+as
+begin 
+   Begin Try
+		update Users set 
+			Emp_Code =@Emp_Code,
+			Email=@Email,
+			Password=@Password    where Id=@Id		
+	End Try 
+    BEGIN CATCH
+	 DECLARE @ErrorMessage VARCHAR(max) = ERROR_MESSAGE();
+			 PRINT 'An error occurred: ' + @ErrorMessage;
+    END CATCH;
+end
+GO
+USE [master]
+GO
+ALTER DATABASE [PayslipManagement] SET  READ_WRITE 
+GO
