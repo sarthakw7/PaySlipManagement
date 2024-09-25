@@ -40,25 +40,25 @@ namespace PaySlipManagement.UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormFile file)
+        public async Task<IActionResult> Create(IFormFile fileImage)
         {
             if (ModelState.IsValid)
             {
-                if (file != null && file.Length > 0)
+                if (fileImage != null && fileImage.Length > 0)
                 {
                     var image = new HolidayImage
                     {
                         Id = 0,
-                        ImageName = file.FileName,
-                        ContentType = file.ContentType
+                        ImageName = fileImage.FileName,
+                        ContentType = fileImage.ContentType
                     };
 
                     using (var stream = new MemoryStream())
                     {
-                        await file.CopyToAsync(stream);
+                        await fileImage.CopyToAsync(stream);
                         image.ImageData = stream.ToArray();
                     }
-                    var response = await _apiServices.PostAsync($"{_apiSettings.HolidayEndpoint}/CreateHolidayPdfAsync", image);
+                    var response = await _apiServices.PostAsync($"{_apiSettings.HolidayEndpoint}/CreateHolidayImageAsync", image);
                     if (!string.IsNullOrEmpty(response) && response == "Role Registered Successfully" || response == "true")
                     {
                         return RedirectToAction(nameof(Index));
