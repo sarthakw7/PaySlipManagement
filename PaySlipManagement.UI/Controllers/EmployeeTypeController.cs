@@ -48,6 +48,7 @@ namespace PaySlipManagement.UI.Controllers
                 EmployeeTypeViewModel et = new EmployeeTypeViewModel();
                 et.Id = _employeeType.Id;
                 et.EmpType = _employeeType.EmpType;
+                et.LeaveAllocation = _employeeType.LeaveAllocation;
                 var response = await _apiServices.PostAsync<EmployeeType>($"{_apiSettings.EmployeeTypeEndpoint}/CreateEmployeeType", _employeeType);
                 if (response != null && response == "true")
                 {
