@@ -26,7 +26,19 @@
             <label asp-for="PFAccountNumber"></label>
             <input asp-for="PFAccountNumber" class="form-control" />
         </div>
-        <button type="submit" class="btn btn-primary">Create</button>
+        <div class="mt-2">
+            <div class="row justify-content-start">
+                <div class="col-auto">
+                    <form asp-action="Create">
+                        <div class="form-group">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+                <div class="col-auto">
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
-<a asp-action="Index" class="btn btn-secondary">Back to List</a>
