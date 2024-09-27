@@ -10,5 +10,6 @@ namespace PaySlipManagement.Common.Models
     {
         public int? Id { get; set; }
         public string EmpType { get; set; }
+        public decimal LeaveAllocation { get; set; }
     }
 }

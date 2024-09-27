@@ -100,6 +100,7 @@ namespace PaySlipManagement.UI.Controllers
         public async Task<IActionResult> ApproveRequest(int id)
         {
             var response = await _apiServices.GetAsync<LeaveRequestsViewModel>($"{_apiSettings.LeaveRequestsEndpoint}/GetLeaveRequestsByid/{id}");
+            //var data = await _apiServices.GetAsync<LeavesViewModel>($"{_apiSettings.LeavesEndpoint}/GetLeavesByid/{id}");
             if (response != null)
             {
                 var model = response;
@@ -111,7 +112,7 @@ namespace PaySlipManagement.UI.Controllers
                     {
                         count = (model.ToDate - model.FromDate).Value.Days + 1;
                     }
-                    model.LeavesCount += count;
+                    model.LeavesCount = count;
                     //model.LeaveBalance -= count;
                     await _apiServices.PutAsync($"{_apiSettings.LeaveRequestsEndpoint}/UpdateLeaveRequests", model);
                     return Json(new { success = true, message = "Request approved successfully!" });
