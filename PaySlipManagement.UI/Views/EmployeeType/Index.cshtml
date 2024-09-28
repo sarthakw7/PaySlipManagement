@@ -18,6 +18,7 @@
         <tr class="bg-secondary text-white">
             <th>Id</th>
             <th>Employee Type</th>
+            <th>Leave Allocation</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -27,6 +28,7 @@
             <tr>
                 <td>@type.Id</td>
                 <td>@type.EmpType</td>
+                <td>@type.LeaveAllocation</td>
                 <td>
                     <div class="d-flex justify-content-md-evenly">
                         <a asp-action="Edit" asp-route-id="@type.Id" class="btn btn-primary btn-sm mr-2">
