@@ -26,5 +26,6 @@ namespace PaySlipManagement.UI.Models
         public List<string> PayPeriods { get; set; }
         public HolidayImagePDFViewModel Holiday {  get; set; }
         public LeavesViewModel Leaves { get; set; } = new LeavesViewModel();
+        public IEnumerable<LeaveRequestsViewModel>? LeaveRequests { get; set; }
     }
 }
