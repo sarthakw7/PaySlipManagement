@@ -6,52 +6,169 @@
 @model EmployeePayPeriodsViewModel
 
 <div class="container mt-5">
-    <ul class="nav nav-tabs" id="employeeTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="employee-details-tab" data-bs-toggle="tab" href="#employee-details" role="tab" aria-controls="employee-details" aria-selected="true">Employee Details</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="pay-periods-tab" data-bs-toggle="tab" href="#pay-periods" role="tab" aria-controls="pay-periods" aria-selected="false">Pay Periods</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="ctc-breakdown-tab" data-bs-toggle="tab" href="#ctc-breakdown" role="tab" aria-controls="ctc-breakdown" aria-selected="false">CTC BreakDown</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="holiday-calendar-tab" data-bs-toggle="tab" href="#holiday-calendar" role="tab" aria-controls="holiday-calendar" aria-selected="false">Holiday Calendar</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="leaves-details-tab" data-bs-toggle="tab" href="#leaves-details" role="tab" aria-controls="leaves-details" aria-selected="false">Leaves</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="apply-leave-tab" data-bs-toggle="tab" href="#apply-leave" role="tab" aria-controls="apply-leave" aria-selected="false">Leaves Request</a>
-        </li>
-    </ul>
+    <!-- Nav Tabs -->
+<ul class="nav nav-tabs" id="employeeTabs" role="tablist" style="border-bottom: 2px solid #ff9800;">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="employee-details-tab" data-bs-toggle="tab" href="#employee-details" role="tab" aria-controls="employee-details" aria-selected="true" style="color: #424242; font-weight: 500;">Employee Details</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="pay-periods-tab" data-bs-toggle="tab" href="#pay-periods" role="tab" aria-controls="pay-periods" aria-selected="false" style="color: #424242; font-weight: 500;">Pay Periods</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="ctc-breakdown-tab" data-bs-toggle="tab" href="#ctc-breakdown" role="tab" aria-controls="ctc-breakdown" aria-selected="false" style="color: #424242; font-weight: 500;">CTC BreakDown</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="holiday-calendar-tab" data-bs-toggle="tab" href="#holiday-calendar" role="tab" aria-controls="holiday-calendar" aria-selected="false" style="color: #424242; font-weight: 500;">Holiday Calendar</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="leaves-details-tab" data-bs-toggle="tab" href="#leaves-details" role="tab" aria-controls="leaves-details" aria-selected="false" style="color: #424242; font-weight: 500;">Leaves</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="apply-leave-tab" data-bs-toggle="tab" href="#apply-leave" role="tab" aria-controls="apply-leave" aria-selected="false" style="color: #424242; font-weight: 500;">Leaves Request</a>
+    </li>
+</ul>
+
+<!-- Updated Styles for Tabs -->
+<style>
+    .nav-tabs .nav-item {
+        margin-right: 10px;
+    }
+
+    .nav-tabs .nav-link {
+        border: none;
+        border-bottom: 3px solid transparent;
+        padding: 10px 15px;
+        color: #424242;
+        font-size: 1rem;
+        font-weight: 500;
+        background-color: transparent;
+        transition: color 0.3s ease, border-bottom-color 0.3s ease;
+    }
+
+    .nav-tabs .nav-link.active {
+        color: #ff9800;
+        border-bottom: 3px solid #ff9800;
+        background-color: transparent;
+        font-weight: 600;
+    }
+
+    .nav-tabs .nav-link:hover {
+        color: #ff9800;
+        border-bottom: 3px solid #ff9800;
+        background-color: transparent;
+    }
+
+    .nav-tabs {
+        border-bottom: none;
+    }
+
+</style>
+
+
+
     <div class="tab-content mt-4" id="employeeTabsContent">
-        <!-- Employee Details Tab -->
-        <div class="tab-pane fade show active" id="employee-details" role="tabpanel" aria-labelledby="employee-details-tab">
-            <h2 class="text-primary mb-4">Employee Dashboard - @Model.Employee.EmployeeName</h2>
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5>Employee Details</h5>
+
+
+       <!-- Employee Details Tab -->
+<div class="tab-pane fade show active" id="employee-details" role="tabpanel" aria-labelledby="employee-details-tab">
+            <h2 class="employee-dashboard-heading">Employee Dashboard - @Model.Employee.EmployeeName</h2>
+    <div class="card mb-4" style="border: none; border-radius: 12px;">
+        <div class="card-header text-white" style="background-color: #ff9800; border-radius: 12px 12px 0 0; padding: 15px;">
+            <h5 class="mb-0" style="font-weight: 500;">Employee Details</h5>
+        </div>
+        <div class="card-body" style="background-color: #fff8e1; padding: 20px;">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <p class="text-muted"><strong>Employee Code:</strong> @Model.Employee.Emp_Code</p>
+                    <p class="text-muted"><strong>Employee Name:</strong> @Model.Employee.EmployeeName</p>
+                    <p class="text-muted"><strong>Department:</strong> @Model.Employee.DepartmentName</p>
+                    <p class="text-muted"><strong>Designation:</strong> @Model.Employee.Designation</p>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p><strong>Employee Code:</strong> @Model.Employee.Emp_Code</p>
-                            <p><strong>Employee Name:</strong> @Model.Employee.EmployeeName</p>
-                            <p><strong>Department:</strong> @Model.Employee.DepartmentName</p>
-                            <p><strong>Designation:</strong> @Model.Employee.Designation</p>
-                        </div>
-                        <div class="col-md-6">
-                            <p><strong>Division:</strong> @Model.Employee.Division</p>
-                            <p><strong>Email:</strong> @Model.Employee.Email</p>
-                            <p><strong>PAN Number:</strong> @Model.Employee.PAN_Number</p>
-                            <p><strong>Joining Date:</strong> @Model.Employee.JoiningDate?.ToString("yyyy-MM-dd")</p>
-                        </div>
-                    </div>
+                <div class="col-md-6 mb-3">
+                    <p class="text-muted"><strong>Division:</strong> @Model.Employee.Division</p>
+                    <p class="text-muted"><strong>Email:</strong> @Model.Employee.Email</p>
+                    <p class="text-muted"><strong>PAN Number:</strong> @Model.Employee.PAN_Number</p>
+                    <p class="text-muted"><strong>Joining Date:</strong> @Model.Employee.JoiningDate?.ToString("yyyy-MM-dd")</p>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Minimalist Styles -->
+<style>
+            .employee-dashboard-heading {
+                font-size: 1.6rem; /* Slim, modern font size */
+                color: #5dcaff; /* Subtle orange text for a clean look */
+                font-weight: 500; /* Medium weight for simplicity */
+                margin-bottom: 20px; /* Spacing below the heading */
+                border-bottom: 2px solid #ffa726; /* Thin orange underline for visual separation */
+                padding-bottom: 10px; /* Slight padding to give the heading space */
+                text-align: left; /* Left-aligned for professional appearance */
+                letter-spacing: 0.5px; /* Slight spacing between letters for modern feel */
+            }
+
+                .employee-dashboard-heading:hover {
+                    color: #ff7043; /* Slightly darker orange on hover */
+                    border-bottom: 2px solid #ff7043; /* Darker underline on hover for subtle effect */
+                    transition: all 0.3s ease-in-out; /* Smooth transition for hover effects */
+                }
+
+    /* General card styles for modern and minimalistic feel */
+    .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+        transform: scale(1.01);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header styling */
+    .card-header {
+        background-color: #ff9800;
+        border-radius: 12px 12px 0 0;
+        padding: 15px;
+        color: #fff;
+        text-align: center;
+        font-size: 1.25rem;
+        font-weight: 500;
+    }
+
+    /* Body background with soft tone */
+    .card-body {
+        background-color: #fff8e1;
+        padding: 20px;
+        color: #424242;
+        font-size: 1rem;
+    }
+
+    /* Typography */
+    p {
+        margin-bottom: 10px;
+        color: #424242;
+        font-size: 1rem;
+        font-weight: 400;
+    }
+
+    .text-muted {
+        color: #616161 !important;
+        font-size: 0.95rem;
+    }
+
+    /* Remove excess margin and padding */
+    h5 {
+        margin-bottom: 0;
+    }
+
+</style>
+
+
+
+
         <!-- Pay Periods Tab -->
         <div class="tab-pane fade" id="pay-periods" role="tabpanel" aria-labelledby="pay-periods-tab">
             <h3 class="text-secondary mb-3">Pay Periods</h3>
