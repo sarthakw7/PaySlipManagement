@@ -11,16 +11,12 @@ namespace PaySlipManagement.Common.Models
     {
         public int? Id { get; set; }
         public string? Emp_Code { get; set; }
-        [Required]
-        [EmailAddress(ErrorMessage = "Invalid email address.")]
         public string? Email { get; set; }
         public string? Password { get; set; }
     }
     public class User
     {
         public string? Emp_Code { get; set; }
-        [Required]
-        [EmailAddress(ErrorMessage = "Invalid email address.")]
         public string? Email { get; set; }
         public string? Password { get; set; }
         public string? Role { get; set; }
@@ -28,8 +24,6 @@ namespace PaySlipManagement.Common.Models
     }
     public class ResetPassword
     {
-        [Required]
-        [EmailAddress(ErrorMessage = "Invalid email address.")]
         public string? Email { get; set; }
         public string? Password { get; set; }
     }
