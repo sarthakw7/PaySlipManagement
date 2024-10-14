@@ -3,7 +3,29 @@
 @{
     ViewData["Title"] = "Home";
 }
+<style>
+    .custom-select {
+        width: 250px;
+    }
 
+    .bg-secondary {
+        background-color: #6c757d !important;
+    }
+
+    .bg-light-orange {
+        background-color: #FF8C00 !important; /* Light Orange Color */
+        color: white; /* Optional: Text color */
+    }
+
+    .form-inline .form-group {
+        display: flex;
+        align-items: center;
+    }
+
+        .form-inline .form-group label {
+            margin-right: 10px;
+        }
+</style>
 
 <div class="container mt-5">
     <div class="mt-2">
@@ -11,8 +33,8 @@
             <div>
                 @if (Model.HolidayPdf != null)
                 {
-                    <h6 class="text-primary mb-4">Latest Holiday Details</h6>
-                    <a href="data:application/pdf;base64,@Convert.ToBase64String(Model.HolidayPdf.Data)" class="btn btn-primary" download="@Model.HolidayPdf.FileName">@Model.HolidayPdf.FileName</a>
+                    <h6 class="bg-light-orange">Latest Holiday Details</h6>
+                    <a href="data:application/pdf;base64,@Convert.ToBase64String(Model.HolidayPdf.Data)" class="bg-light-orange" download="@Model.HolidayPdf.FileName">@Model.HolidayPdf.FileName</a>
                 }
                 else
                 {

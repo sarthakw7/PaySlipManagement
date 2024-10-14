@@ -6,7 +6,7 @@
 @model EmployeePayPeriodsViewModel
 
 <div class="container mt-5">
-    <ul class="nav nav-tabs" id="employeeTabs" role="tablist">
+    <ul class="nav nav-tabs custom-orange-text" id="employeeTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <a class="nav-link active" id="employee-details-tab" data-bs-toggle="tab" href="#employee-details" role="tab" aria-controls="employee-details" aria-selected="true">Employee Details</a>
         </li>
@@ -29,9 +29,9 @@
     <div class="tab-content mt-4" id="employeeTabsContent">
         <!-- Employee Details Tab -->
         <div class="tab-pane fade show active" id="employee-details" role="tabpanel" aria-labelledby="employee-details-tab">
-            <h2 class="text-primary mb-4">Employee Dashboard - @Model.Employee.EmployeeName</h2>
+            <h2 class="text-orange mb-4">Employee Dashboard - @Model.Employee.EmployeeName</h2>
             <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header text-orange text-white">
                     <h5>Employee Details</h5>
                 </div>
                 <div class="card-body">
@@ -54,7 +54,7 @@
         </div>
         <!-- Pay Periods Tab -->
         <div class="tab-pane fade" id="pay-periods" role="tabpanel" aria-labelledby="pay-periods-tab">
-            <h3 class="text-secondary mb-3">Pay Periods</h3>
+            <h3 class="text-orange mb-3">Pay Periods</h3>
             <div class="row">
                 @foreach (var payPeriod in Model.PayPeriods)
                 {
@@ -78,7 +78,7 @@
         </div>
         <!-- CTC BreakDown Tab -->
         <div class="tab-pane fade" id="ctc-breakdown" role="tabpanel" aria-labelledby="ctc-breakdown-tab">
-            <h4 class="text-secondary mb-2">CTC BreakDown</h4>
+            <h4 class="text-orange mb-2">CTC BreakDown</h4>
             <div class="row">
                 <div class="card m-2" style="width: 18rem;">
                     <div class="card-body d-flex align-items-center">
@@ -97,17 +97,18 @@
         </div>
         <!-- Holiday Calendar Tab -->
         <div class="tab-pane fade" id="holiday-calendar" role="tabpanel" aria-labelledby="holiday-calendar-tab">
-            @* @if (Model.Holiday.HolidayPdf != null)
+            @if (Model.Holiday.HolidayPdf != null)
             {
                 <div class="d-flex justify-content-between">
-                    <h6 class="text-primary mb-4">Latest Holiday Details</h6>
-                    <a href="data:application/pdf;base64,@Convert.ToBase64String(Model.Holiday.HolidayPdf.Data)" class="btn btn-primary" download="@Model.Holiday.HolidayPdf.FileName">@Model.Holiday.HolidayPdf.FileName</a>
+                    <h6 class="text-orange mb-4">Latest Holiday Details</h6>
+                    <a href="data:application/pdf;base64,@Convert.ToBase64String(Model.Holiday.HolidayPdf.Data)" class="text-orange" download="@Model.Holiday.HolidayPdf.FileName">@Model.Holiday.HolidayPdf.FileName</a>
                 </div>
             }
             else
             {
                 <p>No holiday PDF available.</p>
-            } *@
+            }
+            <br/>
             @if (Model.Holiday.HolidayImage != null)
             {
                 <img src="data:@Model.Holiday.HolidayImage.ContentType;base64,@Convert.ToBase64String(Model.Holiday.HolidayImage.ImageData)" alt="Holiday Image" class="holiday-image">
@@ -121,7 +122,7 @@
         <div class="tab-pane fade" id="leaves-details" role="tabpanel" aria-labelledby="leaves-details-tab">
 @*             <h2 class="text-secondary mb-2">Leave Info - @Model.Employee.Emp_Code</h2>*@         
                <div class="card shadow-sm mb-4">
-                <div class="card-header bg-secondary text-white">
+                <div class="card-header text-orange text-white">
                     <h5>Leave Information</h5>
                   </div>
                   <div class="card-body">
@@ -129,7 +130,7 @@
                         <!-- Total Leaves -->
                         <div class="col-md-4">
                             <div class="card shadow-sm">
-                                <div class="card-header bg-secondary text-white">
+                                <div class="card-header text-orange text-white">
                                     <h5>Total Leaves</h5>
                                 </div>
                                 <div class="card-body">
@@ -141,7 +142,7 @@
                         <!-- Leave Balance -->
                         <div class="col-md-4">
                             <div class="card shadow-sm">
-                                <div class="card-header bg-secondary text-white">
+                                <div class="card-header text-orange text-white">
                                     <h5>Leave Balance</h5>
                                 </div>
                                 <div class="card-body">
@@ -153,7 +154,7 @@
                         <!-- Leaves Used -->
                         <div class="col-md-4">
                             <div class="card shadow-sm">
-                                <div class="card-header bg-secondary text-white">
+                                <div class="card-header text-orange text-white">
                                     <h5>Leaves Used</h5>
                                 </div>
                                 <div class="card-body">
@@ -167,10 +168,10 @@
         </div>
         <!-- Apply Leave Tab-->
         <div class="tab-pane fade" id="apply-leave" role="tabpanel" aria-labelledby="apply-leave-tab">
-            <h4 class="text-secondary mb-2">Apply Leave</h4>
+            <h4 class="text-orange mb-2">Apply Leave</h4>
             <form asp-action="ApplyLeave" asp-controller="LeaveRequests" method="post">
                 <div class="form-group">
-                    <p><strong>Employee:</strong> @Model.Employee.Emp_Code</p>
+                    <p><strong>Employee:</strong> @Model.Employee.EmployeeName</p>
                 </div>
                 <div class="form-group">
                     <label for="leaveType">Leave Type:</label>
@@ -232,6 +233,13 @@
         transition: transform 0.2s;
     }
 
+    .text-orange {
+        color: #FF8C00 !important; /* Orange Color */
+    }
+
+    .custom-orange-text .nav-link {
+        color: #FF8C00 !important; /* Light orange color */
+    }
     .btn-outline-primary:hover {
         transform: scale(1.05);
     }
