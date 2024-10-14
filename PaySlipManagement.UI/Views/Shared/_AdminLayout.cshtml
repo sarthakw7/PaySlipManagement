@@ -27,19 +27,20 @@
 
         .sidebar {
             min-width: 200px;
-            background-color: #343a40;
+            /* background-color: #FFD580; */
+            background-color: #FF8C00;
             color: white;
             height: 100%;
             padding-top: 1rem;
         }
 
             .sidebar .nav-link {
-                color: rgba(255, 255, 255, 0.8);
+                color: black;
             }
 
                 .sidebar .nav-link:hover,
                 .sidebar .nav-link.active {
-                    background-color: #007bff;
+                    background-color: black;
                     color: white;
                 }
 
@@ -47,9 +48,21 @@
             flex: 1;
         }
 
-        .navbar {
-            padding: 0.5rem 1rem;
-            background-color: #ebebeb;
+        img {
+            display: right;
+            margin: 0 auto;
+            opacity: 0.8;
+
+        }
+
+        .logo {
+            width: 150px; /* Adjust size for the logo */
+            height: auto;
+        }
+
+        .holiday-calendar {
+            width: 100%; /* Adjust size for the holiday calendar */
+            height: auto;
         }
 
         .footer {
@@ -76,7 +89,7 @@
         @if (isAdminRole || isEmployeeRole)
         {
             <div class="sidebar p-3">
-                <h2>Whiztek</h2>
+                <img src="@Url.Content("~/images/whiztek_transparent_logo.png")" class="logo" alt="Logo" />
                 <hr>
                 <nav class="nav flex-column">
                     @if (isAdminRole)
