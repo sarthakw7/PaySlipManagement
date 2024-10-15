@@ -25,6 +25,12 @@
     <PackageReference Include="PagedList" Version="1.17.0" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
     <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
+    <PackageReference Include="Serilog.Enrichers.Process" Version="3.0.0" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.4" />
+    <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="7.0.1" />
     <ProjectReference Include="..\PaySlipManagement.BAL\PaySlipManagement.BAL.csproj" />
     <ProjectReference Include="..\PayslipManagement.common\PaySlipManagement.Common.csproj" />
   </ItemGroup>
