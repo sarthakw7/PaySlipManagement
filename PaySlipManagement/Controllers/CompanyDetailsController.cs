@@ -9,13 +9,16 @@ namespace PaySlipManagement.API.Controllers
     public class CompanyDetailsController : ControllerBase
     {
         private readonly ICompanyDetailsBALRepo _companydetailsBALRepo;
-        public CompanyDetailsController(ICompanyDetailsBALRepo _cmpdetailsBALRepo)
+        private readonly ILogger<CompanyDetailsController> _logger;
+        public CompanyDetailsController(ICompanyDetailsBALRepo _cmpdetailsBALRepo, ILogger<CompanyDetailsController> logger)
         {
             _companydetailsBALRepo = _cmpdetailsBALRepo;
+            _logger = logger;
         }
         [HttpGet("GetAllCompanyDetails")]
         public async Task<IEnumerable<CompanyDetails>> GetAllCompanyDetailsAsync()
         {
+            _logger.LogInformation("Company details API called");
             return await _companydetailsBALRepo.GetAllCompanyDetailsAsync();
         }
         [HttpGet("GetCompanyDetailsById/{id}")]
