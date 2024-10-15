@@ -11,9 +11,9 @@ namespace PaySlipManagement.API.Controllers
     public class AccountDetailsController : ControllerBase
     {
         private readonly IAccountDetailsBALRepo _accountdetailsBALRepo;
-        public AccountDetailsController(IAccountDetailsBALRepo _accdetailsBALRepo)
+        public AccountDetailsController(IAccountDetailsBALRepo accountDetailsBALRepo)
         {
-            _accountdetailsBALRepo = _accdetailsBALRepo;
+            _accountdetailsBALRepo = accountDetailsBALRepo;
         }
         [HttpGet("GetAllAccountDetails")]
         public async Task<IEnumerable<AccountDetails>> GetAllAccountDetailsAsync()
