@@ -10,16 +10,27 @@ namespace PaySlipManagement.UI.Controllers
     {
         private APIServices _apiServices;
         private readonly ApiSettings _apiSettings;
-        public CompanyDetailsController(APIServices apiServices, IOptions<ApiSettings> apiSettings)
+        private readonly ILogger<CompanyDetailsController> _logger;
+        public CompanyDetailsController(APIServices apiServices, IOptions<ApiSettings> apiSettings, ILogger<CompanyDetailsController> logger)
         {
             this._apiServices = apiServices;
             _apiSettings = apiSettings.Value;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
-            var companyDetails = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.CompanyDetailsViewModel>($"{_apiSettings.CompanyDetailsEndpoint}/GetAllCompanyDetails");
-            return View(companyDetails);
+            try
+            {
+                var companyDetails = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.CompanyDetailsViewModel>($"{_apiSettings.CompanyDetailsEndpoint}/GetAllCompanyDetails");
+                _logger.LogInformation("Successfully retrieved company details");
+                return View(companyDetails);
+            }
+            catch (Exception ex) 
+            {
+                _logger.LogError(ex, "An error occurred while executing the Get method.");
+                return StatusCode(500, "Internal Server Error");
+            }
         }
 
         public async Task<IActionResult> Details(int id)
