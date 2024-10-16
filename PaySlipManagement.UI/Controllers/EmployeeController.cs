@@ -30,8 +30,10 @@ namespace PaySlipManagement.UI.Controllers
 
         public async Task<IActionResult> Index(int? departmentId, int page = 1, int pageSize = 8)
         {
+            var empCode = Request.Cookies["empCode"];
             var emp = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"{_apiSettings.EmployeeEndpoint}/GetAllEmployees");
             var departments = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.DepartmentViewModel>($"{_apiSettings.DepartmentEndpoint}/GetAllDepartments");
+            var employee = await _apiServices.GetAsync<EmployeeDetails>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeByEmpCode/{empCode}");
 
             var employeeWithDepartmentList = emp.Select(e => new EmployeeViewModel
             {
@@ -63,7 +65,8 @@ namespace PaySlipManagement.UI.Controllers
             int skipItems = (currentPage - 1) * pageSize;
 
             var pagedEmployeeList = employeeWithDepartmentList.Skip(skipItems).Take(pageSize).ToList();
-
+            var paySlips = CalculatePaySlips(employee.JoiningDate, DateTime.Now);
+            ViewBag.PaySlips = paySlips;
             ViewBag.Departments = new SelectList(departments, "Id", "DepartmentName");
             ViewBag.SelectedDepartmentId = departmentId;
             ViewBag.CurrentPage = currentPage;
@@ -455,6 +458,19 @@ namespace PaySlipManagement.UI.Controllers
 	        }
 	          payPeriods.Reverse();
             return payPeriods;
+        }
+        private List<string> CalculatePaySlips(DateTime? joiningDate, DateTime presentDate)
+        {
+            var paySlips = new List<string>();
+            var currentDate = presentDate.AddMonths(-1);
+
+            while (currentDate >= joiningDate)
+            {
+                paySlips.Add(currentDate.ToString("MMMM-yyyy"));
+                currentDate = currentDate.AddMonths(-1);
+            }
+            paySlips.Reverse();
+            return paySlips;
         }
 
         [HttpPost]
