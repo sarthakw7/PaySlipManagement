@@ -6,8 +6,31 @@ using PaySlipManagement.DAL.Interfaces;
 using PaySlipManagement.API.Data;
 using System.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Serilog.Sinks.MSSqlServer;
+using System.Collections.ObjectModel;
+using Serilog.Events;
+using Serilog;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+// Serilog setup with the connection string from the configuration
+Serilog.Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.MSSqlServer(
+        connectionString: builder.Configuration.GetConnectionString("DefaultConnection"),
+        sinkOptions: new MSSqlServerSinkOptions
+        {
+            TableName = "Logs",
+            AutoCreateSqlTable = true
+        },
+        restrictedToMinimumLevel: LogEventLevel.Information)
+    .CreateLogger();
+Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
 
 // Add services to the container.
 builder.Services.AddDbContextFactory<LoggingDbContext>(options =>
@@ -34,7 +57,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Host.UseSerilog();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -42,9 +65,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
 }
 
-app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

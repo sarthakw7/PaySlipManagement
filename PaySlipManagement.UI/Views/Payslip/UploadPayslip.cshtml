@@ -2,6 +2,29 @@
     ViewData["Title"] = "Upload Payslip Details";
 }
 
+<style>
+    .custom-select {
+        width: 250px;
+    }
+
+    .bg-secondary {
+        background-color: #6c757d !important;
+    }
+
+    .bg-light-orange {
+        background-color: #FF8C00 !important; /* Light Orange Color */
+        color: white; /* Optional: Text color */
+    }
+
+    .form-inline .form-group {
+        display: flex;
+        align-items: center;
+    }
+
+        .form-inline .form-group label {
+            margin-right: 10px;
+        }
+</style>
 <h2>Upload Payslip Details</h2>
 
 <form asp-action="UploadPayslip" method="post" enctype="multipart/form-data">
@@ -9,5 +32,5 @@
         <label for="file">Choose Excel File</label>
         <input type="file" name="file" class="form-control-file" />
     </div>
-    <button type="submit" class="btn btn-primary">Upload</button>
+    <button type="submit" class="bg-light-orange">Upload</button>
 </form>
