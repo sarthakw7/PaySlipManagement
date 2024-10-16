@@ -32,6 +32,7 @@ namespace PaySlipManagement.UI.Controllers
         {
             var emp = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"{_apiSettings.EmployeeEndpoint}/GetAllEmployees");
             var departments = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.DepartmentViewModel>($"{_apiSettings.DepartmentEndpoint}/GetAllDepartments");
+
             var employeeWithDepartmentList = emp.Select(e => new EmployeeViewModel
             {
                 Id = e.Id,
@@ -186,10 +187,16 @@ namespace PaySlipManagement.UI.Controllers
         public async Task<IActionResult> GeneratePdf()
         {
             var empCode = Request.Cookies["empCode"];
+            var leaverequests = await _apiServices.GetAllAsync<LeaveRequestsViewModel>($"{_apiSettings.LeaveRequestsEndpoint}/GetLeaveRequestsByEmpCode/{empCode}");
+           
+
             var employee = await _apiServices.GetAsync<EmployeeDetails>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeByEmpCode/{empCode}");
             var holidayImage = await _apiServices.GetAsync<HolidayImageViewModel>($"{_apiSettings.HolidayEndpoint}/GetHolidayImageByIdAsync");
             var holidayPdf = await _apiServices.GetAsync<HolidayPdfViewModel>($"{_apiSettings.HolidayEndpoint}/GetHolidayPdfByIdAsync");
             var leaves = await _apiServices.GetAsync<LeavesViewModel>($"{_apiSettings.LeavesEndpoint}/GetLeavesByEmpCode/{empCode}");
+
+
+            
 
             if (employee == null)
             {
@@ -212,7 +219,8 @@ namespace PaySlipManagement.UI.Controllers
                 Employee = employee,
                 PayPeriods = payPeriods,
                 Holiday = holiday,
-                Leaves = leaves
+                Leaves = leaves,
+                LeaveRequests= leaverequests
             };
 
             return View(model);
@@ -448,7 +456,28 @@ namespace PaySlipManagement.UI.Controllers
 	          payPeriods.Reverse();
             return payPeriods;
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetEmployeeInactive(int id)
+        {
+            var employee = await _apiServices.GetAsync<EmployeeViewModel>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeById/{id}");
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            employee.IsActive = false; // Set the employee's status to inactive
+            var result = await _apiServices.PutAsync($"{_apiSettings.EmployeeEndpoint}/UpdateEmployee", employee);
+
+            if (result == null)
+            {
+                ModelState.AddModelError("", "Failed to update employee status.");
+                return View(employee); // Return with the current employee if the update failed
+            }
+            return RedirectToAction("Index");
+        }
     }
+
 }
 
 

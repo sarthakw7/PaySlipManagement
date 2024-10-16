@@ -25,6 +25,9 @@ namespace PaySlipManagement.UI.Models
         
         [Display(Name = "Department Name")]
         public string? DepartmentName { get; set; }
+        // New property to track if the employee is active
+        [Display(Name = "Active")]
+        public bool IsActive { get; set; } = true; // Default to true (active)
     }
     public class EmployeePayPeriodsViewModel
     {
@@ -32,5 +35,6 @@ namespace PaySlipManagement.UI.Models
         public List<string> PayPeriods { get; set; }
         public HolidayImagePDFViewModel Holiday {  get; set; }
         public LeavesViewModel Leaves { get; set; } = new LeavesViewModel();
+        public IEnumerable<LeaveRequestsViewModel>? LeaveRequests { get; set; }
     }
 }
