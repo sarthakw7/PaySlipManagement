@@ -155,18 +155,20 @@
                                         <div class="mx-1 w-50">
                                             <select class="form-control" id="payslipMonth">
                                                 <option>--Select Month--</option>
-                                                <option>June-2024</option>
-                                                <option>July-2024</option>
+                                                @foreach (var month in ViewBag.PaySlips)
+                                                {
+                                                    <option>@month</option>
+                                                }
                                             </select>
                                         </div>
-                                        <button type="button" class="btn btn-primary">Download</button>
+                                        <form asp-action="GenerateEmployeePdf" method="post" class="d-inline-flex mx-2 p-0">
+                                            <input type="hidden" name="empCode" value="@item.Emp_Code" />
+                                            <input type="hidden" name="month" value="month" />
+                                            <button type="submit" class="btn btn-primary">Download</button>
+                                        </form>
                                     </div>
                                 </div>
                                 <div class="col-6 text-right p-2">
-                                    @* <div class="d-flex align-items-center justify-content-end">
-                                        <h6 class="mx-1">CTC</h6>
-                                        <button type="button" class="btn btn-primary">Download</button>
-                                    </div> *@
                                 </div>
                             </div>
                         </div>
