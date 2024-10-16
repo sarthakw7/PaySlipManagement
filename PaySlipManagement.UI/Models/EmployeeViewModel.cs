@@ -13,7 +13,7 @@ namespace PaySlipManagement.UI.Models
         [Display(Name = "Employee Name")]
         public string EmployeeName { get; set; }
         public int DepartmentId { get; set; }
-        [Display(Name = "Department Id")]
+        [Display(Name = "Designation")]
         public string Designation { get; set; }
         public String Division { get; set; }
         public String Email { get; set; }
