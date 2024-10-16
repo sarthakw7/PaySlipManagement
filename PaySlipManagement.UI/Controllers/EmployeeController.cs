@@ -448,7 +448,28 @@ namespace PaySlipManagement.UI.Controllers
 	          payPeriods.Reverse();
             return payPeriods;
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetEmployeeInactive(int id)
+        {
+            var employee = await _apiServices.GetAsync<EmployeeViewModel>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeById/{id}");
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            employee.IsActive = false; // Set the employee's status to inactive
+            var result = await _apiServices.PutAsync($"{_apiSettings.EmployeeEndpoint}/UpdateEmployee", employee);
+
+            if (result == null)
+            {
+                ModelState.AddModelError("", "Failed to update employee status.");
+                return View(employee); // Return with the current employee if the update failed
+            }
+            return RedirectToAction("Index");
+        }
     }
+
 }
 
 
