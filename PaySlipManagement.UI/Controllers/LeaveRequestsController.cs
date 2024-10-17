@@ -17,10 +17,33 @@ namespace PaySlipManagement.UI.Controllers
             _apiServices = apiServices;
             _apiSettings = apiSettings.Value;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 8)
         {
-            var leaveRequests = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.LeaveRequestsViewModel>($"{_apiSettings.LeaveRequestsEndpoint}/GetAllLeaveRequests");
-            return View(leaveRequests);
+            // Fetch all leave requests
+            var leaveRequests = await _apiServices.GetAllAsync<LeaveRequestsViewModel>($"{_apiSettings.LeaveRequestsEndpoint}/GetAllLeaveRequests");
+
+            // Calculate total number of items
+            int totalItems = leaveRequests.Count();
+
+            // Calculate total pages
+            int totalPages = (int)Math.Ceiling((decimal)totalItems / pageSize);
+
+            // Ensure current page is within bounds
+            int currentPage = page > totalPages ? totalPages : page;
+            currentPage = currentPage < 1 ? 1 : currentPage;
+
+            // Calculate the items to skip
+            int skipItems = (currentPage - 1) * pageSize;
+
+            // Get the paginated list of leave requests
+            var pagedLeaveRequests = leaveRequests.Skip(skipItems).Take(pageSize).ToList();
+
+            // Pass pagination-related data to the View
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.TotalPages = totalPages;
+
+            // Return the paginated list to the view
+            return View(pagedLeaveRequests);
         }
 
         public async Task<IActionResult> Index1(string Emp_Code)
