@@ -43,6 +43,22 @@ namespace PaySlipManagement.DAL.Implementations
                 throw ex;
             }
         }
+
+        public async Task<Employee> GetEmployeeManagerByCodeAsync(string empcode)
+        {
+            try
+            {
+                Employee e = new Employee();
+                e.Emp_Code = empcode;
+                DapperServices<Employee> _empDetailsRepo = new DapperServices<Employee>();
+                return await _empDetailsRepo.GetEmployeeManagerDetailsAsync(e);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
+        }
         public async Task<IEnumerable<EmployeeDetails>> GetAllEmployeesDetailsAsync()
         {
             try

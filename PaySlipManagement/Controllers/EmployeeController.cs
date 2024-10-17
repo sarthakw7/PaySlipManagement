@@ -30,6 +30,14 @@ namespace PaySlipManagement.API.Controllers
             emp.Id = id;
             return await _employeeBALRepo.GetEmployeeById(emp);
         }
+
+        [HttpGet("GetEmployeeManagerByCodeAsync/{empcode}")]
+        public async Task<Employee> GetEmployeeManagerByCodeAsync(string empcode)
+        {
+            return await _employeeBALRepo.GetEmployeeManagerByCodeAsync(empcode);
+        }
+
+
         [HttpGet("GetAllEmployeesDetails")]
         public async Task<IEnumerable<EmployeeDetails>> GetAllEmployeesDetailsAsync()
         {

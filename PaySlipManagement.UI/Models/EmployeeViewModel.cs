@@ -25,10 +25,13 @@ namespace PaySlipManagement.UI.Models
         
         [Display(Name = "Department Name")]
         public string? DepartmentName { get; set; }
+        public string ManagerCode { get; set; }
     }
     public class EmployeePayPeriodsViewModel
     {
         public EmployeeDetails Employee { get; set; }
+
+        public EmployeeViewModel employeeViewModel { get; set; }
         public List<string> PayPeriods { get; set; }
         public HolidayImagePDFViewModel Holiday {  get; set; }
         public LeavesViewModel Leaves { get; set; } = new LeavesViewModel();

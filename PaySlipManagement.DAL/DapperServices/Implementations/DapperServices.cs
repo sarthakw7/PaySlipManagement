@@ -14,7 +14,7 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
 {
     public class DapperServices<T>: IDapperServices<T>
     {
-        private string constring = "Server=LAPTOP-46NPMGS0\\SQLEXPRESS;database=PayslipManagementDB;TrustServerCertificate=True;Trusted_Connection=true;MultipleActiveResultSets=true";
+        private string constring = "Server=Sarth\\SQLEXPRESS;database=PayslipManagementDB;TrustServerCertificate=True;Trusted_Connection=true;MultipleActiveResultSets=true";
         private SqlConnection con;
         public DapperServices()
         {
@@ -67,6 +67,32 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
                 throw ex;
             }
         }
+
+        public async Task<T> GetEmployeeManagerDetailsAsync(T entity)
+        {
+            try
+            {
+                // Prepare the stored procedure name dynamically using the method similar to GetSelectDetailsStoredProcedureName
+                var sql = GetSelectManagerDetailsStoredProcedureName(entity) + " @Emp_Code";
+
+                // Prepare the parameters dynamically
+                var parameters = new DynamicParameters();
+                foreach (var property in entity.GetType().GetProperties())
+                {
+                    parameters.Add("@" + property.Name, property.GetValue(entity));
+                }
+
+                // Execute the query to retrieve the employee's manager details
+                var result = await con.QueryFirstOrDefaultAsync<T>(sql, parameters);
+                con.Close();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<IEnumerable<T>> ReadGetByAllNullCodeAsync(T entity)
         {
             try
@@ -283,6 +309,11 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
             return result > 0;
         }
 
+
+        private string GetSelectManagerDetailsStoredProcedureName(T entity)
+        {
+            return $"EXEC spSelect{entity.GetType().Name}ManagerDetails";
+        }
 
         private string GetInsertStoredProcedureName(T entity)
         {

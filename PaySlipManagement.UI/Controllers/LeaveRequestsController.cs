@@ -97,14 +97,18 @@ namespace PaySlipManagement.UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+       
         public async Task<IActionResult> ApproveRequest(int id)
         {
+            var currentManagerCode = Request.Cookies["empCode"]; // Get the logged-in manager's Emp_Code
+
             var response = await _apiServices.GetAsync<LeaveRequestsViewModel>($"{_apiSettings.LeaveRequestsEndpoint}/GetLeaveRequestsByid/{id}");
-            //var data = await _apiServices.GetAsync<LeavesViewModel>($"{_apiSettings.LeavesEndpoint}/GetLeavesByid/{id}");
             if (response != null)
             {
                 var model = response;
-                if (model.Status == "Pending")
+
+                // Check if the current user is the manager responsible for approving the request
+                if (model.ApprovalPerson == currentManagerCode && model.Status == "Pending")
                 {
                     model.Status = "Approved";
                     var count = 0;
@@ -113,9 +117,13 @@ namespace PaySlipManagement.UI.Controllers
                         count = (model.ToDate - model.FromDate).Value.Days + 1;
                     }
                     model.LeavesCount = count;
-                    //model.LeaveBalance -= count;
+
                     await _apiServices.PutAsync($"{_apiSettings.LeaveRequestsEndpoint}/UpdateLeaveRequests", model);
                     return Json(new { success = true, message = "Request approved successfully!" });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "You are not authorized to approve this request." });
                 }
             }
             return Json(new { success = false, message = "An error occurred while approving the request." });
@@ -125,36 +133,82 @@ namespace PaySlipManagement.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelRequest(int id)
         {
+            var currentManagerCode = Request.Cookies["empCode"]; // Get the logged-in manager's Emp_Code
+
             var response = await _apiServices.GetAsync<LeaveRequestsViewModel>($"{_apiSettings.LeaveRequestsEndpoint}/GetLeaveRequestsByid/{id}");
             if (response != null)
             {
                 var model = response;
-                if (model.Status == "Pending")
+
+                // Ensure the manager is authorized to cancel the request
+                if (model.ApprovalPerson == currentManagerCode && model.Status == "Pending")
                 {
                     model.Status = "Declined";
                     await _apiServices.PutAsync($"{_apiSettings.LeaveRequestsEndpoint}/UpdateLeaveRequests", model);
                     return Json(new { success = true, message = "Request canceled successfully!" });
                 }
+                else
+                {
+                    return Json(new { success = false, message = "You are not authorized to cancel this request." });
+                }
             }
             return Json(new { success = false, message = "An error occurred while canceling the request." });
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ApplyLeave(LeaveRequests leaveRequests)
         {
-            var empCode = Request.Cookies["empCode"];
-            leaveRequests.Emp_Code = empCode;
-            leaveRequests.ApprovalPerson = "Admin";
-            leaveRequests.Status = "Pending";
-            var count = 0;
-            if (leaveRequests.FromDate != null && leaveRequests.ToDate != null)
+            try
             {
-                count = (leaveRequests.ToDate - leaveRequests.FromDate).Value.Days + 1;
+                var empCode = Request.Cookies["empCode"];
+                leaveRequests.Emp_Code = empCode;
+
+                // Retrieve the employee details to find their manager
+                var employee = await _apiServices.GetAsync<Employee>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeManagerByCodeAsync/{empCode}");
+
+                if (employee != null)
+                {
+                    leaveRequests.ApprovalPerson = employee.ManagerCode;
+
+                    leaveRequests.Status = "Pending";
+                    var count = 0;
+                    if (leaveRequests.FromDate != null && leaveRequests.ToDate != null)
+                    {
+                        count = (leaveRequests.ToDate - leaveRequests.FromDate).Value.Days + 1;
+                    }
+                    leaveRequests.LeavesCount = count;
+
+                    var response = await _apiServices.PostAsync<LeaveRequests>($"{_apiSettings.LeaveRequestsEndpoint}/CreateLeaveRequests", leaveRequests);
+
+                    // Check if the response was successful
+                    if (!string.IsNullOrEmpty(response))
+                    {
+                        return RedirectToAction("Index1");
+                    }
+                    else
+                    {
+                        // Handle the case where the API response is empty or failed
+                        ModelState.AddModelError("", "Failed to submit leave request.");
+                    }
+                }
+                else
+                {
+                    // Handle case where employee is null
+                    ModelState.AddModelError("", "Employee not found.");
+                }
             }
-            leaveRequests.LeavesCount = count;
-            var response = await _apiServices.PostAsync<LeaveRequests>($"{_apiSettings.LeaveRequestsEndpoint}/CreateLeaveRequests", leaveRequests);
-            return RedirectToAction("Index1");
+            catch (Exception ex)
+            {
+                // Log the exception and add a model error
+                ModelState.AddModelError("", $"An error occurred: {ex.Message}");
+            }
+
+            // Return the view with errors if any issues occur
+            return View(Index1);
         }
+
+
 
     }
 }

@@ -19,6 +19,7 @@ namespace PaySlipManagement.Common.Models
         [EmailAddress(ErrorMessage = "Invalid email address.")]
         public String Email { get; set; }
         public string PAN_Number { get; set; }
-        public string JoiningDate { get; set; } 
+        public string JoiningDate { get; set; }
+        public string ManagerCode { get; set; }
     }
 }

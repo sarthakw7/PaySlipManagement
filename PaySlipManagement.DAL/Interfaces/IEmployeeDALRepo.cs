@@ -12,6 +12,7 @@ namespace PaySlipManagement.DAL.Interfaces
     {
         Task<IEnumerable<Employee>> GetAllEmployees();
         Task<Employee> GetEmployeeById(Employee _employee);
+        Task<Employee> GetEmployeeManagerByCodeAsync(string empcode);
         Task<IEnumerable<EmployeeDetails>> GetAllEmployeesDetailsAsync();
         Task<EmployeeDetails> GetEmployeeByCodeAsync(string empcode, string payperiod);
         Task<EmployeeDetails> GetEmployeeDetailsByCodeAsync(string empcode);
