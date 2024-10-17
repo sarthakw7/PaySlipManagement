@@ -19,11 +19,34 @@ namespace PaySlipManagement.UI.Controllers
             _apiSettings = apiSettings.Value;
         }
         // GET: UserController
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
         {
             ViewData["ToastMessage"] = "Retrieved all Users.";
-            var data = await _apiService.GetAllAsync<UsersViewModel>($"{_apiSettings.UserEndpoint}/GetAllUsers");
-            return View(data);
+
+            // Fetch all users from the API
+            var userList = await _apiService.GetAllAsync<UsersViewModel>($"{_apiSettings.UserEndpoint}/GetAllUsers");
+
+            // Calculate total number of items
+            int totalItems = userList.Count();
+
+            // Calculate total number of pages
+            int totalPages = (int)Math.Ceiling((decimal)totalItems / pageSize);
+
+            // Ensure the current page is within bounds
+            int currentPage = page > totalPages ? totalPages : page;
+            currentPage = currentPage < 1 ? 1 : currentPage;
+
+            // Calculate the number of items to skip
+            int skipItems = (currentPage - 1) * pageSize;
+
+            // Get the paginated data for the current page
+            var pagedUserList = userList.Skip(skipItems).Take(pageSize).ToList();
+
+            // Pass pagination data to the view using ViewBag
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.TotalPages = totalPages;
+
+            return View(pagedUserList);
         }
 
         // GET: UserController/Details/5
