@@ -19,13 +19,34 @@ namespace PaySlipManagement.UI.Controllers
 
 
         // GET: Roles
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 8)
         {
             TempData["message"] = "This is Role Index";
 
-            var roles = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.RolesViewModel>($"{_apiSettings.RolesEndpoint}/GetAllAsyncRoles");
+            // Fetch all roles
+            var roles = await _apiServices.GetAllAsync<RolesViewModel>($"{_apiSettings.RolesEndpoint}/GetAllAsyncRoles");
 
-            return View(roles);
+            // Calculate total number of items
+            int totalItems = roles.Count();
+
+            // Calculate total number of pages
+            int totalPages = (int)Math.Ceiling((decimal)totalItems / pageSize);
+
+            // Ensure current page is within bounds
+            int currentPage = page > totalPages ? totalPages : page;
+            currentPage = currentPage < 1 ? 1 : currentPage;
+
+            // Calculate the number of items to skip
+            int skipItems = (currentPage - 1) * pageSize;
+
+            // Get the paginated data for the current page
+            var pagedRoles = roles.Skip(skipItems).Take(pageSize).ToList();
+
+            // Pass pagination data to the view using ViewBag
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.TotalPages = totalPages;
+
+            return View(pagedRoles);
         }
 
         // GET: Roles/Create
