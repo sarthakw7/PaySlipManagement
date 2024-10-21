@@ -16,11 +16,36 @@ namespace PaySlipManagement.UI.Controllers
             _apiSettings = apiSettings.Value;
         }
         // GET: DepartmentController
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 8)
         {
-            ViewData["ToastMessage"] = "Retrieved all Departments.";
+            // Fetch all department data
             var data = await _apiService.GetAllAsync<DepartmentViewModel>($"{_apiSettings.DepartmentEndpoint}/GetAllDepartments");
-            return View(data);
+
+            // Calculate total number of items
+            int totalItems = data.Count();
+
+            // Calculate total number of pages
+            int totalPages = (int)Math.Ceiling((decimal)totalItems / pageSize);
+
+            // Ensure current page is within bounds
+            int currentPage = page > totalPages ? totalPages : page;
+            currentPage = currentPage < 1 ? 1 : currentPage;
+
+            // Calculate the number of items to skip
+            int skipItems = (currentPage - 1) * pageSize;
+
+            // Get the paginated department data for the current page
+            var pagedDepartments = data.Skip(skipItems).Take(pageSize).ToList();
+
+            // Pass pagination data to the view using ViewBag
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.TotalPages = totalPages;
+
+            // ViewData for toast message
+            ViewData["ToastMessage"] = "Retrieved all Departments.";
+
+            // Return the paginated data to the view
+            return View(pagedDepartments);
         }
 
         // GET: DepartmentController/Details/5

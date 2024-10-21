@@ -34,6 +34,8 @@ namespace PaySlipManagement.UI.Controllers
             var emp = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.EmployeeViewModel>($"{_apiSettings.EmployeeEndpoint}/GetAllEmployees");
             var departments = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.DepartmentViewModel>($"{_apiSettings.DepartmentEndpoint}/GetAllDepartments");
             var employee = await _apiServices.GetAsync<EmployeeDetails>($"{_apiSettings.EmployeeEndpoint}/GetEmployeeByEmpCode/{empCode}");
+            var roles = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.RolesViewModel>($"{_apiSettings.RolesEndpoint}/GetAllAsyncRoles");
+            var userRoles = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.UserRolesViewModel>($"{_apiSettings.UserRoleEndpoint}/GetAllAsyncUserRoles");
 
             var employeeWithDepartmentList = emp.Select(e => new EmployeeViewModel
             {
@@ -41,16 +43,22 @@ namespace PaySlipManagement.UI.Controllers
                 Emp_Code = e.Emp_Code,
                 EmployeeName = e.EmployeeName,
                 DepartmentId = e.DepartmentId,
+                DepartmentName = departments.FirstOrDefault(d => d.Id == e.DepartmentId)?.DepartmentName,
+
+                // Fetching Role by joining Employee, UserRoles, and Roles
+                Role = (from ur in userRoles
+                        join r in roles on ur.RoleId equals r.Id
+                        where ur.Emp_Code == e.Emp_Code
+                        select r.Role).ToList(),  // Fetching role as List<string>
+
                 Designation = e.Designation,
                 Division = e.Division,
                 Email = e.Email,
                 PAN_Number = e.PAN_Number,
                 JoiningDate = DateTime.TryParseExact(e.JoiningDate, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime joiningDateTime)
-                                ? joiningDateTime.ToString("MM/dd/yyyy")
-                                : string.Empty,
-                DepartmentName = departments.FirstOrDefault(d => d.Id == e.DepartmentId)?.DepartmentName
+                    ? joiningDateTime.ToString("MM/dd/yyyy")
+                    : string.Empty,
             }).ToList();
-
 
             // Filter employees if departmentId is provided
             if (departmentId.HasValue)
