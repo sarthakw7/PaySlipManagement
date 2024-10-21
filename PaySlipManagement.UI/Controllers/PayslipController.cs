@@ -20,10 +20,32 @@ namespace PaySlipManagement.UI.Controllers
         }
         // GET: Payslip
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 8)
         {
+            // Fetch all payslip data
             var payslips = await _apiServices.GetAsync<List<PayslipDetailsViewModel>>($"{_apiSettings.PayslipDetailsEndpoint}/GetAllPayslipDetails");
-            return View(payslips);
+
+            // Calculate total number of items
+            int totalItems = payslips.Count();
+
+            // Calculate total number of pages
+            int totalPages = (int)Math.Ceiling((decimal)totalItems / pageSize);
+
+            // Ensure current page is within bounds
+            int currentPage = page > totalPages ? totalPages : page;
+            currentPage = currentPage < 1 ? 1 : currentPage;
+
+            // Calculate the number of items to skip
+            int skipItems = (currentPage - 1) * pageSize;
+
+            // Get the paginated data for the current page
+            var pagedPayslips = payslips.Skip(skipItems).Take(pageSize).ToList();
+
+            // Pass pagination data to the view using ViewBag
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.TotalPages = totalPages;
+
+            return View(pagedPayslips);
         }
 
         // GET: Payslip/Upload
