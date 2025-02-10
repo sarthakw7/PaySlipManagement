@@ -32,7 +32,20 @@ namespace PaySlipManagement.DAL.Implementations
             }
         }
 
-        public async Task<CompanyDocuments> GetByIdAsync(string empcode, string doc)
+        public async Task<CompanyDocuments> GetDepartmentByidAsync(CompanyDocuments _doc)
+        {
+            try
+            {
+                return await _db.ReadGetByIdAsync(_doc);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public async Task<IEnumerable<CompanyDocuments>> GetByIdAsync(string empcode, string doc)
         {
 
             try
@@ -41,7 +54,7 @@ namespace PaySlipManagement.DAL.Implementations
                 d.Emp_Code = empcode;
                 d.DocumentType = doc;
                 DapperServices<CompanyDocuments> document = new DapperServices<CompanyDocuments>();
-                return await document.ReadGetByTypeAsync(d);
+                return await document.ReadGetAllByTypeAsync(d);
             }
             catch (Exception ex)
             {

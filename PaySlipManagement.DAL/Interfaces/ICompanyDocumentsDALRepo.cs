@@ -9,7 +9,8 @@ namespace PaySlipManagement.DAL.Interfaces
 {
     public interface ICompanyDocumentsDALRepo
     {
-        Task<CompanyDocuments> GetByIdAsync(string empcode, string doc);
+        Task<IEnumerable<CompanyDocuments>> GetByIdAsync(string empcode, string doc);
+        Task<CompanyDocuments> GetCompanyDocumentsByidAsync(CompanyDocuments _department);
         Task<bool> Create(CompanyDocuments user);
     }
 }
