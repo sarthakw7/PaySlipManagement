@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using iText.StyledXmlParser.Jsoup.Nodes;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using PaySlipManagement.Common.Models;
 using PaySlipManagement.UI.Common;
@@ -15,10 +16,81 @@ namespace PaySlipManagement.UI.Controllers
             _apiServices = apiServices;
             _apiSettings = apiSettings.Value;
         }
+
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View();
+            var employees = await _apiServices.GetAllAsync<EmployeeViewModel>($"{_apiSettings.EmployeeEndpoint}/GetAllEmployees");
+            ViewBag.Employees = employees;
+
+            ViewBag.SelectedEmpCode = null;
+            ViewBag.SelecteddocumentType = null;
+
+            return View(Enumerable.Empty<CompanyDocumentsViewModel>());
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Index(string Emp_Code, string DocumentType)
+        {
+            var employees = await _apiServices.GetAllAsync<EmployeeViewModel>($"{_apiSettings.EmployeeEndpoint}/GetAllEmployees");
+            ViewBag.Employees = employees;
+
+            // Pass the selected values back to the view
+            ViewBag.SelectedEmpCode = Emp_Code;
+            ViewBag.SelecteddocumentType = DocumentType;
+
+            // Fetch employee tasks based on filters
+            var response = await _apiServices.GetAllAsync<CompanyDocumentsViewModel>($"{_apiSettings.CompanyDocumentsEndpoint}/GetCompanyDocumentsByIdAsync/{Emp_Code}/{DocumentType}");
+
+            // Return the filtered tasks to the view
+            return View(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DownloadDocument(int id)
+        {
+
+            var url = $"{_apiSettings.CompanyDocumentsEndpoint}/GetCompanyDocumentsById/{id}";
+            var doc = await _apiServices.GetAsync<CompanyDocumentsViewModel>(url);
+
+            if (doc == null || doc.FileData == null)
+            {
+                return NotFound("Document not found.");
+            }
+
+            return File(doc.FileData, "application/octet-stream", doc.FileName);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ViewDocument(int id)
+        {
+            var url = $"{_apiSettings.CompanyDocumentsEndpoint}/GetCompanyDocumentsById/{id}";
+            var doc = await _apiServices.GetAsync<CompanyDocumentsViewModel>(url);
+
+            if (doc == null || doc.FileData == null)
+            {
+                return NotFound("Document not found.");
+            }
+
+            // Determine the MIME type based on the document type
+            string mimeType;
+            switch (Path.GetExtension(doc.FileName)?.ToLower())
+            {
+                case ".jpg":
+                case ".jpeg":
+                    mimeType = "image/jpeg";
+                    break;
+                case ".png":
+                    mimeType = "image/png";
+                    break;
+                default:
+                    mimeType = "application/pdf";
+                    break;
+            }
+
+            return File(doc.FileData, mimeType);
+        }
+
         [HttpGet]
         //[Route("CompanyDocuments/create")] // Specify a unique route for the GET method
         public async Task<IActionResult> Create()

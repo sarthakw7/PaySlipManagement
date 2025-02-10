@@ -14,11 +14,19 @@ namespace PaySlipManagement.API.Controllers
         {
             _documentBALRepo = documentBALRepo;
         }
-        //[HttpGet("GetCompanyDocumentsByIdAsync/{empcode}/{document}")]
-        //public async Task<CompanyDocuments> GetByIdDocumentAsync(string empcode, string document)
-        //{
-        //    return await _documentBALRepo.GetByIdAsync(empcode, document);
-        //}
+        [HttpGet("GetCompanyDocumentsByIdAsync/{empcode}/{document}")]
+        public async Task<IEnumerable<CompanyDocuments>> GetByIdDocumentAsync(string empcode, string document)
+        {
+            return await _documentBALRepo.GetByIdAsync(empcode, document);
+        }
+        [HttpGet("GetCompanyDocumentsById/{id}")]
+        public async Task<CompanyDocuments> GetCompanyDocumentsByidAsync(int id)
+        {
+            CompanyDocuments d = new CompanyDocuments();
+            d.Id = id;
+            return await _documentBALRepo.GetCompanyDocumentsByidAsync(d);
+        }
+
         [HttpPost("Create")]
         public async Task<bool> Create(CompanyDocuments doc)
         {
