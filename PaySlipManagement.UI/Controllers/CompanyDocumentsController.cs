@@ -46,6 +46,27 @@ namespace PaySlipManagement.UI.Controllers
             return View(response);
         }
 
+        public async Task<IActionResult> Index1(string ApprovalPerson, int page = 1, int pageSize = 8)
+        {
+            var empCode = Request.Cookies["empCode"];
+            ApprovalPerson = empCode;
+            // Fetch all leave requests
+            var request = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.CompanyDocumentsViewModel>($"{_apiSettings.CompanyDocumentsEndpoint}/GetCompanyDocumentsByManager/{ApprovalPerson}");
+
+            // Filter only "Pending" requests
+            var pendingRequests = request?.Where(r => r.Status == "Pending").ToList();
+
+            // Pagination logic
+            var totalPending = pendingRequests.Count();
+            var totalPages = (int)Math.Ceiling(totalPending / (double)pageSize);
+            var pagedPendingRequests = pendingRequests.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewBag.TotalPages = totalPages;
+            ViewBag.CurrentPage = page;
+
+            return View(pagedPendingRequests);
+        }
+
         [HttpPost]
         public async Task<IActionResult> DownloadDocument(int id)
         {
@@ -60,6 +81,13 @@ namespace PaySlipManagement.UI.Controllers
 
             return File(doc.FileData, "application/octet-stream", doc.FileName);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewDocumentGet(int id)
+        {
+            return await ViewDocument(id); // Call the existing ViewDocument method
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> ViewDocument(int id)

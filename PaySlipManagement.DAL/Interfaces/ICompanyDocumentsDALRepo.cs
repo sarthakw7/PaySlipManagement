@@ -12,5 +12,7 @@ namespace PaySlipManagement.DAL.Interfaces
         Task<IEnumerable<CompanyDocuments>> GetByIdAsync(string empcode, string doc);
         Task<CompanyDocuments> GetCompanyDocumentsByidAsync(CompanyDocuments _department);
         Task<bool> Create(CompanyDocuments user);
+        Task<IEnumerable<CompanyDocuments>> GetCompanyDocumentsByManagerAsync(string approvalPerson);
+
     }
 }

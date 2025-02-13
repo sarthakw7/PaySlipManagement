@@ -32,5 +32,11 @@ namespace PaySlipManagement.API.Controllers
         {
             return await _documentBALRepo.Create(doc);
         }
+
+        [HttpGet("GetCompanyDocumentsByManager/{Emp_Code}")]
+        public async Task<IEnumerable<CompanyDocuments>> GetEmployeeRegularizationByManagerAsync(string Emp_Code)
+        {
+            return await _documentBALRepo.GetCompanyDocumentsByManagerAsync(Emp_Code);
+        }
     }
 }
