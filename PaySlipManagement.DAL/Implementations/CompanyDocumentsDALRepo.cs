@@ -61,5 +61,19 @@ namespace PaySlipManagement.DAL.Implementations
                 throw ex;
             }
         }
+        public async Task<IEnumerable<CompanyDocuments>> GetCompanyDocumentsByManagerAsync(string Emp_Code)
+        {
+            try
+            {
+                CompanyDocuments er = new CompanyDocuments();
+                er.Emp_Code = Emp_Code;
+                DapperServices<CompanyDocuments> document = new DapperServices<CompanyDocuments>();
+                return await document.ReadGetCodeByAllAsync(er);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

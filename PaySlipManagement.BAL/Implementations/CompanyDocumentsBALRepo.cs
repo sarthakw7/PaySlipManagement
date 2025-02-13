@@ -32,5 +32,9 @@ namespace PaySlipManagement.BAL.Implementations
         {
             return await _docDALRepo.GetByIdAsync(empcode, doc);
         }
+        public async Task<IEnumerable<CompanyDocuments>> GetCompanyDocumentsByManagerAsync(string Emp_Code)
+        {
+            return await _docDALRepo.GetCompanyDocumentsByManagerAsync(Emp_Code);
+        }
     }
 }

@@ -14,5 +14,7 @@ namespace PaySlipManagement.Common.Models
         public string? FileType { get; set; }
         public string? FileName { get; set; }
         public byte[]? FileData { get; set; }
+        public string? ApprovalPerson { get; set; }
+        public string? Status { get; set; }
     }
 }
