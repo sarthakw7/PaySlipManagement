@@ -1,6 +1,7 @@
 ﻿using iText.StyledXmlParser.Jsoup.Nodes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using PayslipManagement.Common.Models;
 using PaySlipManagement.Common.Models;
 using PaySlipManagement.UI.Common;
 using PaySlipManagement.UI.Models;
@@ -46,11 +47,25 @@ namespace PaySlipManagement.UI.Controllers
             return View(response);
         }
 
+        public async Task<IActionResult> Documents(string Emp_Code, int page = 1, int pageSize = 8)
+        {
+            var empCode = Request.Cookies["empCode"];
+            Emp_Code = empCode;
+            var doc = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.CompanyDocumentsViewModel>($"{_apiSettings.CompanyDocumentsEndpoint}/GetCompanyDocumentsByCode/{Emp_Code}");
+
+            var totalPending = doc.Count();
+            var totalPages = (int)Math.Ceiling(totalPending / (double)pageSize);
+            var pagedPendingRequests = doc.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewBag.TotalPages = totalPages;
+            ViewBag.CurrentPage = page;
+            return View(doc);
+        }
+
         public async Task<IActionResult> Index1(string ApprovalPerson, int page = 1, int pageSize = 8)
         {
             var empCode = Request.Cookies["empCode"];
             ApprovalPerson = empCode;
-            // Fetch all leave requests
             var request = await _apiServices.GetAllAsync<PaySlipManagement.UI.Models.CompanyDocumentsViewModel>($"{_apiSettings.CompanyDocumentsEndpoint}/GetCompanyDocumentsByManager/{ApprovalPerson}");
 
             // Filter only "Pending" requests
@@ -160,7 +175,8 @@ namespace PaySlipManagement.UI.Controllers
                     ModelState.AddModelError(string.Empty, "Invalid file type. Only PDF, JPEG, and PNG are allowed.");
                     return View("Create");
                 }
-
+                var employee = await _apiServices.GetAsync<EmployeeDetails>(
+                    $"{_apiSettings.EmployeeEndpoint}/GetEmployeeByEmpCode/{empCode}");
 
                 var document = new CompanyDocuments
                 {
@@ -168,7 +184,9 @@ namespace PaySlipManagement.UI.Controllers
                     FileName = files.FileName,
                     DocumentType = documentType,
                     FileType = fileType, // Use the actual file content type
-                    Emp_Code = empCode
+                    Emp_Code = empCode,
+                    ApprovalPerson=employee.ManagerCode,
+                    Status="Pending"
                 };
 
                 using (var stream = new MemoryStream())
@@ -187,7 +205,8 @@ namespace PaySlipManagement.UI.Controllers
                 }
 
                 TempData["SuccessMessage"] = "Document uploaded successfully.";
-                return RedirectToAction("Index", "Employee");
+                TempData["ActiveTab"] = "upload-documents"; // Keep the tab active
+                return RedirectToAction("Index");
             }
             return View("Create");
         }
