@@ -33,6 +33,9 @@
                 Regularization
             </a>
         </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="employee-skills-tab" data-bs-toggle="tab" href="#employee-skills" role="tab" aria-controls="employee-skills" aria-selected="false" style="color: #424242; font-weight: 500;">Skills</a>
+        </li>
     </ul>
 
     <!-- Updated Styles for Tabs -->
@@ -458,10 +461,10 @@
 
         <!-- Tasks Tab -->
         <div class="tab-pane fade" id="employee-tasks" role="tabpanel" aria-labelledby="employee-tasks-tab">
-            <div class="d-flex justify-content-between align-items-center">
+            @* <div class="d-flex justify-content-between align-items-center">
                 <h4>Employee Tasks</h4>
                 <button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("Index1", "Tasks")'">All Tasks</button>
-            </div>
+            </div> *@
             <form asp-action="SubmitTasks" asp-controller="EmployeeTasks" method="post" id="taskform">
                 @Html.AntiForgeryToken()
                 <div class="form-group mt-3">
@@ -655,6 +658,99 @@
             function deleteTaskRow(button) {
                 const row = button.closest("tr");
                 row.remove();
+            }
+        </script>
+        <!-- Employee Skills Tab -->
+        <div class="tab-pane fade" id="employee-skills" role="tabpanel" aria-labelledby="employee-skills-tab">
+            <form asp-action="SubmitSkills" asp-controller="EmployeeSkills" method="post" id="skillsForm">
+                @Html.AntiForgeryToken()
+                <div class="form-group mt-3">
+                    <div class="form-group">
+                        <p><strong>Employee:</strong> @Model.Employee.EmployeeName</p>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Skill Name</th>
+                                <th>Proficiency Level</th>
+                                <th>Years of Experience</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="skillTableBody">
+                            <tr>
+                                <td>
+                                    <input type="text" name="skills[0].SkillName" class="form-control" placeholder="Skill Name" required />
+                                </td>
+                                <td>
+                                    <select name="skills[0].ProficiencyLevel" class="form-control">
+                                        <option value="Beginner">Beginner</option>
+                                        <option value="Intermediate">Intermediate</option>
+                                        <option value="Advanced">Advanced</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" name="skills[0].YearsOfExperience" class="form-control" min="0" placeholder="Years" required />
+                                </td>
+                                <td class="action-buttons">
+                                    <button type="button" class="btn btn-success btn-sm mr-2" onclick="addSkillRow()">
+                                        <i class="bi bi-plus-circle"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteSkillRow(this)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-group mt-3">
+                    <button type="submit" class="btn btn-primary">Submit Skills</button>
+                </div>
+            </form>
+        </div>
+        <script>
+            function addSkillRow() {
+                let tableBody = document.getElementById("skillTableBody");
+                let rowCount = tableBody.rows.length;
+
+                let newRow = document.createElement("tr");
+                newRow.innerHTML = `
+                            <td>
+                                <input type="text" name="skills[${rowCount}].SkillName" class="form-control" placeholder="Skill Name" required />
+                            </td>
+                            <td>
+                                <select name="skills[${rowCount}].ProficiencyLevel" class="form-control">
+                                    <option value="Beginner">Beginner</option>
+                                    <option value="Intermediate">Intermediate</option>
+                                    <option value="Advanced">Advanced</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="number" name="skills[${rowCount}].YearsOfExperience" class="form-control" min="0" placeholder="Years" required />
+                            </td>
+                            <td class="action-buttons">
+                                <button type="button" class="btn btn-success btn-sm mr-2" onclick="addSkillRow()">
+                                    <i class="bi bi-plus-circle"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="deleteSkillRow(this)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        `;
+
+                tableBody.appendChild(newRow);
+            }
+            function deleteSkillRow(button) {
+                let row = button.closest("tr");
+                let tableBody = document.getElementById("skillTableBody");
+
+                if (tableBody.rows.length > 1) {
+                    row.remove();
+                } else {
+                    alert("At least one skill is required.");
+                }
             }
         </script>
     </div>
