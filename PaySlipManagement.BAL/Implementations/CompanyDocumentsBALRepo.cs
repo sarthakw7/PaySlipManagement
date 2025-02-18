@@ -40,5 +40,10 @@ namespace PaySlipManagement.BAL.Implementations
         {
             return await _docDALRepo.GetCompanyDocumentsByEmpCodeAsync(Emp_Code);
         }
+        public async Task<bool> UpdateCompanyDocuments(CompanyDocuments _doc)
+        {
+            return await _docDALRepo.UpdateCompanyDocuments(_doc);
+
+        }
     }
 }

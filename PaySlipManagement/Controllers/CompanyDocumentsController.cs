@@ -43,5 +43,11 @@ namespace PaySlipManagement.API.Controllers
         {
             return await _documentBALRepo.GetCompanyDocumentsByEmpCodeAsync(Emp_Code);
         }
+        [HttpPut("UpdateCompanyDocuments")]
+        public async Task<bool> UpdateCompanyDocuments(CompanyDocuments _doc)
+        {
+            return await _documentBALRepo.UpdateCompanyDocuments(_doc);
+
+        }
     }
 }

@@ -89,34 +89,40 @@
 
 <script>
     function approveRequest(id) {
-        if (confirm('Are you sure you want to approve this document?')) {
+        if (confirm('Are you sure you want to approve this Document?')) {
             $.ajax({
                 url: '@Url.Action("approveRequest", "CompanyDocuments")',
                 type: 'POST',
-                data: { id: id },
-                success: function () {
-                    alert('Document approved successfully!');
-                    location.reload();
+                data: {
+                    id: id,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
                 },
-                error: function () {
-                    alert('An error occurred while approving the request.');
+                success: function (response) {
+                    alert('Document approved successfully!');
+                    window.location.href = '@Url.Action("Index1", "CompanyDocuments")';
+                },
+                error: function (error) {
+                    alert('An error occurred while approving the Document.');
                 }
             });
         }
     }
 
     function CancelRequest(id) {
-        if (confirm('Are you sure you want to reject this document?')) {
+        if (confirm('Are you sure you want to reject this Document?')) {
             $.ajax({
                 url: '@Url.Action("CancelRequest", "CompanyDocuments")',
                 type: 'POST',
-                data: { id: id },
-                success: function () {
-                    alert('Document rejected successfully!');
-                    location.reload();
+                data: {
+                    id: id,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
                 },
-                error: function () {
-                    alert('An error occurred while rejecting the request.');
+                success: function (response) {
+                    alert('Document rejected successfully!');
+                    window.location.href = '@Url.Action("Index1", "CompanyDocuments")';
+                },
+                error: function (error) {
+                    alert('An error occurred while rejecting the document.');
                 }
             });
         }
