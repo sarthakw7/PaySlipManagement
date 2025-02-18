@@ -47,6 +47,7 @@ builder.Services.AddScoped<IDepartmentBALRepo, DepartmentBALRepo>();
 builder.Services.AddScoped<IDocumentBALRepo, DocumentBALRepo>();
 builder.Services.AddScoped<ICompanyDocumentsBALRepo, CompanyDocumentsBALRepo>();
 builder.Services.AddScoped<IEmployeeBALRepo,EmployeeBALRepo>();
+builder.Services.AddScoped<IEmployeeSkillsBALRepo, EmployeeSkillsBALRepo>();
 builder.Services.AddScoped<IAccountDetailsBALRepo, AccountDetailsBALRepo>();
 builder.Services.AddScoped<ICompanyDetailsBALRepo, CompanyDetailsBALRepo>();
 builder.Services.AddScoped<ISalaryBALRepo, SalaryBALRepo>();
