@@ -89,5 +89,26 @@ namespace PaySlipManagement.DAL.Implementations
                 throw ex;
             }
         }
+        public async Task<bool> UpdateCompanyDocuments(CompanyDocuments _doc)
+        {
+            try
+            {
+                if (_doc != null)
+                {
+                    var employeeExists = await _db.CheckEmployeeExistsAsync(_doc.Emp_Code);
+                    if (!employeeExists)
+                    {
+                        return false; // Employee does not exist, creation cannot proceed
+                    }
+                    await _db.UpdateAsync(_doc);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

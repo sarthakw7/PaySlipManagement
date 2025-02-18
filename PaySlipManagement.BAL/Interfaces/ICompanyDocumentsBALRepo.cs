@@ -14,6 +14,7 @@ namespace PaySlipManagement.BAL.Interfaces
         Task<bool> Create(CompanyDocuments pdf);
         Task<IEnumerable<CompanyDocuments>> GetCompanyDocumentsByManagerAsync(string approvalPerson);
         Task<IEnumerable<CompanyDocuments>> GetCompanyDocumentsByEmpCodeAsync(string Emp_Code);
+        Task<bool> UpdateCompanyDocuments(CompanyDocuments _doc);
 
     }
 }

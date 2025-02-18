@@ -210,5 +210,45 @@ namespace PaySlipManagement.UI.Controllers
             }
             return View("Create");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApproveRequest(int id)
+        {
+            var response = await _apiServices.GetAsync<CompanyDocumentsViewModel>($"{_apiSettings.CompanyDocumentsEndpoint}/GetCompanyDocumentsById/{id}");
+            if (response != null)
+            {
+                var reg = response;
+
+                if (reg.Status == "Pending")
+                {
+                    reg.Status = "Approved";
+                    await _apiServices.PutAsync($"{_apiSettings.CompanyDocumentsEndpoint}/UpdateCompanyDocuments", reg);
+
+
+                    return Json(new { success = true, message = "Request approved successfully!" });
+                }
+            }
+
+            return Json(new { success = false, message = "An error occurred while approving the request." });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelRequest(int id)
+        {
+            var response = await _apiServices.GetAsync<CompanyDocumentsViewModel>($"{_apiSettings.CompanyDocumentsEndpoint}/GetCompanyDocumentsById/{id}");
+            if (response != null)
+            {
+                var model = response;
+                if (model.Status == "Pending")
+                {
+                    model.Status = "Declined";
+                    await _apiServices.PutAsync($"{_apiSettings.CompanyDocumentsEndpoint}/UpdateCompanyDocuments", model);
+                    return Json(new { success = true, message = "Request canceled successfully!" });
+                }
+            }
+            return Json(new { success = false, message = "An error occurred while canceling the request." });
+        }
     }
 }
