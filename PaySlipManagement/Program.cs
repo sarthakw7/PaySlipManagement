@@ -60,6 +60,7 @@ builder.Services.AddScoped<ICTCDetailsBALRepo, CTCDetailsBALRepo>();
 builder.Services.AddScoped<IManagerBALRepo, ManagerBALRepo>();
 builder.Services.AddScoped<IEmployeeTasksBALRepo, EmployeeTasksBALRepo>();
 builder.Services.AddScoped<IEmployeeRegularizationBALRepo, EmployeeRegularizationBALRepo>();
+builder.Services.AddScoped<IEmployeeExperienceBALRepo, EmployeeExperienceBALRepo>();
 
 // Hangfire configuration
 builder.Services.AddHangfire(configuration => configuration
