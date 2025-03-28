@@ -129,6 +129,27 @@ namespace PaySlipManagement.DAL.DapperServices.Implementations
             }
         }
 
+        public async Task<IEnumerable<T>> ReadGetAllByTypeAsync(T entity)
+        {
+            try
+            {
+                var sql = GetSelectTypeStoredProcedureName(entity) + " @Emp_Code,@DocumentType";
+                var parameters = new DynamicParameters();
+                foreach (var property in entity.GetType().GetProperties())
+                {
+                    parameters.Add("@" + property.Name, property.GetValue(entity));
+                };
+                var result = await con.QueryAsync<T>(sql, parameters);
+                con.Close();
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<IEnumerable<T>> ReadGetCodeByAllAsync(T entity)
         {
             try

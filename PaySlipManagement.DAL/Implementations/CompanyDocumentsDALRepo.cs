@@ -32,7 +32,20 @@ namespace PaySlipManagement.DAL.Implementations
             }
         }
 
-        public async Task<CompanyDocuments> GetByIdAsync(string empcode, string doc)
+        public async Task<CompanyDocuments> GetDepartmentByidAsync(CompanyDocuments _doc)
+        {
+            try
+            {
+                return await _db.ReadGetByIdAsync(_doc);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public async Task<IEnumerable<CompanyDocuments>> GetByIdAsync(string empcode, string doc)
         {
 
             try
@@ -41,7 +54,56 @@ namespace PaySlipManagement.DAL.Implementations
                 d.Emp_Code = empcode;
                 d.DocumentType = doc;
                 DapperServices<CompanyDocuments> document = new DapperServices<CompanyDocuments>();
-                return await document.ReadGetByTypeAsync(d);
+                return await document.ReadGetAllByTypeAsync(d);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IEnumerable<CompanyDocuments>> GetCompanyDocumentsByManagerAsync(string Emp_Code)
+        {
+            try
+            {
+                CompanyDocuments er = new CompanyDocuments();
+                er.Emp_Code = Emp_Code;
+                DapperServices<CompanyDocuments> document = new DapperServices<CompanyDocuments>();
+                return await document.ReadGetCodeByAllAsync(er);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IEnumerable<CompanyDocuments>> GetCompanyDocumentsByEmpCodeAsync(string Emp_Code)
+        {
+            try
+            {
+                CompanyDocuments er = new CompanyDocuments();
+                er.Emp_Code = Emp_Code;
+                DapperServices<CompanyDocuments> _documentRepo = new DapperServices<CompanyDocuments>();
+                return await _documentRepo.ReadGetByAllNullCodeAsync(er);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<bool> UpdateCompanyDocuments(CompanyDocuments _doc)
+        {
+            try
+            {
+                if (_doc != null)
+                {
+                    var employeeExists = await _db.CheckEmployeeExistsAsync(_doc.Emp_Code);
+                    if (!employeeExists)
+                    {
+                        return false; // Employee does not exist, creation cannot proceed
+                    }
+                    await _db.UpdateAsync(_doc);
+                    return true;
+                }
+                return false;
             }
             catch (Exception ex)
             {

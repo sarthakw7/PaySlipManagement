@@ -47,6 +47,7 @@ builder.Services.AddScoped<IDepartmentBALRepo, DepartmentBALRepo>();
 builder.Services.AddScoped<IDocumentBALRepo, DocumentBALRepo>();
 builder.Services.AddScoped<ICompanyDocumentsBALRepo, CompanyDocumentsBALRepo>();
 builder.Services.AddScoped<IEmployeeBALRepo,EmployeeBALRepo>();
+builder.Services.AddScoped<IEmployeeSkillsBALRepo, EmployeeSkillsBALRepo>();
 builder.Services.AddScoped<IAccountDetailsBALRepo, AccountDetailsBALRepo>();
 builder.Services.AddScoped<ICompanyDetailsBALRepo, CompanyDetailsBALRepo>();
 builder.Services.AddScoped<ISalaryBALRepo, SalaryBALRepo>();
@@ -59,9 +60,7 @@ builder.Services.AddScoped<ICTCDetailsBALRepo, CTCDetailsBALRepo>();
 builder.Services.AddScoped<IManagerBALRepo, ManagerBALRepo>();
 builder.Services.AddScoped<IEmployeeTasksBALRepo, EmployeeTasksBALRepo>();
 builder.Services.AddScoped<IEmployeeRegularizationBALRepo, EmployeeRegularizationBALRepo>();
-builder.Services.AddScoped<IEmployeeBALRepo, EmployeeBALRepo>();
-builder.Services.AddScoped<IEmployeeDALRepo, EmployeeDALRepo>();
-
+builder.Services.AddScoped<IEmployeeExperienceBALRepo, EmployeeExperienceBALRepo>();
 
 // Hangfire configuration
 builder.Services.AddHangfire(configuration => configuration
@@ -80,19 +79,6 @@ builder.Services.AddHangfire(configuration => configuration
 //Hangfire Server
 builder.Services.AddHangfireServer();
 
-
-// Add CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll",
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-        });
-});
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -108,8 +94,6 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-
-app.UseCors("AllowAll");
 
 app.UseMiddleware<ExceptionMiddleware>();
 
