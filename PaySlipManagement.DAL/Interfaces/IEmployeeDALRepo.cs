@@ -16,7 +16,8 @@ namespace PaySlipManagement.DAL.Interfaces
         Task<EmployeeDetails> GetEmployeeByCodeAsync(string empcode, string payperiod);
         Task<EmployeeDetails> GetEmployeeDetailsByCodeAsync(string empcode);
         Task<EmployeeDetails> GetEmployeeByCodeAsync(string empcode);
-        Task<bool> AddEmployee(Employee _employee);
+        Task<bool> CreateEmployee(Employee _employee);
+        Task<bool> BulkInsertEmployees(List<Employee> employees);
         Task<bool> UpdateEmployee(Employee _employee);
         Task<bool> DeleteEmployee(Employee _employee);
 
