@@ -2,6 +2,7 @@
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using iText.Html2pdf;
+﻿using iText.Html2pdf;
 using iText.Kernel.Exceptions;
 using iText.Kernel.Pdf;
 using Microsoft.AspNetCore.Mvc;
@@ -180,6 +181,13 @@ namespace PaySlipManagement.UI.Controllers
 
 
 
+
+        public EmployeeController(APIServices apiService, IOptions<ApiSettings> apiSettings)
+        {
+            this._apiServices = apiService;
+            _apiSettings = apiSettings.Value;
+        }
+
         //GET: EmployeeController
 
         public async Task<IActionResult> Index(int? departmentId, int page = 1, int pageSize = 8)
@@ -304,6 +312,50 @@ namespace PaySlipManagement.UI.Controllers
         //    ModelState.AddModelError(string.Empty, "Invalid Create attempt");
         //    return View();
         //}
+        public async Task<IActionResult> Create(EmployeeViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Employee employee = new Employee
+                {
+                    Id = model.Id,
+                    Emp_Code = model.Emp_Code,
+                    EmployeeName = model.EmployeeName,
+                    DepartmentId = model.DepartmentId,
+                    Designation = model.Designation,
+                    Division = model.Division,
+                    Email = model.Email,
+                    PAN_Number = model.PAN_Number,
+                    JoiningDate = model.JoiningDate,
+                    IsActive = model.IsActive,
+                    PhoneNumber = model.PhoneNumber
+                };
+
+                // Make a POST request to the Web API
+                var response = await _apiServices.PostAsync($"{_apiSettings.EmployeeEndpoint}/CreateEmployee", model);
+
+                if (!string.IsNullOrEmpty(response) && (response == "Employee Registered Successfully" || response == "true"))
+                {
+                    //// Redirect to the Document Create View and pass Employee Code
+                    TempData["Emp_Code"] = employee.Emp_Code;
+                    //TempData["EmployeeName"] = employee.EmployeeName;
+
+                    return RedirectToAction("Create", "Document"); // Redirect to Document Create View
+                }
+                else
+                {
+                    // Handle the case where the API request fails or register is unsuccessful
+                    if (response != null)
+                    {
+                        ModelState.AddModelError(string.Empty, response);
+                    }
+                    ModelState.AddModelError(string.Empty, "API request failed or Create was unsuccessful");
+                }
+            }
+
+            ModelState.AddModelError(string.Empty, "Invalid Create attempt");
+            return View();
+        }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)

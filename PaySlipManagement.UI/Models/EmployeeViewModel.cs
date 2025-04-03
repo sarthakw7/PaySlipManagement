@@ -97,7 +97,7 @@ namespace PaySlipManagement.UI.Models
         public string ReportingManager { get; set; }
         [Display(Name = "Latest Company Reference")]
         public string LatestCompanyReference { get; set; }
-   
+
     }
     public class EmployeePayPeriodsViewModel
     {

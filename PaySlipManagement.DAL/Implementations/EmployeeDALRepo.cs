@@ -101,6 +101,8 @@ namespace PaySlipManagement.DAL.Implementations
         }
 
         public async Task<bool> CreateEmployee(Employee _employee)
+        
+        public async Task<bool> AddEmployee(Employee _employee)
         {
             try
             {

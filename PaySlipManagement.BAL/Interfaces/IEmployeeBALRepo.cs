@@ -21,5 +21,8 @@ namespace PaySlipManagement.BAL.Interfaces
         Task<bool> UpdateEmployee(Employee _employee);
         Task<bool> DeleteEmployee(Employee employee);
         Task<bool> BulkInsertEmployees(List<Employee> employees);
+        Task<bool> AddEmployee(Employee _employee);
+        Task<bool> UpdateEmployee(Employee _employee);
+        Task<bool> DeleteEmployee(Employee employee);
     }
 }

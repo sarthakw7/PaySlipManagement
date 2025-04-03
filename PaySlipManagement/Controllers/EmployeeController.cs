@@ -8,6 +8,7 @@ using PayslipManagement.Common.Models;
 using PaySlipManagement.DAL.Implementations;
 using Microsoft.Data.SqlClient;
 
+
 namespace PaySlipManagement.API.Controllers
 {
     [Route("api/[controller]")]
@@ -55,6 +56,7 @@ namespace PaySlipManagement.API.Controllers
         public async Task<bool> Create(Employee _employee)
         {
             return await _employeeBALRepo.CreateEmployee(_employee);
+            return await _employeeBALRepo.AddEmployee(_employee);
 
         }
         [HttpPut("UpdateEmployee")]

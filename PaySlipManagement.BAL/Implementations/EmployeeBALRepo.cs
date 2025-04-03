@@ -69,6 +69,11 @@ namespace PaySlipManagement.BAL.Implementations
 
         }
 
+        public async Task<bool> AddEmployee(Employee _employee)
+        {
+            return await _employeeDALRepo.AddEmployee(_employee);
+
+        }
         public async Task<bool> UpdateEmployee(Employee _employee)
         {
             return await _employeeDALRepo.UpdateEmployee(_employee);

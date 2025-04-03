@@ -81,6 +81,10 @@ namespace PaySlipManagement.UI.Common
             var jsonContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await _httpClient.PostAsync(requestUri, jsonContent);
+        public async Task<string> PostAsync<TRequest>(string requestUri, TRequest data)
+        {
+            var jsonContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(requestUri, jsonContent);
 
             if (response.IsSuccessStatusCode)
             {
@@ -94,6 +98,10 @@ namespace PaySlipManagement.UI.Common
 
 
 
+            // Handle error scenarios or throw exceptions as needed
+            // For example: throw custom exceptions, log the error, etc.
+            return null; // Or return a default value
+        }
         public async Task<string> PutAsync<TRequest>(string requestUri, TRequest data)
         {
             var jsonContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
